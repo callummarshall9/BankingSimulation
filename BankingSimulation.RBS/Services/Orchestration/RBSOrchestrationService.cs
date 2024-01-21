@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BankingSimulation.Data;
+using BankingSimulation.Data.Models;
 using BankingSimulation.Services;
 
 namespace BankingSimulation.RBS;
@@ -110,6 +111,8 @@ internal partial class RBSOrchestrationService : IRBSOrchestrationService
             });
         }
 
+        var dbCategoryKeywords = foundationService.GetAll<CategoryKeyword>();
+
         var dbTransactionTypes = foundationService
             .GetAll<TransactionType>()
             .Where(tt => tt.SystemId == "RBS" && transactionTypes.Contains(tt.TypeId))
@@ -118,6 +121,9 @@ internal partial class RBSOrchestrationService : IRBSOrchestrationService
 
         foreach(var transaction in parsedTransactions) 
         {
+            transaction.CategoryId = dbCategoryKeywords
+                .FirstOrDefault(ck => transaction.Description.Contains(ck.Keyword))?.CategoryId;
+
             var accountId = existingAccounts
                 .Where(a => a.Number == transaction.Account.Number)
                 .Select(a => a.Id)

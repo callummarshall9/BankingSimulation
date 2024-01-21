@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSimulation.Data.Migrations
 {
     [DbContext(typeof(BankSimulationContext))]
-    [Migration("20240121131417_Initial")]
+    [Migration("20240121225156_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -73,6 +73,47 @@ namespace BankingSimulation.Data.Migrations
                     b.ToTable("Systems");
                 });
 
+            modelBuilder.Entity("BankingSimulation.Data.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentCategoryId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("BankingSimulation.Data.Models.CategoryKeyword", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Keyword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategoryKeywords");
+                });
+
             modelBuilder.Entity("BankingSimulation.Data.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -84,6 +125,9 @@ namespace BankingSimulation.Data.Migrations
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
@@ -100,6 +144,8 @@ namespace BankingSimulation.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("TransactionTypeId");
 
@@ -145,13 +191,35 @@ namespace BankingSimulation.Data.Migrations
                     b.Navigation("BankingSystem");
                 });
 
+            modelBuilder.Entity("BankingSimulation.Data.Models.Category", b =>
+                {
+                    b.HasOne("BankingSimulation.Data.Models.Category", "ParentCategory")
+                        .WithMany("ChildCategories")
+                        .HasForeignKey("ParentCategoryId");
+
+                    b.Navigation("ParentCategory");
+                });
+
+            modelBuilder.Entity("BankingSimulation.Data.Models.CategoryKeyword", b =>
+                {
+                    b.HasOne("BankingSimulation.Data.Models.Category", null)
+                        .WithMany("Keywords")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BankingSimulation.Data.Transaction", b =>
                 {
                     b.HasOne("BankingSimulation.Data.Account", "Account")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BankingSimulation.Data.Models.Category", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("BankingSimulation.Data.TransactionType", "TransactionType")
                         .WithMany("Transactions")
@@ -167,11 +235,22 @@ namespace BankingSimulation.Data.Migrations
             modelBuilder.Entity("BankingSimulation.Data.Account", b =>
                 {
                     b.Navigation("AccountSystemReferences");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BankingSimulation.Data.BankingSystem", b =>
                 {
                     b.Navigation("AccountSystemReferences");
+                });
+
+            modelBuilder.Entity("BankingSimulation.Data.Models.Category", b =>
+                {
+                    b.Navigation("ChildCategories");
+
+                    b.Navigation("Keywords");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BankingSimulation.Data.TransactionType", b =>

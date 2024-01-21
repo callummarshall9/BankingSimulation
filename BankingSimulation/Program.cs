@@ -1,11 +1,37 @@
 using BankingSimulation.Data;
-using BankingSimulation.Services;
+using BankingSimulation.Data.Models;
 using BankingSimulation.RBS;
+using BankingSimulation.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Any;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+
+IEdmModel GetModel()
+{
+    var builder = new ODataConventionModelBuilder();
+
+    builder.EntitySet<Account>("Accounts");
+    builder.EntitySet<AccountBankingSystemReference>("AccountBankingSystemReferences").EntityType.HasKey(t => new { t.BankingSystemId, t.AccountId });
+    builder.EntitySet<BankingSystem>("BankingSystems");
+    builder.EntitySet<Category>("Categories");
+    builder.EntitySet<CategoryKeyword>("CategoryKeywords");
+    builder.EntitySet<Transaction>("Transactions");
+    builder.EntitySet<TransactionType>("TransactionTypes");
+
+    return builder.GetEdmModel();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +41,17 @@ builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddODataQueryFilter();
+builder.Services.AddOData((opts) => opts.EnableQueryFeatures(100));
+
+var model = GetModel();
+
+builder.Services.AddODataOptions<Account>(model);
+builder.Services.AddODataOptions<AccountBankingSystemReference>(model);
+builder.Services.AddODataOptions<BankingSystem>(model);
+builder.Services.AddODataOptions<Category>(model);
+builder.Services.AddODataOptions<CategoryKeyword>(model);
+builder.Services.AddODataOptions<Transaction>(model);
+builder.Services.AddODataOptions<TransactionType>(model);
 
 builder.Services.AddBankingSimulationServices();
 builder.Services.AddBankingSimulationRBSServices();
@@ -36,10 +72,12 @@ app.UseHttpsRedirection();
 AddSet<Account>(app);
 AddSet<AccountBankingSystemReference>(app);
 AddSet<BankingSystem>(app);
+AddSet<Category>(app);
+AddSet<CategoryKeyword>(app);
 AddSet<Transaction>(app);
 AddSet<TransactionType>(app);
 
-app.MapPost("/Accounts/Import", 
+app.MapPost("/Accounts/ImportRBS", 
     async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
         => {
             var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
@@ -66,7 +104,7 @@ app.MapPost("/Accounts/Import",
             Description = "Import Accounts from CSV for RBS Transaction Statements"
         });
 
-app.MapPost("/Transactions/Import", 
+app.MapPost("/Transactions/ImportRBS", 
     async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
        => {
             var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
@@ -109,5 +147,6 @@ void AddSet<T>(WebApplication app) where T : class
         => foundationService.UpdateAsync<T>(entity)).WithOpenApi();
     app.MapDelete($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromBody] T entity) 
         => foundationService.UpdateAsync<T>(entity)).WithOpenApi();
-    app.MapGet($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService) => foundationService.GetAll<T>()).WithOpenApi();
+    app.MapGet($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromServices] ODataQueryOptions<T> options)
+        => options.ApplyTo(foundationService.GetAll<T>()).Cast<T>()).WithOpenApi();
 }

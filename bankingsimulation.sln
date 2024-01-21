@@ -3,23 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation", "BankingSimulation\BankingSimulation.csproj", "{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation", "BankingSimulation\BankingSimulation.csproj", "{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.RBS", "BankingSimulation.RBS\BankingSimulation.RBS.csproj", "{83AF25F2-DF02-491B-A6B0-B3482D327EE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.RBS", "BankingSimulation.RBS\BankingSimulation.RBS.csproj", "{83AF25F2-DF02-491B-A6B0-B3482D327EE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.Data", "BankingSimulation.Data\BankingSimulation.Data.csproj", "{4DA3AFB5-D598-4CB8-854C-241DAAFE7C05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Data", "BankingSimulation.Data\BankingSimulation.Data.csproj", "{4DA3AFB5-D598-4CB8-854C-241DAAFE7C05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.Services", "BankingSimulation.Services\BankingSimulation.Services.csproj", "{3D685D02-CCBB-4BC7-B868-AFC55D74EAA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Services", "BankingSimulation.Services\BankingSimulation.Services.csproj", "{3D685D02-CCBB-4BC7-B868-AFC55D74EAA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.UI", "BankingSimulation.UI\BankingSimulation.UI.csproj", "{26A24181-57A8-42AF-88D5-94796F296F98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.UI", "BankingSimulation.UI\BankingSimulation.UI.csproj", "{26A24181-57A8-42AF-88D5-94796F296F98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.OData", "..\..\AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj", "{782BC628-AFEB-4A41-83E8-FC3018E24CF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +41,12 @@ Global
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782BC628-AFEB-4A41-83E8-FC3018E24CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782BC628-AFEB-4A41-83E8-FC3018E24CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782BC628-AFEB-4A41-83E8-FC3018E24CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782BC628-AFEB-4A41-83E8-FC3018E24CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

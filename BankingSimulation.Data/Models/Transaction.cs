@@ -8,6 +8,7 @@ public class Transaction
     public DateTimeOffset Date { get; set; }
     public TransactionType TransactionType { get;set; }
     public Guid TransactionTypeId { get;set; }
+    public Guid? CategoryId { get; set; }
     public string Description { get; set; }
     public double Value { get; set; }
     public double Balance { get; set; }

@@ -5,7 +5,7 @@ export class Accounts extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { accounts: [], loading: true, config: { apiUrl: "https://localhost:7050/" } };
+      this.state = { accounts: [], loading: true, config: { apiUrl: "https://localhost:44338/" } };
   }
 
   componentDidMount() {
