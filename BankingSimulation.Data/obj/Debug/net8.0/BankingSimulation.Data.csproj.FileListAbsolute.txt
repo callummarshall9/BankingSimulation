@@ -1,0 +1,14 @@
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/bin/Debug/net8.0/BankingSimulation.Data.deps.json
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/bin/Debug/net8.0/BankingSimulation.Data.runtimeconfig.json
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/bin/Debug/net8.0/BankingSimulation.Data.dll
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/bin/Debug/net8.0/BankingSimulation.Data.pdb
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.csproj.AssemblyReference.cache
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.GeneratedMSBuildEditorConfig.editorconfig
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.AssemblyInfoInputs.cache
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.AssemblyInfo.cs
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.csproj.CoreCompileInputs.cache
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.dll
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/refint/BankingSimulation.Data.dll
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.pdb
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/BankingSimulation.Data.genruntimeconfig.cache
+/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/Debug/net8.0/ref/BankingSimulation.Data.dll
