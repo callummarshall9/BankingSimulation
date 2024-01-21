@@ -10,6 +10,8 @@ public class BankSimulationContext : DbContext
     public DbSet<BankingSystem> Systems { get; set; }
     public DbSet<Transaction> Transaction { get; set; }
     public DbSet<TransactionType> TransactionTypes { get; set; }
+    public DbSet<Calendar> Calendars { get; set; }
+    public DbSet<CalendarEvent> CalendarEvents { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<CategoryKeyword> CategoryKeywords { get; set; }
 
