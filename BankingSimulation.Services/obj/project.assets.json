@@ -4035,32 +4035,39 @@
     ]
   },
   "packageFolders": {
-    "/Users/cmarshall/.nuget/packages/": {}
+    "C:\\Users\\callu\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj",
+      "projectUniqueName": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj",
       "projectName": "BankingSimulation.Services",
-      "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj",
-      "packagesPath": "/Users/cmarshall/.nuget/packages/",
-      "outputPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/obj/",
+      "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj",
+      "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/cmarshall/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj": {
-              "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj"
+            "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj": {
+              "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj"
             }
           }
         }
@@ -4069,6 +4076,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -4090,7 +4102,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

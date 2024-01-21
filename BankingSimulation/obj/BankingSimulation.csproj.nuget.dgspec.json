@@ -1,25 +1,273 @@
 {
   "format": 1,
   "restore": {
-    "/Users/cmarshall/bankingsimulation/BankingSimulation/BankingSimulation.csproj": {}
+    "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation\\BankingSimulation.csproj": {}
   },
   "projects": {
-    "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj": {
+    "C:\\Users\\callu\\source\\repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\Microsoft.AspNetCore.OData.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj",
-        "projectName": "BankingSimulation.Data",
-        "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj",
-        "packagesPath": "/Users/cmarshall/.nuget/packages/",
-        "outputPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/obj/",
+        "projectUniqueName": "C:\\Users\\callu\\source\\repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\Microsoft.AspNetCore.OData.csproj",
+        "projectName": "Microsoft.AspNetCore.OData",
+        "projectPath": "C:\\Users\\callu\\source\\repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\Microsoft.AspNetCore.OData.csproj",
+        "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\callu\\source\\repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\obj\\",
         "projectStyle": "PackageReference",
+        "crossTargeting": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/cmarshall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0",
+          "net6.0",
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          },
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          },
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.CodeAnalysis.PublicApiAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "Microsoft.OData.Core": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.Edm": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.ModelBuilder": {
+              "target": "Package",
+              "version": "[1.0.9, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Microsoft.Spatial": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5\\RuntimeIdentifierGraph.json"
+        },
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.CodeAnalysis.PublicApiAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "Microsoft.OData.Core": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.Edm": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.ModelBuilder": {
+              "target": "Package",
+              "version": "[1.0.9, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Microsoft.Spatial": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[5.0.0, 5.0.0]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[5.0.0, 5.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[5.0.0, 5.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5\\RuntimeIdentifierGraph.json"
+        },
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.CodeAnalysis.PublicApiAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "Microsoft.OData.Core": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.Edm": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            },
+            "Microsoft.OData.ModelBuilder": {
+              "target": "Package",
+              "version": "[1.0.9, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Microsoft.Spatial": {
+              "target": "Package",
+              "version": "[7.20.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj",
+        "projectName": "BankingSimulation.Data",
+        "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj",
+        "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,6 +280,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -71,34 +324,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/BankingSimulation.RBS.csproj": {
+    "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\BankingSimulation.RBS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/BankingSimulation.RBS.csproj",
+        "projectUniqueName": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\BankingSimulation.RBS.csproj",
         "projectName": "BankingSimulation.RBS",
-        "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/BankingSimulation.RBS.csproj",
-        "packagesPath": "/Users/cmarshall/.nuget/packages/",
-        "outputPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/obj/",
+        "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\BankingSimulation.RBS.csproj",
+        "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/cmarshall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj": {
-                "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj"
+              "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj"
               }
             }
           }
@@ -107,6 +366,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -134,34 +398,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj": {
+    "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj",
+        "projectUniqueName": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj",
         "projectName": "BankingSimulation.Services",
-        "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj",
-        "packagesPath": "/Users/cmarshall/.nuget/packages/",
-        "outputPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/obj/",
+        "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj",
+        "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/cmarshall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj": {
-                "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj"
+              "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj"
               }
             }
           }
@@ -170,6 +440,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -191,40 +466,49 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/cmarshall/bankingsimulation/BankingSimulation/BankingSimulation.csproj": {
+    "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation\\BankingSimulation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/cmarshall/bankingsimulation/BankingSimulation/BankingSimulation.csproj",
+        "projectUniqueName": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation\\BankingSimulation.csproj",
         "projectName": "BankingSimulation",
-        "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation/BankingSimulation.csproj",
-        "packagesPath": "/Users/cmarshall/.nuget/packages/",
-        "outputPath": "/Users/cmarshall/bankingsimulation/BankingSimulation/obj/",
+        "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation\\BankingSimulation.csproj",
+        "packagesPath": "C:\\Users\\callu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/cmarshall/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\callu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj": {
-                "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Data/BankingSimulation.Data.csproj"
+              "C:\\Users\\callu\\Source\\Repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\Microsoft.AspNetCore.OData.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\AspNetCoreOData\\src\\Microsoft.AspNetCore.OData\\Microsoft.AspNetCore.OData.csproj"
               },
-              "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/BankingSimulation.RBS.csproj": {
-                "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.RBS/BankingSimulation.RBS.csproj"
+              "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Data\\BankingSimulation.Data.csproj"
               },
-              "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj": {
-                "projectPath": "/Users/cmarshall/bankingsimulation/BankingSimulation.Services/BankingSimulation.Services.csproj"
+              "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\BankingSimulation.RBS.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.RBS\\BankingSimulation.RBS.csproj"
+              },
+              "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj": {
+                "projectPath": "C:\\Users\\callu\\Source\\Repos\\callummarshall9\\BankingSimulation\\BankingSimulation.Services\\BankingSimulation.Services.csproj"
               }
             }
           }
@@ -233,23 +517,20 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OData": {
-              "target": "Package",
-              "version": "[8.2.4, )"
-            },
-            "Microsoft.AspNetCore.OData.Versioning": {
-              "target": "Package",
-              "version": "[5.1.0, )"
-            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.7, )"
+              "version": "[8.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -275,7 +556,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200-preview.23624.5/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

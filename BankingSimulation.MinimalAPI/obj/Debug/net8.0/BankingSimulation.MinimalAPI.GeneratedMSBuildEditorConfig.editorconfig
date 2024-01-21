@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BankingSimulation.MinimalAPI
-build_property.ProjectDir = /Users/cmarshall/bankingsimulation/BankingSimulation.MinimalAPI/
+build_property.ProjectDir = C:\Users\callu\Source\Repos\callummarshall9\BankingSimulation\BankingSimulation.MinimalAPI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
