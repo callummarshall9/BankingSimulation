@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Services"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.UI", "BankingSimulation.UI\BankingSimulation.UI.csproj", "{26A24181-57A8-42AF-88D5-94796F296F98}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.OData", "AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj", "{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26A24181-57A8-42AF-88D5-94796F296F98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
