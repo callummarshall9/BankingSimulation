@@ -12,10 +12,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj" />
     <ProjectReference Include="..\BankingSimulation.Data\BankingSimulation.Data.csproj" />
     <ProjectReference Include="..\BankingSimulation.Services\BankingSimulation.Services.csproj" />
     <ProjectReference Include="..\BankingSimulation.RBS\BankingSimulation.RBS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.OData">
+      <HintPath>..\Microsoft.AspNetCore.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Core">
+      <HintPath>..\Microsoft.OData.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Edm">
+      <HintPath>..\Microsoft.OData.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.ModelBuilder">
+      <HintPath>..\Microsoft.OData.ModelBuilder.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
