@@ -23,7 +23,7 @@ internal class RBSTransactionProcessingService : IRBSTransactionProcessingServic
             Account = new Account { Name = r.AccountName, Number = r.AccountNumber },
             Balance = r.Balance,
             Value = r.Value,
-            Date = DateTimeOffset.Parse(r.Date),
+            Date = DateOnly.Parse(r.Date),
             Description = r.Description,
             TransactionType = new TransactionType { TypeId = r.Type }
         }).ToArray();

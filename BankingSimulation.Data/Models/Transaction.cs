@@ -5,7 +5,7 @@ namespace BankingSimulation.Data;
 public class Transaction
 {
     public Guid Id { get; set; }
-    public DateTimeOffset Date { get; set; }
+    public DateOnly Date { get; set; }
     public TransactionType TransactionType { get;set; }
     public Guid TransactionTypeId { get;set; }
     public Guid? CategoryId { get; set; }

@@ -12,7 +12,7 @@ namespace BankingSimulation.Services.Processing
             this.foundationService = foundationService;
         }
 
-        public IEnumerable<MonthlyAccountSummary> GetMonthlyAccountSummariesSincePeriod(DateTimeOffset fromDate, DateTimeOffset toDate)
+        public IEnumerable<MonthlyAccountSummary> GetMonthlyAccountSummariesSincePeriod(DateOnly fromDate, DateOnly toDate)
         {
             var accounts = foundationService.GetAll<Account>();
 
@@ -25,7 +25,7 @@ namespace BankingSimulation.Services.Processing
                     .GroupBy(t => new { t.Date.Month, t.Date.Year })
                     .Select(g => new MonthlyAccountSummary
                     {
-                        Date = DateOnly.FromDateTime(g.First().Date.DateTime),
+                        Date =g.First().Date,
                         Incomings = g.Where(g => g.Value >= 0.0).Sum(g => g.Value),
                         Outgoings = g.Where(g => g.Value < 0.0).Sum(g => g.Value),
                     })
