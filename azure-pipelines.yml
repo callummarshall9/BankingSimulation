@@ -32,6 +32,15 @@ steps:
 - checkout: AspNetCoreOData
   displayName: 'Pull OData repository'
 
+- task: CopyFiles@2
+  displayName: 'Copy OData repo to BankingSimulation sub module path'
+  inputs:
+    SourceFolder: '$(Pipeline.Workspace)/AspNetCoreOData'
+    Contents: '**'
+    TargetFolder: '$(Pipeline.Workspace)/BankingSimulation/AspNetCoreOData'
+    CleanTargetFolder: true
+    OverWrite: true
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
