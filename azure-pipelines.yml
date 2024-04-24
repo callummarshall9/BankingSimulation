@@ -26,6 +26,9 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- checkout: BankingSimulation
+- checkout: AspNetCoreOData
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
