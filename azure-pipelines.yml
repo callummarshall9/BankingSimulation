@@ -21,7 +21,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: '**/bankingsimulation.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
