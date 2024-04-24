@@ -21,12 +21,18 @@ resources:
       type: github
       name: callummarshall9/BankingSimulation
       ref: $(Build.SourceBranch)
+    - repository: AspNetCoreOData
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/AspNetCoreOData
 
 
 steps:
 - checkout: BankingSimulation
   displayName: 'Pull Repository with Submodules'
-  submodules: 'recursive'
+- checkout: AspNetCoreOData
+  displayName: 'Pull OData repository'
+  path: '$(Pipeline.Workspace)\BankingSimulation'
 
 - task: NuGetToolInstaller@1
 
