@@ -6,6 +6,17 @@
 trigger:
 - main
 
+resources:
+  repositories:
+    - repository: BankingSimulation
+      type: github
+      endpoint: GitHubServiceConnection
+      name: callummarshall9/BankingSimulation
+    - repository: AspNetCoreOData
+      type: github
+      endpoint: GitHubServiceConnection
+      name: callummarshall9/AspNetCoreOData
+
 pool:
   vmImage: 'windows-latest'
 
