@@ -14,8 +14,18 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+resources:
+  repositories:
+    - repository: BankingSimulation
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/BankingSimulation
+      ref: $(Build.SourceBranch)
+
+
 steps:
-- checkout: self
+- checkout: BankingSimulation
+  displayName: 'Pull Repository with Submodules'
   submodules: 'recursive'
 
 - task: NuGetToolInstaller@1
