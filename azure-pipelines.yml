@@ -6,17 +6,6 @@
 trigger:
 - main
 
-resources:
-  repositories:
-    - repository: BankingSimulation
-      type: github
-      endpoint: GitHubServiceConnection
-      name: callummarshall9/BankingSimulation
-    - repository: AspNetCoreOData
-      type: github
-      endpoint: GitHubServiceConnection
-      name: callummarshall9/AspNetCoreOData
-
 pool:
   vmImage: 'windows-latest'
 
@@ -26,10 +15,8 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- checkout: BankingSimulation
-- checkout: AspNetCoreOData
-  path: $(Pipeline.Workspace)\BankingSimulation
-- script: dir $(Pipeline.Workspace)
+- checkout: self
+  submodules: 'recursive'
 
 - task: NuGetToolInstaller@1
 
