@@ -28,8 +28,8 @@ variables:
 steps:
 - checkout: BankingSimulation
 - checkout: AspNetCoreOData
-  path: $(Build.SourcesDirectory)/BankingSimulation
-- script: dir $(Build.SourcesDirectory)
+  path: $(Pipeline.Workspace)\BankingSimulation
+- script: dir $(Pipeline.Workspace)
 
 - task: NuGetToolInstaller@1
 
