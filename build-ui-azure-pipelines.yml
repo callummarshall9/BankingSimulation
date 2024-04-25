@@ -1,0 +1,44 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+resources:
+  repositories:
+    - repository: BankingSimulation
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/BankingSimulation
+      ref: $(Build.SourceBranch)
+
+steps:
+- checkout: BankingSimulation
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    cd $(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactsStagingDirectory)'
+    
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
