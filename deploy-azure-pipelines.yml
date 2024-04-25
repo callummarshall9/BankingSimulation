@@ -31,7 +31,7 @@ jobs:
         deployToSlotOrASE: true
         ResourceGroupName: $(resourceGroupName)
         SlotName: 'production'
-        packageForLinux: '$(Pipeline.Workspace)/BankingSimulation/BankingSimulation.zip/BankingSimulation.zip'
+        packageForLinux: '$(System.ArtifactsDirectory)/BankingSimulation/BankingSimulation.zip/BankingSimulation.zip'
         enableCustomDeployment: true
         DeploymentType: 'webDeploy'
         RemoveAdditionalFilesFlag: true
