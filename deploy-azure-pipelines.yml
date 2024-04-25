@@ -24,7 +24,7 @@ jobs:
         cleanDestinationFolder: true
 
     - script: dir $(System.ArtifactsDirectory)
-    - script: dir $(System.ArtifactsDirectory)/BankingSimulation
+    - script: dir $(System.ArtifactsDirectory)/BankingSimulation.zip
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
