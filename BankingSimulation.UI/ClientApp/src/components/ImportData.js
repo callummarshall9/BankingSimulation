@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react'
+import ApiConfig from '../config/ApiConfig'
 
 export class ImportData extends Component {
     static displayName = ImportData.name;
@@ -6,7 +7,7 @@ export class ImportData extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            config: { apiUrl: "https://localhost:44338/" },
+            config: { apiUrl: ApiConfig.BaseUrl },
             imported: false,
             importing: false,
             errorMessage: ""
