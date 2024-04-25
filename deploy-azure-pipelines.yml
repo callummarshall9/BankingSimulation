@@ -1,0 +1,42 @@
+resources:
+  pipelines:
+    - pipeline: BankingSimulation
+      source: 'Banking Simulation API'
+      project: BankingSimulation
+      trigger: 
+        branches:
+          - main
+
+pool:
+  vmImage: windows-latest
+
+jobs:
+- job: Deploy
+  steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'specific'
+        project: '$(projectId)'
+        pipeline: '1'
+        buildVersionToDownload: 'latest'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+
+    - script: dir $(System.ArtifactsDirectory)
+    - script: dir "$(System.ArtifactsDirectory)/drop"
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(subscriptionId)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        deployToSlotOrASE: true
+        ResourceGroupName: $(resourceGroupName)
+        SlotName: 'production'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/BankingSimulation.zip'
+        enableCustomDeployment: true
+        DeploymentType: 'webDeploy'
+        RemoveAdditionalFilesFlag: true
+        ExcludeFilesFromAppDataFlag: false
+      displayName: 'Deploy to Web App'
