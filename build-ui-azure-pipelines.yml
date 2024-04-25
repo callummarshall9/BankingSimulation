@@ -18,10 +18,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    dir "$(Build.SourcesDirectory)"
-    dir "$(Build.SourcesDirectory)\BankingSimulation"
-    cd "$(Build.SourcesDirectory)\BankingSimulation\BankingSimulation.UI\ClientApp"
-    dir "$(Build.SourcesDirectory)\BankingSimulation\BankingSimulation.UI\ClientApp"
+    cd "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
     npm install
     npm run build
   displayName: 'npm install and build'
