@@ -14,7 +14,7 @@ steps:
 
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.2.4'
+    versionSpec: '20.11.1'
   displayName: 'Install Node.js'
 
 - script: npm install
