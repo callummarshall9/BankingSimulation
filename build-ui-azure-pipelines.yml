@@ -21,13 +21,15 @@ steps:
     cd "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
     npm install
     npm run build
+    dir "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
   displayName: 'npm install and build'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp'
+    SourceFolder: '$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp\build'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactsStagingDirectory)'
+  
     
 - task: PublishBuildArtifacts@1
   inputs:
