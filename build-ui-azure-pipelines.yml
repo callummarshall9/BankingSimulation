@@ -19,9 +19,9 @@ steps:
 
 - script: |
     cd "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
+    dir "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
     npm install
     npm run build
-    dir "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
   displayName: 'npm install and build'
 
 - task: CopyFiles@2
