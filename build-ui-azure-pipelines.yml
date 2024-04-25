@@ -9,16 +9,8 @@ trigger:
 pool:
   vmImage: windows-latest
 
-resources:
-  repositories:
-    - repository: BankingSimulation
-      endpoint: GitHubServiceConnection
-      type: github
-      name: callummarshall9/BankingSimulation
-      ref: $(Build.SourceBranch)
-
 steps:
-- checkout: BankingSimulation
+- checkout: self
 
 - task: NodeTool@0
   inputs:
@@ -26,8 +18,10 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd $(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp
-    dir $(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp
+    dir "$(Build.SourcesDirectory)"
+    dir "$(Build.SourcesDirectory)\BankingSimulation"
+    cd "$(Build.SourcesDirectory)\BankingSimulation\BankingSimulation.UI\ClientApp"
+    dir "$(Build.SourcesDirectory)\BankingSimulation\BankingSimulation.UI\ClientApp"
     npm install
     npm run build
   displayName: 'npm install and build'
