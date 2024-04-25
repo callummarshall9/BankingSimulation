@@ -23,6 +23,9 @@ jobs:
         downloadPath: '$(System.ArtifactsDirectory)'
         cleanDestinationFolder: true
         
+    - script: dir $(System.ArtifactsDirectory)
+    - script: dir "$(System.ArtifactsDirectory)/drop"
+        
     - task: AzureStaticWebApp@0
       inputs:
         app_location: '$(System.ArtifactsDirectory)/drop/'
