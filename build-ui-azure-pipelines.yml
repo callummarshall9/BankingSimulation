@@ -18,6 +18,14 @@ steps:
   inputs:
     versionSpec: '20.11.1'
   displayName: 'Install Node.js'
+  
+- task: PowerShell@2
+  displayName: 'Subsitute secrets'
+  inputs:
+    targetType: 'inline'
+    workingDirectory: $(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp\src\config
+    script: |
+      $(Get-Content ApiConfig.js) -Replace ('__ApiBaseUrl__','$env:apiBaseUrl') -Replace ('__LoginAuthority__', $env:loginAuthority) | Set-Content -Path ApiConfig.js
 
 - script: npm install
   displayName: 'npm install'
