@@ -15,13 +15,13 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    var jwtToken = document.cookie.split(";").map(r => r.split("=")).filter(r => r[0] === "token");
+    var jwtToken = document.cookie.split(";").map(r => r.split("=")).filter(r => r[0].trim() === "token");
 
     if (jwtToken.length === 0) {
         return;
     }
 
-    var jwtTokenValue = jwtToken[0][1];
+    var jwtTokenValue = jwtToken[0][1].trim();
 
     fetch(ApiConfig.LoginAuthority + "Security/SSOUser/Me()", {
         method: "GET",
