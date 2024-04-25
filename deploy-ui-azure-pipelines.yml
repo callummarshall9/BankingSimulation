@@ -1,0 +1,40 @@
+resources:
+  pipelines:
+    - pipeline: BankingSimulationUI
+      source: 'Websites-BankingSimulation'
+      project: BankingSimulation
+      trigger: 
+        branches:
+          - main
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job: Deploy
+  steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'specific'
+        project: '$(projectId)'
+        pipeline: 'Websites-BankingSimulation'
+        buildVersionToDownload: 'latest'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+        
+    - task: AzureStaticWebApp@0
+      inputs:
+        app_location: '/'
+        skip_app_build: true
+        skip_api_build: true
+        workingDirectory: $(System.ArtifactsDirectory)/drop/
+        output_location: $(System.ArtifactsDirectory)/drop/
+        verbose: true
+        azure_static_web_apps_api_token: '$(deploymentToken)'
+      displayName: 'Deploy to Static App'
