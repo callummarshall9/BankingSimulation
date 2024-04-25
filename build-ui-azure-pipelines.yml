@@ -27,6 +27,7 @@ steps:
 
 - script: |
     cd $(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp
+    dir $(Build.SourcesDirectory)/BankingSimulation/BankingSimulation.UI/ClientApp
     npm install
     npm run build
   displayName: 'npm install and build'
