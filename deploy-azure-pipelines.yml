@@ -1,7 +1,7 @@
 resources:
   pipelines:
     - pipeline: BankingSimulation
-      source: 'Banking Simulation API'
+      source: 'API-BankingSimulation'
       project: BankingSimulation
       trigger: 
         branches:
