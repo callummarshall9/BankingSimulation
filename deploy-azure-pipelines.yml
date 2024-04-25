@@ -16,13 +16,16 @@ jobs:
     - task: DownloadBuildArtifacts@1
       inputs:
         buildType: 'specific'
-        project: $(projectId)
+        project: '$(projectId)'
         pipeline: '1'
         buildVersionToDownload: 'latest'
-        downloadType: 'specific'
+        downloadType: 'single'
+        artifactName: 'BankingSimulation.zip'
         downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
 
     - script: dir $(System.ArtifactsDirectory)
+    - script: dir $(System.ArtifactsDirectory)/BankingSimulation
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
