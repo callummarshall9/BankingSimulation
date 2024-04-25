@@ -19,8 +19,7 @@ jobs:
         project: '$(projectId)'
         pipeline: '1'
         buildVersionToDownload: 'latest'
-        downloadType: 'single'
-        artifactName: 'BankingSimulation.zip'
+        downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
         cleanDestinationFolder: true
 
