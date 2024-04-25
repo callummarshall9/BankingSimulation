@@ -5,7 +5,8 @@ resources:
       project: BankingSimulation
       trigger: 
         branches:
-          - main
+          include:
+            - main
 
 pr: none
 
