@@ -13,7 +13,7 @@ steps:
 - task: DownloadBuildArtifacts@1
   inputs:
     buildType: 'specific'
-    project: variables['projectId']
+    project: $(projectId)
     pipeline: '1'
     buildVersionToDownload: 'latest'
     downloadType: 'specific'
@@ -22,11 +22,11 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: variables['subscriptionId']
+    azureSubscription: $(subscriptionId)
     appType: 'webApp'
-    WebAppName: variables['webAppName']
+    WebAppName: $(webAppName)
     deployToSlotOrASE: true
-    ResourceGroupName: variables['resourceGroupName']
+    ResourceGroupName: $(resourceGroupName)
     SlotName: 'production'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     enableCustomDeployment: true
