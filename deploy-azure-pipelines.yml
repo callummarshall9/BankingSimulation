@@ -1,0 +1,36 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'specific'
+    project: variables['projectId']
+    pipeline: '1'
+    buildVersionToDownload: 'latest'
+    downloadType: 'specific'
+    downloadPath: '$(System.ArtifactsDirectory)'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: variables['subscriptionId']
+    appType: 'webApp'
+    WebAppName: variables['webAppName']
+    deployToSlotOrASE: true
+    ResourceGroupName: variables['resourceGroupName']
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'webDeploy'
+    RemoveAdditionalFilesFlag: true
+    ExcludeFilesFromAppDataFlag: false
+  displayName: 'Deploy to Web App'
