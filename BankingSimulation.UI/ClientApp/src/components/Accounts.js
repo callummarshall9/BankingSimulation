@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import ApiConfig from '../config/ApiConfig'
 
 export class Accounts extends Component {
   static displayName = Accounts.name;
 
   constructor(props) {
     super(props);
-      this.state = { accounts: [], loading: true, config: { apiUrl: "https://localhost:44338/" } };
+    this.state = { accounts: [], loading: true, config: { apiUrl: ApiConfig.BaseUrl } };
   }
 
   componentDidMount() {
