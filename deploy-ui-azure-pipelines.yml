@@ -17,14 +17,11 @@ jobs:
       inputs:
         buildType: 'specific'
         project: '$(projectId)'
-        pipeline: '1'
+        pipeline: BankingSimulationUI
         buildVersionToDownload: 'latest'
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
         cleanDestinationFolder: true
-        
-    - script: dir $(System.ArtifactsDirectory)
-    - script: dir "$(System.ArtifactsDirectory)/drop"
         
     - task: AzureStaticWebApp@0
       inputs:
