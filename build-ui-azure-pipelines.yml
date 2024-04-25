@@ -19,9 +19,11 @@ steps:
 
 - script: npm install
   displayName: 'npm install'
+  workingDirectory: $(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp
 
 - script: npm install
   displayName: 'npm run build'
+  workingDirectory: $(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp
 
 - script: dir "$(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp"
 
