@@ -1,0 +1,66 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/bankingsimulation.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+resources:
+  repositories:
+    - repository: BankingSimulation
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/BankingSimulation
+      ref: $(Build.SourceBranch)
+    - repository: AspNetCoreOData
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/AspNetCoreOData
+
+steps:
+- checkout: BankingSimulation
+  displayName: 'Pull Repository with Submodules'
+- checkout: AspNetCoreOData
+  displayName: 'Pull OData repository'
+
+- task: CopyFiles@2
+  displayName: 'Copy OData repo to BankingSimulation sub module path'
+  inputs:
+    SourceFolder: '$(Build.Repository.LocalPath)/AspNetCoreOData'
+    Contents: '**'
+    TargetFolder: '$(Build.Repository.LocalPath)/BankingSimulation/AspNetCoreOData'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '**/BankingSimulation.csproj'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'BankingSimulation.zip'
+    publishLocation: 'Container'
