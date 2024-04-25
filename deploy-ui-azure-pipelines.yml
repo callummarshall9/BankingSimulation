@@ -17,7 +17,7 @@ jobs:
       inputs:
         buildType: 'specific'
         project: '$(projectId)'
-        pipeline: BankingSimulationUI
+        pipeline: 'Websites-BankingSimulation'
         buildVersionToDownload: 'latest'
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
