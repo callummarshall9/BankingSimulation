@@ -22,6 +22,7 @@ jobs:
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
 
+    - script: dir $(System.ArtifactsDirectory)
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
@@ -31,7 +32,7 @@ jobs:
         deployToSlotOrASE: true
         ResourceGroupName: $(resourceGroupName)
         SlotName: 'production'
-        packageForLinux: '$(System.ArtifactsDirectory)/BankingSimulation/BankingSimulation.zip/BankingSimulation.zip'
+        packageForLinux: '$(System.ArtifactsDirectory)/BankingSimulation.zip'
         enableCustomDeployment: true
         DeploymentType: 'webDeploy'
         RemoveAdditionalFilesFlag: true
