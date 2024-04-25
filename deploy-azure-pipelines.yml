@@ -11,36 +11,29 @@ pool:
   vmImage: windows-latest
 
 jobs:
-- deployment: Deploy
-  displayName: Deploy
-  environment: bankingsimulation
-  pool: 
-    vmImage: $(vmImageName)
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'specific'
-            project: $(projectId)
-            pipeline: '1'
-            buildVersionToDownload: 'latest'
-            downloadType: 'specific'
-            downloadPath: '$(System.ArtifactsDirectory)'
+- job: Deploy
+  steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'specific'
+        project: $(projectId)
+        pipeline: '1'
+        buildVersionToDownload: 'latest'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
 
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: $(subscriptionId)
-            appType: 'webApp'
-            WebAppName: $(webAppName)
-            deployToSlotOrASE: true
-            ResourceGroupName: $(resourceGroupName)
-            SlotName: 'production'
-            packageForLinux: '$(Pipeline.Workspace)/BankingSimulation/BankingSimulation.zip/BankingSimulation.zip'
-            enableCustomDeployment: true
-            DeploymentType: 'webDeploy'
-            RemoveAdditionalFilesFlag: true
-            ExcludeFilesFromAppDataFlag: false
-          displayName: 'Deploy to Web App'
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(subscriptionId)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        deployToSlotOrASE: true
+        ResourceGroupName: $(resourceGroupName)
+        SlotName: 'production'
+        packageForLinux: '$(Pipeline.Workspace)/BankingSimulation/BankingSimulation.zip/BankingSimulation.zip'
+        enableCustomDeployment: true
+        DeploymentType: 'webDeploy'
+        RemoveAdditionalFilesFlag: true
+        ExcludeFilesFromAppDataFlag: false
+      displayName: 'Deploy to Web App'
