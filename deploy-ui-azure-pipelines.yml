@@ -25,7 +25,7 @@ jobs:
         
     - task: AzureStaticWebApp@0
       inputs:
-        app_location: '/'
+        app_location: '/drop/'
         skip_app_build: true
         skip_api_build: true
         output_location: $(System.ArtifactsDirectory)/drop/
