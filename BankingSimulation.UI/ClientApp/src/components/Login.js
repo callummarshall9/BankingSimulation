@@ -14,10 +14,35 @@ export default class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    var jwtToken = document.cookie.split(";").map(r => r.split("=")).filter(r => r[0] === "token");
+
+    if (jwtToken.length === 0) {
+        return;
+    }
+
+    var jwtTokenValue = jwtToken[0][1];
+
+    fetch(ApiConfig.LoginAuthority + "Security/SSOUser/Me()", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8;",
+            "Authorization": "bearer " + jwtTokenValue
+        }
+    }).then(async (response) => {
+        var json = await response.json();
+
+        if (json.Id !== "Guest") {
+            this.setState({ error: "", loading: false });
+            this.props.onLoggedIn();
+        }
+    })
+  }
+
   login() {
     this.setState({ loading: true });
 
-    fetch(ApiConfig.LoginAuthority + "Login", {
+    fetch(ApiConfig.LoginAuthority + "Account/Login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=utf-8;"
@@ -33,13 +58,14 @@ export default class Login extends Component {
             this.setState( {error: "Invalid login", loading: false })
         } else if (response.status === 200) {
             this.setState({ error: "", loading: false });
+            document.cookie = "token=" + json.id + "; expires=" + json.expires + "; path=/;";
             this.props.onLoggedIn();
         } else {
             this.setState({ error: "Unhandled error occured", loading: false });
         }
     }).catch((_) => {
         this.setState({ error: "Unhandled error occured", loading: false });
-    });;
+    });
   }
 
   renderError() {
@@ -75,7 +101,7 @@ export default class Login extends Component {
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                        <div className="card bg-dark text-white" style={{ borderRadius: "1rem;" }} >
+                        <div className="card bg-dark text-white" style={{ borderRadius: "1rem" }} >
                             <div className="card-body p-5 text-center">
 
                                 <div className="mb-md-5 mt-md-4 pb-5">
@@ -83,7 +109,7 @@ export default class Login extends Component {
                                     <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
                                     <p className="text-white-50 mb-5">Please enter your login and password!</p>
 
-                                    <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    <div data-mdb-input-init className="form-outline form-white mb-4">
                                         <input type="email" 
                                                 id="typeEmailX" 
                                                 placeholder="Email" 
@@ -92,7 +118,7 @@ export default class Login extends Component {
                                                 onChange={(e) => this.setState({username: e.target.value})} />
                                     </div>
 
-                                    <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    <div data-mdb-input-init className="form-outline form-white mb-4">
                                         <input type="password" 
                                                 placeholder="Password" 
                                                 id="typePasswordX" 
