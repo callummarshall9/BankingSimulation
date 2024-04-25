@@ -21,7 +21,7 @@ steps:
   displayName: 'npm install'
   workingDirectory: $(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp
 
-- script: npm install
+- script: npm run build
   displayName: 'npm run build'
   workingDirectory: $(Build.SourcesDirectory)\BankingSimulation.UI\ClientApp
 
