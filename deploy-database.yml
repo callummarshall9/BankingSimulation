@@ -8,11 +8,37 @@ trigger:
     include:
       - main
 
+resources:
+  repositories:
+    - repository: BankingSimulation
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/BankingSimulation
+      ref: $(Build.SourceBranch)
+    - repository: AspNetCoreOData
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/AspNetCoreOData
+
+
 pool:
   vmImage: windows-latest
 
 steps:
-- checkout: self
+- checkout: BankingSimulation
+  displayName: 'Pull Repository with Submodules'
+- checkout: AspNetCoreOData
+  displayName: 'Pull OData repository'
+
+- task: CopyFiles@2
+  displayName: 'Copy OData repo to BankingSimulation sub module path'
+  inputs:
+    SourceFolder: '$(Build.Repository.LocalPath)/AspNetCoreOData'
+    Contents: '**'
+    TargetFolder: '$(Build.Repository.LocalPath)/BankingSimulation/AspNetCoreOData'
+    CleanTargetFolder: true
+    OverWrite: true
+
 
 - task: UseDotNet@2
   inputs:
@@ -29,7 +55,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Debugging'
   inputs:
-    workingDirectory: '$(Build.SourcesDirectory)'
+    workingDirectory: '$(Build.Repository.LocalPath)'
     targetType: 'inline'
     script: |
      dir
@@ -37,7 +63,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Set connection string in appsettings'
   inputs:
-    workingDirectory: '$(Build.SourcesDirectory)/BankingSimulation'
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation'
     targetType: 'inline'
     script: |
      $json = Get-Content appsettings.json | ConvertFrom-Json
@@ -47,7 +73,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Apply migrations script'
   inputs:
-    workingDirectory: '$(Build.SourcesDirectory)/BankingSimulation'
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation'
     targetType: 'inline'
     script: |
       $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
@@ -55,7 +81,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/BankingSimulation'
+    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation'
     Contents: 'migration-script-*.sql'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
