@@ -73,7 +73,7 @@ jobs:
           Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
     - task: PowerShell@2
-      displayName: 'Apply migrations script'
+      displayName: 'Generate Difference Script'
       inputs:
         workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
         targetType: 'inline'
@@ -82,24 +82,26 @@ jobs:
           dotnet ef migrations script --idempotent -o $path
 
     - task: CopyFiles@2
+      displayName: 'Copy difference script to artifact directory'
       inputs:
         SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
         Contents: 'migration-script-*.sql'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish difference script'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
     
   - job: manualApproval
-    displayName: "Apply Difference Script"
+    displayName: "Get difference script approval"
     dependsOn: generateDifferenceScript
     pool: server
     steps:
     - task: ManualValidation@0
-      timeoutInMinutes: 5
+      timeoutInMinutes: 60
       inputs:
         instructions: "Please review differences script"
         notifyUsers: "callummarshall9@hotmail.co.uk"
