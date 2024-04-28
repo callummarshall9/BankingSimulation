@@ -32,7 +32,7 @@ steps:
     targetType: 'inline'
     script: |
      $json = Get-Content appsettings.json | ConvertFrom-Json
-     $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString"
+     $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
      Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
 - task: PowerShell@2
