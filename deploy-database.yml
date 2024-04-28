@@ -1,0 +1,55 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- checkout: self
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x'
+    
+- task: DotNetCoreCLI@2
+  displayName: 'Install EF Core Tools'
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'custom'
+    custom: 'user-secrets'
+    arguments: 'set "Connections:BankSimulationContext" "$(env:BankConnectionString)"'
+    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
+
+- task: PowerShell@2
+  displayName: 'Apply migrations script'
+  inputs:
+    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
+    targetType: 'inline'
+    script: |
+      $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
+      dotnet ef migrations script --idempotent -o $path
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Pipeline.Workspace)/BankingSimulation'
+    Contents: 'migration-script-*.sql'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
