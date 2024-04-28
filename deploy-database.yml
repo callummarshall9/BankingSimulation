@@ -29,6 +29,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Set connection string in appsettings'
   inputs:
+    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
     targetType: 'inline'
     script: |
      $json = Get-Content appsettings.json | ConvertFrom-Json
