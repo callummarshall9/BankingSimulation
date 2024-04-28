@@ -26,12 +26,14 @@ steps:
     custom: 'tool'
     arguments: 'install --global dotnet-ef'
     
-- task: DotNetCoreCLI@2
+- task: PowerShell@2
+  displayName: 'Set connection string in appsettings'
   inputs:
-    command: 'custom'
-    custom: 'user-secrets'
-    arguments: 'set "Connections:BankSimulationContext" "$(env:BankConnectionString)"'
-    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
+    targetType: 'inline'
+    script: |
+      $json = Get-Content appsettings.json | ConvertFrom-Json
+      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value "${{ BankConnectionString }}"
+      Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
 - task: PowerShell@2
   displayName: 'Apply migrations script'
