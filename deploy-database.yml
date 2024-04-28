@@ -29,7 +29,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Debugging'
   inputs:
-    workingDirectory: '$(Pipeline.Workspace)'
+    workingDirectory: '$(Build.SourcesDirectory)'
     targetType: 'inline'
     script: |
      dir
@@ -37,17 +37,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Set connection string in appsettings'
   inputs:
-    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
-    targetType: 'inline'
-    script: |
-     $json = Get-Content appsettings.json | ConvertFrom-Json
-     $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
-     Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
-    
-- task: PowerShell@2
-  displayName: 'Set connection string in appsettings'
-  inputs:
-    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
+    workingDirectory: '$(Build.SourcesDirectory)/BankingSimulation'
     targetType: 'inline'
     script: |
      $json = Get-Content appsettings.json | ConvertFrom-Json
@@ -57,7 +47,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Apply migrations script'
   inputs:
-    workingDirectory: '$(Pipeline.Workspace)/BankingSimulation'
+    workingDirectory: '$(Build.SourcesDirectory)/BankingSimulation'
     targetType: 'inline'
     script: |
       $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
@@ -65,7 +55,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Pipeline.Workspace)/BankingSimulation'
+    SourceFolder: '$(Build.SourcesDirectory)/BankingSimulation'
     Contents: 'migration-script-*.sql'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
