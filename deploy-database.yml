@@ -127,10 +127,12 @@ jobs:
             
     - task: SqlAzureDacpacDeployment@1
       inputs:
-        azureSubscription: $(subscriptionId)
-        AuthenticationType: 'aadAuthenticationIntegrated'
-        ServerName: $(serverName)
-        DatabaseName: $(databaseName)
+        azureSubscription: '$(subscriptionId)'
+        AuthenticationType: 'aadAuthenticationPassword'
+        ServerName: '$(serverName)'
+        DatabaseName: '$(databaseName)'
+        aadSqlUsername: '$(username)'
+        aadSqlPassword: '$(password)'
         deployType: 'SqlTask'
         SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
