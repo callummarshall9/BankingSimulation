@@ -114,7 +114,7 @@ jobs:
     - task: DownloadBuildArtifacts@1
       inputs:
         buildType: 'specific'
-        project: '$(projectId)'
+        project: $(projectId)
         pipeline: 'callummarshall9.BankingSimulation'
         buildVersionToDownload: 'specific'
         buildId: $(Build.BuildId)
