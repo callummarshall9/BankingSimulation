@@ -118,5 +118,5 @@ jobs:
         ServerName: $(serverName)
         DatabaseName: $(databaseName)
         deployType: 'SqlTask'
-        SqlFile: '$(Build.ArtifactStagingDirectory)\migration-script.sql'
+        SqlFile: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
