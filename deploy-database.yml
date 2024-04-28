@@ -111,6 +111,20 @@ jobs:
     displayName: "Apply Difference Script"
     dependsOn: manualApproval
     steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'specific'
+        project: '$(projectId)'
+        pipeline: 'callummarshall9.BankingSimulation'
+        buildVersionToDownload: 'specific'
+        buildId: $(Build.BuildId)
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+        
+    - script: dir $(System.ArtifactsDirectory)
+    - script: dir "$(System.ArtifactsDirectory)/drop"
+            
     - task: SqlAzureDacpacDeployment@1
       inputs:
         azureSubscription: $(subscriptionId)
@@ -118,5 +132,5 @@ jobs:
         ServerName: $(serverName)
         DatabaseName: $(databaseName)
         deployType: 'SqlTask'
-        SqlFile: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation/migration-script.sql'
+        SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
