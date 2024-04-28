@@ -24,69 +24,97 @@ resources:
 pool:
   vmImage: windows-latest
 
-steps:
-- checkout: BankingSimulation
-  displayName: 'Pull Repository with Submodules'
-- checkout: AspNetCoreOData
-  displayName: 'Pull OData repository'
+jobs:
+  - job: generateDifferenceScript
+    displayName: 'Generate Migration Difference Script'
+    steps:
+    - checkout: BankingSimulation
+      displayName: 'Pull Repository with Submodules'
+    - checkout: AspNetCoreOData
+      displayName: 'Pull OData repository'
 
-- task: CopyFiles@2
-  displayName: 'Copy OData repo to BankingSimulation sub module path'
-  inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)/AspNetCoreOData'
-    Contents: '**'
-    TargetFolder: '$(Build.Repository.LocalPath)/BankingSimulation/AspNetCoreOData'
-    CleanTargetFolder: true
-    OverWrite: true
+    - task: CopyFiles@2
+      displayName: 'Copy OData repo to BankingSimulation sub module path'
+      inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)/AspNetCoreOData'
+        Contents: '**'
+        TargetFolder: '$(Build.Repository.LocalPath)/BankingSimulation/AspNetCoreOData'
+        CleanTargetFolder: true
+        OverWrite: true
 
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.x'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Install EF Core Tools'
+      inputs:
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'install --global dotnet-ef'
+        
+    - task: PowerShell@2
+      displayName: 'Debugging'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)'
+        targetType: 'inline'
+        script: |
+          dir
+        
+    - task: PowerShell@2
+      displayName: 'Set connection string in appsettings'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        targetType: 'inline'
+        script: |
+          $json = Get-Content appsettings.json | ConvertFrom-Json
+          $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
+          Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.x'
+    - task: PowerShell@2
+      displayName: 'Apply migrations script'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        targetType: 'inline'
+        script: |
+          $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
+          dotnet ef migrations script --idempotent -o $path
+
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        Contents: 'migration-script-*.sql'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
     
-- task: DotNetCoreCLI@2
-  displayName: 'Install EF Core Tools'
-  inputs:
-    command: 'custom'
-    custom: 'tool'
-    arguments: 'install --global dotnet-ef'
-    
-- task: PowerShell@2
-  displayName: 'Debugging'
-  inputs:
-    workingDirectory: '$(Build.Repository.LocalPath)'
-    targetType: 'inline'
-    script: |
-     dir
-    
-- task: PowerShell@2
-  displayName: 'Set connection string in appsettings'
-  inputs:
-    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
-    targetType: 'inline'
-    script: |
-     $json = Get-Content appsettings.json | ConvertFrom-Json
-     $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
-     Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
+  - job: manualApproval
+    displayName: "Apply Difference Script"
+    dependsOn: generateDifferenceScript
+    pool: server
+    steps:
+    - task: ManualValidation@0
+      timeoutInMinutes: 5
+      inputs:
+        instructions: "Please review differences script"
+        notifyUsers: "callummarshall9@hotmail.co.uk"
+        onTimeout: reject
 
-- task: PowerShell@2
-  displayName: 'Apply migrations script'
-  inputs:
-    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
-    targetType: 'inline'
-    script: |
-      $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
-      dotnet ef migrations script --idempotent -o $path
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
-    Contents: 'migration-script-*.sql'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+  - job: applyDifferenceScript
+    displayName: "Apply Difference Script"
+    dependsOn: manualApproval
+    steps:
+    - task: SqlAzureDacpacDeployment@1
+      inputs:
+        azureSubscription: $(subscriptionId)
+        AuthenticationType: 'aadAuthenticationIntegrated'
+        ServerName: $(serverName)
+        DatabaseName: $(databaseName)
+        deployType: 'SqlTask'
+        SqlFile: '$(Build.ArtifactStagingDirectory)\migration-script-*.sql'
+        IpDetectionMethod: 'AutoDetect'
