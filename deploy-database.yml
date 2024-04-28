@@ -63,7 +63,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Set connection string in appsettings'
   inputs:
-    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation'
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
     targetType: 'inline'
     script: |
      $json = Get-Content appsettings.json | ConvertFrom-Json
@@ -73,7 +73,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Apply migrations script'
   inputs:
-    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation'
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
     targetType: 'inline'
     script: |
       $path = ".\migration-script-$(Get-Date -Format "yyyy-MM-dd hhmmss").sql"
@@ -81,7 +81,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation'
+    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
     Contents: 'migration-script-*.sql'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
