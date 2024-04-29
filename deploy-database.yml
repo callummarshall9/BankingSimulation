@@ -115,7 +115,7 @@ jobs:
       inputs:
         buildType: 'specific'
         project: $(projectId)
-        pipeline: 'callummarshall9.BankingSimulation'
+        pipeline: 'Databases-BankingSimulation'
         buildVersionToDownload: 'specific'
         buildId: $(Build.BuildId)
         downloadType: 'specific'
