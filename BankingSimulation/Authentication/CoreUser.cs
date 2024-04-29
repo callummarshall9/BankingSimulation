@@ -1,4 +1,4 @@
-﻿namespace BankingSimulation.Authentication
+﻿namespace BankingSimulation.Authentication;
 
 public class CoreUser
 {
