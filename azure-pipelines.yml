@@ -70,14 +70,14 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '-c Release -o $(Build.Repository.LocalPath)/BankingSimulation'
+    arguments: '-c Release -o $(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation/BankingSimulation'
     zipAfterPublish: true
     workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
 
 - task: CopyFiles@2
   displayName: 'Copy packaged zip'
   inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation'
+    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
     Contents: 'BankingSimulation.zip'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
