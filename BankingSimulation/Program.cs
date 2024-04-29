@@ -13,6 +13,7 @@ using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,6 +83,8 @@ AddSet<Category>(app);
 AddSet<CategoryKeyword>(app);
 AddSet<Transaction>(app);
 AddSet<TransactionType>(app);
+
+app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
 
 app.MapPost("/Accounts/ImportRBS", 
     async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
