@@ -49,17 +49,37 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+- task: PowerShell@2
+  displayName: 'Set connection string in appsettings'
   inputs:
-    solution: '**/BankingSimulation.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+    targetType: 'inline'
+    script: |
+      $json = Get-Content appsettings.json | ConvertFrom-Json
+      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
+      Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
-- task: VSTest@2
+- task: UseDotNet@2
+  displayName: 'Use .NET 8'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    packageType: 'sdk'
+    version: '8.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    arguments: '-c Release -o $(Build.Repository.LocalPath)/BankingSimulation'
+    zipAfterPublish: true
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+
+- task: CopyFiles@2
+  displayName: 'Copy packaged zip'
+  inputs:
+    SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation'
+    Contents: 'BankingSimulation.zip'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:

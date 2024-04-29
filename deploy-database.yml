@@ -1,0 +1,140 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr: none
+
+resources:
+  repositories:
+    - repository: BankingSimulation
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/BankingSimulation
+      ref: $(Build.SourceBranch)
+    - repository: AspNetCoreOData
+      endpoint: GitHubServiceConnection
+      type: github
+      name: callummarshall9/AspNetCoreOData
+
+
+pool:
+  vmImage: windows-latest
+
+jobs:
+  - job: generateDifferenceScript
+    displayName: 'Generate Migration Difference Script'
+    steps:
+    - checkout: BankingSimulation
+      displayName: 'Pull Repository with Submodules'
+    - checkout: AspNetCoreOData
+      displayName: 'Pull OData repository'
+
+    - task: CopyFiles@2
+      displayName: 'Copy OData repo to BankingSimulation sub module path'
+      inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)/AspNetCoreOData'
+        Contents: '**'
+        TargetFolder: '$(Build.Repository.LocalPath)/BankingSimulation/AspNetCoreOData'
+        CleanTargetFolder: true
+        OverWrite: true
+
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.x'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Install EF Core Tools'
+      inputs:
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'install --global dotnet-ef'
+        
+    - task: PowerShell@2
+      displayName: 'Debugging'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)'
+        targetType: 'inline'
+        script: |
+          dir
+        
+    - task: PowerShell@2
+      displayName: 'Set connection string in appsettings'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        targetType: 'inline'
+        script: |
+          $json = Get-Content appsettings.json | ConvertFrom-Json
+          $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
+          Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
+
+    - task: PowerShell@2
+      displayName: 'Generate Difference Script'
+      inputs:
+        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        targetType: 'inline'
+        script: |
+          $path = ".\migration-script.sql"
+          dotnet ef migrations script --idempotent -o $path
+
+    - task: CopyFiles@2
+      displayName: 'Copy difference script to artifact directory'
+      inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        Contents: 'migration-script.sql'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish difference script'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+    
+  - job: manualApproval
+    displayName: "Get difference script approval"
+    dependsOn: generateDifferenceScript
+    pool: server
+    steps:
+    - task: ManualValidation@0
+      timeoutInMinutes: 60
+      inputs:
+        instructions: "Please review differences script"
+        notifyUsers: "callummarshall9@hotmail.co.uk"
+        onTimeout: reject
+
+  - job: applyDifferenceScript
+    displayName: "Apply Difference Script"
+    dependsOn: manualApproval
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'specific'
+        project: $(projectId)
+        pipeline: 'Databases-BankingSimulation'
+        buildVersionToDownload: 'specific'
+        buildId: $(Build.BuildId)
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+        
+    - script: dir $(System.ArtifactsDirectory)
+    - script: dir "$(System.ArtifactsDirectory)/drop"
+            
+    - task: SqlAzureDacpacDeployment@1
+      inputs:
+        azureSubscription: '$(subscriptionId)'
+        AuthenticationType: 'aadAuthenticationPassword'
+        ServerName: '$(serverName)'
+        DatabaseName: '$(databaseName)'
+        aadSqlUsername: '$(username)'
+        aadSqlPassword: '$(password)'
+        deployType: 'SqlTask'
+        SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
+        IpDetectionMethod: 'AutoDetect'
