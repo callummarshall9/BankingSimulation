@@ -40,5 +40,5 @@ jobs:
         SlotName: 'production'
         packageForLinux: '$(System.ArtifactsDirectory)/drop/BankingSimulation.zip'
         enableCustomDeployment: true
-        DeploymentType: 'zipDeploy'
+        DeploymentType: 'runFromZip'
       displayName: 'Deploy to Web App'
