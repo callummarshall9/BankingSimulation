@@ -56,7 +56,7 @@ steps:
     targetType: 'inline'
     script: |
       $json = Get-Content appsettings.json | ConvertFrom-Json
-      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value ${env:BANKCONNECTIONSTRING}
+      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value "${BankConnectionString}"
       Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
 - task: VSBuild@1
