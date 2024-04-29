@@ -70,7 +70,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/BankingSimulation'
     zipAfterPublish: true
     workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
 
