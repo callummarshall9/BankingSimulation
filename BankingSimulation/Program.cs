@@ -43,10 +43,15 @@ IEdmModel GetModel()
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication("bearer")
-    .AddScheme<AuthenticationSchemeOptions, SSOAuthenticationHandler>("bearer", opts => { }); 
+    .AddScheme<AuthenticationSchemeOptions, SSOAuthenticationHandler>("bearer", opts => { });
+
+builder.Services.AddScoped((provider) => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<BankSimulationContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("BankSimulationContext")));
+
+builder.Services.AddDbContext<ODataContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("BankSimulationContext")));
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddCors();
@@ -179,7 +184,15 @@ void AddSet<T>(WebApplication app) where T : class
         .RequireAuthorization();
 
     app.MapGet($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromServices] ODataQueryOptions<T> options)
-        => options.ApplyTo(foundationService.GetAll<T>()).Cast<T>())
+        => {
+            var result = foundationService.GetAll<T>();
+
+            var peek = result.ToArray();
+            var appliedResult = options.ApplyTo(result).Cast<T>();
+
+            return appliedResult;
+        }
+    )
         .WithOpenApi()
         .RequireAuthorization();
 }

@@ -6,9 +6,9 @@ namespace BankingSimulation.Data;
 
 public class StorageBroker : IStorageBroker
 {
-    private readonly BankSimulationContext context;
+    private readonly ODataContext context;
 
-    public StorageBroker(BankSimulationContext context)
+    public StorageBroker(ODataContext context)
     {
         this.context = context;
     }
@@ -38,7 +38,14 @@ public class StorageBroker : IStorageBroker
         await context.SaveChangesAsync();
     }
 
-    public IQueryable<T> GetAll<T>() where T : class
-        => context.Set<T>()
+    public IQueryable<T> GetAll<T>(bool ignoreFilters = false) where T : class
+    {
+        var baseQueryable = context.Set<T>()
             .AsNoTracking();
+
+        if (ignoreFilters)
+            baseQueryable = baseQueryable.IgnoreQueryFilters();
+
+        return baseQueryable;
+    }
 }
