@@ -1,7 +1,9 @@
+using BankingSimulation.Authentication;
 using BankingSimulation.Data;
 using BankingSimulation.Data.Models;
 using BankingSimulation.RBS;
 using BankingSimulation.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +41,10 @@ IEdmModel GetModel()
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication("bearer")
+    .AddScheme<AuthenticationSchemeOptions, SSOAuthenticationHandler>("bearer", opts => { }); 
+builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<BankSimulationContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("BankSimulationContext")));
 // Add services to the container.
@@ -114,7 +120,9 @@ app.MapPost("/Accounts/ImportRBS",
             },
             Summary = "Import Accounts",
             Description = "Import Accounts from CSV for RBS Transaction Statements"
-        });
+        })
+    .WithOpenApi()
+    .RequireAuthorization();
 
 app.MapPost("/Transactions/ImportRBS", 
     async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
@@ -141,7 +149,9 @@ app.MapPost("/Transactions/ImportRBS",
             },
             Summary = "Import Transactions",
             Description = "Import Transactions from CSV for RBS Transaction Statements"
-        });;
+        })
+    .WithOpenApi()
+    .RequireAuthorization();
 
  app.UseCors(x => x
     .AllowAnyMethod()
@@ -154,11 +164,22 @@ app.Run();
 void AddSet<T>(WebApplication app) where T : class
 {
     app.MapPost($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromBody] T entity) 
-        => foundationService.AddAsync<T>(entity)).WithOpenApi();
+        => foundationService.AddAsync<T>(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
     app.MapPut($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromBody] T entity) 
-        => foundationService.UpdateAsync<T>(entity)).WithOpenApi();
+        => foundationService.UpdateAsync<T>(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
     app.MapDelete($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromBody] T entity) 
-        => foundationService.UpdateAsync<T>(entity)).WithOpenApi();
+        => foundationService.UpdateAsync<T>(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
     app.MapGet($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromServices] ODataQueryOptions<T> options)
-        => options.ApplyTo(foundationService.GetAll<T>()).Cast<T>()).WithOpenApi();
+        => options.ApplyTo(foundationService.GetAll<T>()).Cast<T>())
+        .WithOpenApi()
+        .RequireAuthorization();
 }
