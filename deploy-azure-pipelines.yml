@@ -32,15 +32,13 @@ jobs:
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
-        azureSubscription: $(subscriptionId)
+        azureSubscription: '$(subscriptionId)'
         appType: 'webApp'
-        WebAppName: $(webAppName)
+        WebAppName: '$(webAppName)'
         deployToSlotOrASE: true
-        ResourceGroupName: $(resourceGroupName)
+        ResourceGroupName: '$(resourceGroupName)'
         SlotName: 'production'
         packageForLinux: '$(System.ArtifactsDirectory)/drop/BankingSimulation.zip'
         enableCustomDeployment: true
-        DeploymentType: 'webDeploy'
-        RemoveAdditionalFilesFlag: true
-        ExcludeFilesFromAppDataFlag: false
+        DeploymentType: 'zipDeploy'
       displayName: 'Deploy to Web App'
