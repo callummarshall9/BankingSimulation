@@ -38,6 +38,12 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
             .HasForeignKey(ur => ur.RoleId)
             .OnDelete(DeleteBehavior.NoAction);
 
+        modelBuilder.Entity<Role>()
+            .HasMany(r => r.Categories)
+            .WithOne(ur => ur.Role)
+            .HasForeignKey(ur => ur.RoleId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         modelBuilder.Entity<Account>()
             .HasMany(a => a.Roles)
             .WithOne(ar => ar.Account)
@@ -57,8 +63,6 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
 
         modelBuilder.Entity<AccountRole>().ToTable("AccountRoles", "Security")
             .HasKey(ar => new { ar.AccountId, ar.RoleId });
-
-        
     }
 }
 
@@ -88,5 +92,11 @@ public class ODataContext : BankSimulationContext
 
         modelBuilder.Entity<Transaction>()
             .HasQueryFilter(t => t.Account != null);
+
+        modelBuilder.Entity<Category>()
+            .HasQueryFilter(c => c.Role != null);
+
+        modelBuilder.Entity<CategoryKeyword>()
+            .HasQueryFilter(ck => ck.Category != null);
     }
 }

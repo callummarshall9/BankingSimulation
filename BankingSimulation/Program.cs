@@ -1,5 +1,6 @@
 using BankingSimulation.Authentication;
 using BankingSimulation.Data;
+using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.RBS;
 using BankingSimulation.Services;
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication("bearer")
     .AddScheme<AuthenticationSchemeOptions, SSOAuthenticationHandler>("bearer", opts => { });
 
 builder.Services.AddScoped((provider) => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+builder.Services.AddScoped<IAuthorisationBroker, AuthorisationBroker>();
 
 builder.Services.AddAuthorization();
 
@@ -74,7 +76,6 @@ builder.Services.AddODataOptions<TransactionType>(model);
 
 builder.Services.AddBankingSimulationServices();
 builder.Services.AddBankingSimulationRBSServices();
-
 builder.Services.AddBankingSimulationData();
 
 var app = builder.Build();

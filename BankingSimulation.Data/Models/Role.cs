@@ -10,5 +10,6 @@ namespace BankingSimulation.Data.Models
         public DateTimeOffset CreatedOn { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<AccountRole> Accounts { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }
