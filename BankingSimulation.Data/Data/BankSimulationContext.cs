@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankingSimulation.Data;
 
-public class BankSimulationContext : DbContext
+public class BankSimulationContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountBankingSystemReference> AccountSystemReferences { get; set; }
@@ -14,9 +14,6 @@ public class BankSimulationContext : DbContext
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<CategoryKeyword> CategoryKeywords { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=BankingSimulation;Trusted_Connection=yes;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
