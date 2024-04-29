@@ -59,14 +59,14 @@ steps:
       $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
       Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
-- task: VSBuild@1
+- task: UseDotNet@2
+  displayName: 'Use .NET 8'
   inputs:
-    solution: '**/BankingSimulation.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    packageType: 'sdk'
+    version: '8.x'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publish'
   inputs:
     command: 'publish'
     publishWebProjects: true
