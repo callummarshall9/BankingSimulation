@@ -66,10 +66,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+    workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
 
 - task: PublishBuildArtifacts@1
   inputs:
