@@ -1,13 +1,13 @@
 ﻿import React, { Component } from 'react'
-import ApiConfig from '../config/ApiConfig'
+import ApiService from '../services/ApiService'
 
 export class ImportData extends Component {
     static displayName = ImportData.name;
 
     constructor(props) {
         super(props);
+        this.apiService = new ApiService();
         this.state = {
-            config: { apiUrl: ApiConfig.BaseUrl },
             imported: false,
             importing: false,
             errorMessage: ""
@@ -15,60 +15,40 @@ export class ImportData extends Component {
     }
 
     componentDidMount() {
+        this.apiService.getAuthorisationToken();
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
         const form = e.target;
         const formData = new FormData(form);
 
-        this.importAccounts(formData.get("requestBody"), () => {
+        await this.importAccounts(formData.get("requestBody"), () => {
             this.importTransactions(formData.get("requestBody"));
         });
     }
 
-    importAccounts(requestBody, callback) {
+    async importAccounts(requestBody, callback) {
         this.setState({ importing: true, imported: false, errorMessage: "" })
 
-        fetch(this.state.config.apiUrl + 'Transactions/ImportRBS', {
-            method: "POST",
-            body: requestBody
-        }).then((response) => {
-            if (response.status === 200) {
-                callback();
-            } else {
-                this.setState({ importing: false, imported: true, errorMessage: "Failed to import" });
-                console.log(response.status, response.statusText);
-            }
-        })
-        .catch((error) => {
+        try {
+            await this.apiService.post("Accounts/ImportRBS", requestBody);
+            callback();
+
+        } catch (_) {
             this.setState({ importing: false, imported: true, errorMessage: "Failed to import" });
-            console.log(error.status, error.statusText);
-        });
+        }
     }
 
-    importTransactions(requestBody) {
-        fetch(this.state.config.apiUrl + 'Accounts/ImportRBS', {
-            method: "POST",
-            body: requestBody
-        }).then((response) => {
-            if (response.status === 200) {
-                this.setState({ importing: false, imported: true, errorMessage: "" });
-            } else {
-                this.setState({ importing: false, imported: true, errorMessage: "Failed to import" });
-                console.log(response.status, response.statusText);
-            }
+    async importTransactions(requestBody) {
 
-        })
-        .catch((error) => {
+        try {
+            await this.apiService.post("Transactions/ImportRBS", requestBody);
+            this.setState({ importing: false, imported: true, errorMessage: "" });
+        } catch (_) {
             this.setState({ importing: false, imported: true, errorMessage: "Failed to import" });
-            console.log(error.status, error.statusText);
-            // 3. get error messages, if any
-            error.json().then((json) => {
-                console.log(json);
-            });
-        });
+        }
     }
 
     getLoadingMessage() {

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import ApiConfig from '../config/ApiConfig'
+import ApiService from '../services/ApiService'
 
 export default class Login extends Component {
   static displayName = Login.name;
 
   constructor(props) {
     super(props);
+    this.apiService = new ApiService();
     this.state = {
         username: "",
         password: "",
@@ -14,58 +15,34 @@ export default class Login extends Component {
     };
   }
 
-  componentDidMount() {
-    var jwtToken = document.cookie.split(";").map(r => r.split("=")).filter(r => r[0].trim() === "token");
+    async componentDidMount() {
+        this.apiService.getAuthorisationToken();
 
-    if (jwtToken.length === 0) {
-        return;
+        var isLoggedIn = await this.apiService.isLoggedIn();
+
+        if (isLoggedIn) {
+            this.setState({ error: "", loading: false });
+            this.props.onLoggedIn();
+        }
     }
 
-    var jwtTokenValue = jwtToken[0][1].trim();
-
-    fetch(ApiConfig.LoginAuthority + "Security/SSOUser/Me()", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8;",
-            "Authorization": "bearer " + jwtTokenValue
-        }
-    }).then(async (response) => {
-        var json = await response.json();
-
-        if (json.Id !== "Guest") {
-            this.setState({ error: "", loading: false });
-            this.props.onLoggedIn();
-        }
-    })
-  }
-
-  login() {
+  async login() {
     this.setState({ loading: true });
 
-    fetch(ApiConfig.LoginAuthority + "Account/Login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8;"
-        },
-        body: JSON.stringify({ User: this.state.username, "Pass": this.state.password })
-    }).then(async (response) => {
-        this.setState({ error: "", loading: false });
-        var json = await response.json();
+      var response = await this.apiService.login(this.state.username, this.state.password);
 
-        if (response.status === 500) {
-            this.setState({ error: json.error, loading: false });
-        } else if (response.status === 401) {
-            this.setState( {error: "Invalid login", loading: false })
-        } else if (response.status === 200) {
-            this.setState({ error: "", loading: false });
-            document.cookie = "token=" + json.id + "; expires=" + json.expires + "; path=/;";
-            this.props.onLoggedIn();
-        } else {
-            this.setState({ error: "Unhandled error occured", loading: false });
-        }
-    }).catch((_) => {
+    this.setState({ error: "", loading: false });
+
+    if (response.status === 500) {
+        this.setState({ error: response.error, loading: false });
+    } else if (response.status === 401) {
+        this.setState( {error: "Invalid login", loading: false })
+    } else if (response.status === 200) {
+        this.setState({ error: "", loading: false });
+        this.props.onLoggedIn();
+    } else {
         this.setState({ error: "Unhandled error occured", loading: false });
-    });
+    }
   }
 
   renderError() {
