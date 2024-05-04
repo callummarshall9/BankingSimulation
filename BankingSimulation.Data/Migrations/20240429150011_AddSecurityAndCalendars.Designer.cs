@@ -4,6 +4,7 @@ using BankingSimulation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSimulation.Data.Migrations
 {
     [DbContext(typeof(BankSimulationContext))]
-    partial class BankSimulationContextModelSnapshot : ModelSnapshot
+    [Migration("20240429150011_AddSecurityAndCalendars")]
+    partial class AddSecurityAndCalendars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,8 +83,6 @@ namespace BankingSimulation.Data.Migrations
 
                     b.HasKey("AccountId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AccountRoles", "Security");
                 });
 
@@ -94,12 +95,7 @@ namespace BankingSimulation.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Calendars");
                 });
@@ -124,8 +120,6 @@ namespace BankingSimulation.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CalendarId");
-
                     b.ToTable("CalendarEvents");
                 });
 
@@ -144,14 +138,9 @@ namespace BankingSimulation.Data.Migrations
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentCategoryId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Categories");
                 });
@@ -294,35 +283,13 @@ namespace BankingSimulation.Data.Migrations
 
                     b.HasOne("BankingSimulation.Data.Models.Role", "Role")
                         .WithMany("Accounts")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("BankingSimulation.Data.Models.Calendar", b =>
-                {
-                    b.HasOne("BankingSimulation.Data.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("BankingSimulation.Data.Models.CalendarEvent", b =>
-                {
-                    b.HasOne("BankingSimulation.Data.Models.Calendar", "Calendar")
-                        .WithMany()
-                        .HasForeignKey("CalendarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Calendar");
                 });
 
             modelBuilder.Entity("BankingSimulation.Data.Models.Category", b =>
@@ -332,26 +299,16 @@ namespace BankingSimulation.Data.Migrations
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("BankingSimulation.Data.Models.Role", "Role")
-                        .WithMany("Categories")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("ParentCategory");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("BankingSimulation.Data.Models.CategoryKeyword", b =>
                 {
-                    b.HasOne("BankingSimulation.Data.Models.Category", "Category")
+                    b.HasOne("BankingSimulation.Data.Models.Category", null)
                         .WithMany("Keywords")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BankingSimulation.Data.Models.UserRole", b =>
@@ -414,8 +371,6 @@ namespace BankingSimulation.Data.Migrations
             modelBuilder.Entity("BankingSimulation.Data.Models.Role", b =>
                 {
                     b.Navigation("Accounts");
-
-                    b.Navigation("Categories");
 
                     b.Navigation("UserRoles");
                 });

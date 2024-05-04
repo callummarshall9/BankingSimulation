@@ -50,13 +50,14 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: PowerShell@2
-  displayName: 'Set connection string in appsettings'
+  displayName: 'Set connection strings in appsettings'
   inputs:
     workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
     targetType: 'inline'
     script: |
       $json = Get-Content appsettings.json | ConvertFrom-Json
       $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
+      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:SSOConnectionString
       Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
 - task: UseDotNet@2

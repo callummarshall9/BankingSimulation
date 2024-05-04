@@ -1,30 +1,33 @@
 import React, { Component } from 'react';
-import ApiConfig from '../config/ApiConfig'
+import ApiService from '../services/ApiService';
 
 export class Accounts extends Component {
   static displayName = Accounts.name;
 
   constructor(props) {
     super(props);
-    this.state = { accounts: [], loading: true, config: { apiUrl: ApiConfig.BaseUrl } };
+    this.apiService = new ApiService();
+
+    this.state = { accounts: [], loading: true };
   }
 
   componentDidMount() {
+    this.apiService.getAuthorisationToken();
     this.populateAccountData();
   }
 
   static getAccountName(account) {
-    var name = account.name;
+    var name = account.Name;
 
-    if (account.friendlyName && account.friendlyName !== "") {
-        name = account.friendlyName + " (" + account.name + ")";
+      if (account.FriendlyName && account.FriendlyName !== "") {
+          name = account.FriendlyName + " (" + account.Name + ")";
     }
 
     return name;
   }
 
   static getAccountSystems(accountSystems) {
-    return accountSystems.map(acs => (<span key={acs.bankingSystemId} className="badge badge-primary">{acs.bankingSystemId}</span>));
+    return accountSystems.map(acs => (<span key={acs.BankingSystemId} className="badge badge-primary">{acs.BankingSystemId}</span>));
   }
 
   static renderAccountsTable(accounts) {
@@ -39,9 +42,9 @@ export class Accounts extends Component {
         </thead>
         <tbody>
           {accounts.map(account =>
-            <tr key={account.id}>
+            <tr key={account.Id}>
               <td>{Accounts.getAccountName(account)}</td>
-              <td>{account.number}</td>
+              <td>{account.Number}</td>
               <td>{Accounts.getAccountSystems(account.AccountSystemReferences)}</td>
             </tr>
           )}
@@ -64,21 +67,9 @@ export class Accounts extends Component {
     );
   }
 
-  async populateAccountData() {
-    const accountRequest = await fetch(this.state.config.apiUrl + 'Accounts');
-    const accountData = await accountRequest.json();
+    async populateAccountData() {
+        var accountData = await this.apiService.get("Accounts?$expand=AccountSystemReferences");
 
-    const accountBankingSystemReferenceRequest = await fetch(this.state.config.apiUrl + 'AccountBankingSystemReferences');
-    const accountBankingSystemReferenceData = await accountBankingSystemReferenceRequest.json();
-
-    console.log(accountData);
-    console.log(accountBankingSystemReferenceData);
-
-    var finalAccountData = accountData.map(ad => {
-        ad.AccountSystemReferences = accountBankingSystemReferenceData.filter(absrd => absrd.accountId === ad.id);
-        return ad;
-    });
-
-    this.setState({ accounts: finalAccountData, loading: false });
+      this.setState({ accounts: accountData, loading: false });
   }
 }

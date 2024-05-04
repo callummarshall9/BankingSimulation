@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankingSimulation.Data.Models;
+using System;
 using System.Collections.Generic;
 
 namespace BankingSimulation.Data;
@@ -11,4 +12,5 @@ public class Account
     public string FriendlyName { get; set; }
     public ICollection<AccountBankingSystemReference> AccountSystemReferences { get; set; }
     public ICollection<Transaction> Transactions { get;set; }
+    public ICollection<AccountRole> Roles { get; set; }
 }

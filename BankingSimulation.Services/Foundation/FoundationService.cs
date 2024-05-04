@@ -1,25 +1,42 @@
 ﻿using BankingSimulation.Data;
+using BankingSimulation.Data.Brokers;
+using System.Security;
 
 namespace BankingSimulation.Services;
 
-public class FoundationService : IFoundationService
+public class FoundationService(IStorageBroker storageBroker, 
+    IAuthorisationBroker authorisationBroker) : IFoundationService
 {
-    private readonly IStorageBroker storageBroker;
-
-    public FoundationService(IStorageBroker storageBroker)
-{
-        this.storageBroker = storageBroker;
-    }
 
     public Task<T> AddAsync<T>(T item) where T : class
-        => storageBroker.AddAsync(item);
+    {
+        if (authorisationBroker.GetUserId() == "Guest")
+            throw new SecurityException("Access Denied!");
+
+        return storageBroker.AddAsync(item);
+    }
 
     public IQueryable<T> GetAll<T>() where T : class
-        => storageBroker.GetAll<T>();
+    {
+        if (authorisationBroker.GetUserId() == "Guest")
+            throw new SecurityException("Access Denied!");
+
+        return storageBroker.GetAll<T>();
+    }
 
     public Task<T> UpdateAsync<T>(T item) where T : class
-        => storageBroker.UpdateAsync(item);
+    {
+        if (authorisationBroker.GetUserId() == "Guest")
+            throw new SecurityException("Access Denied!");
+
+        return storageBroker.UpdateAsync(item);
+    }
 
     public Task DeleteAsync<T>(T item) where T : class
-        => storageBroker.DeleteAsync(item);
+    {
+        if (authorisationBroker.GetUserId() == "Guest")
+            throw new SecurityException("Access Denied!");
+
+        return storageBroker.DeleteAsync(item);
+    }
 }

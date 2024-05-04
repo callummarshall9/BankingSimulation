@@ -3,26 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BankingSimulation.Data;
+using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.Services;
 
 namespace BankingSimulation.RBS;
 
-internal partial class RBSOrchestrationService : IRBSOrchestrationService
+internal partial class RBSOrchestrationService(
+    IRBSAccountProcessingService accountProcessingService,
+    IRBSTransactionProcessingService transactionProcessingService,
+    IFoundationService foundationService,
+    IAuthorisationBroker authorisationBroker) : IRBSOrchestrationService
 {
-    private readonly IRBSAccountProcessingService accountProcessingService;
-    private readonly IRBSTransactionProcessingService transactionProcessingService;
-    private readonly IFoundationService foundationService;
-
-    public RBSOrchestrationService(IRBSAccountProcessingService accountProcessingService, 
-        IRBSTransactionProcessingService transactionProcessingService,
-        IFoundationService foundationService)
-    {
-        this.accountProcessingService = accountProcessingService;
-        this.transactionProcessingService = transactionProcessingService;
-        this.foundationService = foundationService;
-    }
-
     public async Task CreateRBSSystem()
     {
         if (!foundationService.GetAll<BankingSystem>().Any(bs => bs.Id == "RBS"))
@@ -49,8 +41,19 @@ internal partial class RBSOrchestrationService : IRBSOrchestrationService
         foreach(var entry in newAccounts)
         {
             var topLevelAccount = await foundationService.AddAsync(new Account { Name = entry.Name, Number = entry.Number });
-
             await foundationService.AddAsync(new AccountBankingSystemReference { BankingSystemId = "RBS", AccountId = topLevelAccount.Id });
+
+            var accountRole = await foundationService.AddAsync(new Role
+            {
+                CreatedOn = DateTimeOffset.UtcNow,
+                Name = $"{entry.Name} Role",
+            });
+
+            await foundationService.AddAsync(new AccountRole { RoleId = accountRole.Id, AccountId = topLevelAccount.Id });
+
+            string userId = authorisationBroker.GetUserId();
+
+            await foundationService.AddAsync(new UserRole { RoleId = accountRole.Id, UserId = userId });
         }
 
         foreach(var entry in existingAccounts)
@@ -69,18 +72,22 @@ internal partial class RBSOrchestrationService : IRBSOrchestrationService
     {
         var parsedTransactions = transactionProcessingService.ParseTransactions(rawData);
 
-        var accountNumbers = parsedTransactions.Select(pt => pt.Account.Number).Distinct().ToArray();
+        var receivedAccountNumbers = parsedTransactions.Select(pt => pt.Account.Number).Distinct().ToArray();
 
         var existingAccounts = foundationService.GetAll<Account>()
-            .Where(a => accountNumbers.Contains(a.Number) && a.AccountSystemReferences.Any(asr => asr.BankingSystemId == "RBS"))
+            .Where(a => receivedAccountNumbers.Contains(a.Number) 
+                && a.AccountSystemReferences.Any(asr => asr.BankingSystemId == "RBS")
+            )
             .Select(a => new { a.Number, a.Id })
+            .ToList()
+            .Select(a => (a.Number, a.Id))
             .ToList();
 
         var existingAccountNumbers = existingAccounts
             .Select(a => a.Number)
             .Distinct();
 
-        var missingAccountNumbers = accountNumbers
+        var missingAccountNumbers = receivedAccountNumbers
             .Where(an => !existingAccountNumbers.Contains(an))
             .ToArray();
 
@@ -111,33 +118,96 @@ internal partial class RBSOrchestrationService : IRBSOrchestrationService
             });
         }
 
-        var dbCategoryKeywords = foundationService.GetAll<CategoryKeyword>();
+        var dbCategoryKeywords = foundationService.GetAll<CategoryKeyword>()
+            .ToArray();
 
         var dbTransactionTypes = foundationService
             .GetAll<TransactionType>()
             .Where(tt => tt.SystemId == "RBS" && transactionTypes.Contains(tt.TypeId))
             .Select(tt => new { tt.TypeId, tt.Id })
-            .ToArray();
+            .ToArray()
+            .Select(tt => (tt.TypeId, tt.Id))
+            .ToList();
 
-        foreach(var transaction in parsedTransactions) 
+        var entriesForDate = parsedTransactions.GroupBy(pt => pt.Date)
+            .OrderBy(g => g.Key);
+
+        foreach(var group in entriesForDate)
         {
-            transaction.CategoryId = dbCategoryKeywords
-                .FirstOrDefault(ck => transaction.Description.Contains(ck.Keyword))?.CategoryId;
+            var groupTransactions = group.ToArray()
+                .OrderBy(gt => gt.Description)
+                    .ThenBy(gt => gt.Value);
 
-            var accountId = existingAccounts
-                .Where(a => a.Number == transaction.Account.Number)
-                .Select(a => a.Id)
-                .First();
+            var existingTransactionsForDate = foundationService
+                .GetAll<Transaction>()
+                .Where(t => t.Date == group.Key && receivedAccountNumbers.Contains(t.Account.Number))
+                .OrderBy(t => t.Description)
+                    .ThenBy(t => t.Value)
+                .ToArray();
 
-            await foundationService.AddAsync(new Transaction 
-            {
-                AccountId = accountId,
-                TransactionTypeId = dbTransactionTypes.First(tt => tt.TypeId == transaction.TransactionType.TypeId).Id,
-                Date = transaction.Date,
-                Description = transaction.Description,
-                Balance = transaction.Balance,
-                Value = transaction.Value
-            });
+            var receivedStack = new Stack<Transaction>(groupTransactions);
+            var databaseStack = new Stack<Transaction>(existingTransactionsForDate);
+
+            await HandleDifferences(
+                receivedStack, 
+                databaseStack, 
+                (Transaction transaction) => ImportTransaction
+                (
+                    transaction, 
+                    existingAccounts, 
+                    dbCategoryKeywords, 
+                    dbTransactionTypes
+                )
+            );
         }
+    }
+
+    private async Task HandleDifferences(Stack<Transaction> receivedStack,
+        Stack<Transaction> databaseStack,
+        Func<Transaction, Task> action)
+    {
+        while (receivedStack.Count > 0)
+        {
+            if (databaseStack.Count == 0)
+            {
+                await action(receivedStack.Pop());
+                continue;
+            }
+
+            var databaseItem = databaseStack.Peek();
+            var receivedItem = receivedStack.Pop();
+
+            if (databaseItem.Description != receivedItem.Description
+                && databaseItem.Value != receivedItem.Value)
+            {
+                await action(receivedItem);
+            }
+            else
+                databaseStack.Pop();
+        };
+    }
+
+    private async Task ImportTransaction(Transaction transaction, 
+        List<(string Number, Guid Id)> existingAccounts, 
+        IEnumerable<CategoryKeyword> dbCategoryKeywords, 
+        IEnumerable<(string TypeId, Guid Id)> dbTransactionTypes)
+    {
+        transaction.CategoryId = dbCategoryKeywords
+                            .FirstOrDefault(ck => transaction.Description.Contains(ck.Keyword))?.CategoryId;
+
+        var accountId = existingAccounts
+            .Where(a => a.Number == transaction.Account.Number)
+            .Select(a => a.Id)
+            .First();
+
+        await foundationService.AddAsync(new Transaction
+        {
+            AccountId = accountId,
+            TransactionTypeId = dbTransactionTypes.First(tt => tt.TypeId == transaction.TransactionType.TypeId).Id,
+            Date = transaction.Date,
+            Description = transaction.Description,
+            Balance = transaction.Balance,
+            Value = transaction.Value
+        });
     }
 }

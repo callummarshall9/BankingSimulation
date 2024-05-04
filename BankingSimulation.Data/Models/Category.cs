@@ -13,5 +13,7 @@ namespace BankingSimulation.Data.Models
         public ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<Category> ChildCategories { get; set; }
         public virtual ICollection<CategoryKeyword> Keywords { get; set; }
+        public Guid RoleId { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

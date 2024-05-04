@@ -77,16 +77,16 @@ jobs:
     - task: PowerShell@2
       displayName: 'Generate Difference Script'
       inputs:
-        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation.Data'
         targetType: 'inline'
         script: |
           $path = ".\migration-script.sql"
-          dotnet ef migrations script --idempotent -o $path
+          dotnet ef migrations script --startup-project=../BankingSimulation --context BankSimulationContext --idempotent -o $path
 
     - task: CopyFiles@2
       displayName: 'Copy difference script to artifact directory'
       inputs:
-        SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
+        SourceFolder: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation.Data'
         Contents: 'migration-script.sql'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
