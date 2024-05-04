@@ -4,12 +4,14 @@ using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.RBS;
 using BankingSimulation.Services;
+using BankingSimulation.Services.Processing;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Query.Wrapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,9 +21,11 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 
 IEdmModel GetModel()
@@ -60,6 +64,7 @@ builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ConfigureHttpJsonOptions(jsonOptions => jsonOptions.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddOData((opts) => opts.EnableQueryFeatures(100));
 
 var model = GetModel();
@@ -89,75 +94,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-AddSet<Account>(app);
+AddAccounts(app);
 AddSet<AccountBankingSystemReference>(app);
 AddSet<BankingSystem>(app);
 AddSet<Calendar>(app);
 AddSet<CalendarEvent>(app);
-AddSet<Category>(app);
+AddCategories(app);
 AddSet<CategoryKeyword>(app);
-AddSet<Transaction>(app);
+AddTransactions(app);
 AddSet<TransactionType>(app);
 
 app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
-
-app.MapPost("/Accounts/ImportRBS", 
-    async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
-        => {
-            var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
-            await rbsOrchestrationService.ImportAccountsFromRawDataAsync(requestBody);
-            return "";
-        }).WithOpenApi((operation) => new(operation) {
-            RequestBody = new() 
-            { 
-                Required = true,  
-                Content = new Dictionary<string, OpenApiMediaType>()
-                {
-                    ["text/csv"] = new()
-                    {
-                        Schema = new OpenApiSchema() 
-                        {
-                            Type = "text/csv",
-                            Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
-19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
-                        }
-                    }
-                }
-            },
-            Summary = "Import Accounts",
-            Description = "Import Accounts from CSV for RBS Transaction Statements"
-        })
-    .WithOpenApi()
-    .RequireAuthorization();
-
-app.MapPost("/Transactions/ImportRBS", 
-    async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService) 
-       => {
-            var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
-            await rbsOrchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
-            return "";
-        }).WithOpenApi((operation) => new(operation) {
-            RequestBody = new() 
-            { 
-                Required = true,  
-                Content = new Dictionary<string, OpenApiMediaType>()
-                {
-                    ["text/csv"] = new()
-                    {
-                        Schema = new OpenApiSchema() 
-                        {
-                            Type = "text/csv",
-                            Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
-19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
-                        }
-                    }
-                }
-            },
-            Summary = "Import Transactions",
-            Description = "Import Transactions from CSV for RBS Transaction Statements"
-        })
-    .WithOpenApi()
-    .RequireAuthorization();
 
  app.UseCors(x => x
     .AllowAnyMethod()
@@ -166,6 +113,41 @@ app.MapPost("/Transactions/ImportRBS",
     .AllowCredentials()); // allow credentials
 
 app.Run();
+
+object HandleOData(IEnumerable result)
+{
+    if (result is ISelectExpandWrapper castedWrapper)
+    {
+        return castedWrapper.ToDictionary();
+    }
+
+    if (result is IEnumerable<ISelectExpandWrapper>)
+    {
+        var results = new List<IDictionary<string, object>>();
+
+        var entities = result as IEnumerable<ISelectExpandWrapper>;
+
+        foreach(var entity in entities)
+        {
+            var dictionaryResult = entity.ToDictionary();
+
+            foreach(var (key, value) in dictionaryResult)
+            {
+                if (value is IEnumerable<ISelectExpandWrapper> castedValue)
+                    dictionaryResult[key] = HandleOData(castedValue);
+
+                if (value is ISelectExpandWrapper)
+                    dictionaryResult[key] = HandleOData(new[] { value }.AsQueryable());
+            }
+
+            results.Add(dictionaryResult);
+        }
+
+        return results;
+    }
+
+    return result;
+}
 
 void AddSet<T>(WebApplication app) where T : class
 {
@@ -180,7 +162,7 @@ void AddSet<T>(WebApplication app) where T : class
         .RequireAuthorization();
 
     app.MapDelete($"/{typeof(T).Name}s", ([FromServices] IFoundationService foundationService, [FromBody] T entity) 
-        => foundationService.UpdateAsync<T>(entity))
+        => foundationService.DeleteAsync<T>(entity))
         .WithOpenApi()
         .RequireAuthorization();
 
@@ -188,12 +170,148 @@ void AddSet<T>(WebApplication app) where T : class
         => {
             var result = foundationService.GetAll<T>();
 
-            var peek = result.ToArray();
-            var appliedResult = options.ApplyTo(result).Cast<T>();
+            var appliedResult = options.ApplyTo(result);
 
             return appliedResult;
         }
     )
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddAccounts(WebApplication app)
+{
+    app.MapPost($"/Accounts", ([FromServices] IAccountProcessingService service, [FromBody] Account entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Accounts/ImportRBS",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService)
+            => {
+                var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+                await rbsOrchestrationService.ImportAccountsFromRawDataAsync(requestBody);
+                return "";
+            }).WithOpenApi((operation) => new(operation)
+            {
+                RequestBody = new()
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>()
+                    {
+                        ["text/csv"] = new()
+                        {
+                            Schema = new OpenApiSchema()
+                            {
+                                Type = "text/csv",
+                                Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
+19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
+                            }
+                        }
+                    }
+                },
+                Summary = "Import Accounts",
+                Description = "Import Accounts from CSV for RBS Transaction Statements"
+            })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/Accounts", ([FromServices] IAccountProcessingService service, [FromBody] Account entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/Accounts", ([FromServices] IAccountProcessingService service, [FromBody] Account entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Accounts", ([FromServices] IAccountProcessingService service, [FromServices] ODataQueryOptions<Account> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddCategories(WebApplication app)
+{
+    app.MapPost($"/Categories", ([FromServices] ICategoryProcessingService service, [FromBody] Category entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/Categories", ([FromServices] ICategoryProcessingService service, [FromBody] Category entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/Categories", ([FromServices] ICategoryProcessingService service, [FromBody] Category entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Categories", ([FromServices] ICategoryProcessingService service, [FromServices] ODataQueryOptions<Category> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddTransactions(WebApplication app)
+{
+    app.MapPost($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromBody] Transaction entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Transactions/ImportRBS",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IRBSOrchestrationService rbsOrchestrationService)
+           => {
+               var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+               await rbsOrchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
+               return "";
+           }).WithOpenApi((operation) => new(operation)
+           {
+               RequestBody = new()
+               {
+                   Required = true,
+                   Content = new Dictionary<string, OpenApiMediaType>()
+                   {
+                       ["text/csv"] = new()
+                       {
+                           Schema = new OpenApiSchema()
+                           {
+                               Type = "text/csv",
+                               Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
+19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
+                           }
+                       }
+                   }
+               },
+               Summary = "Import Transactions",
+               Description = "Import Transactions from CSV for RBS Transaction Statements"
+           })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromBody] Transaction entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromBody] Transaction entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromServices] ODataQueryOptions<Transaction> options)
+        => HandleOData(options.ApplyTo(service.GetAll()).Cast<Transaction>()))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Transactions/GetMonthlyAccountSummariesSincePeriod", (
+        [FromServices] ITransactionProcessingService service,
+        DateOnly fromPeriod,
+        DateOnly toPeriod)
+        => service.GetMonthlyAccountSummariesSincePeriod(fromPeriod, toPeriod))
         .WithOpenApi()
         .RequireAuthorization();
 }
