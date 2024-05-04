@@ -63,6 +63,16 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
 
         modelBuilder.Entity<AccountRole>().ToTable("AccountRoles", "Security")
             .HasKey(ar => new { ar.AccountId, ar.RoleId });
+
+        modelBuilder.Entity<AccountRole>()
+            .HasOne(ar => ar.Account)
+            .WithMany(a => a.Roles)
+            .HasForeignKey(ar => ar.AccountId);
+
+        modelBuilder.Entity<AccountRole>()
+            .HasOne(ar => ar.Role)
+            .WithMany(r => r.Accounts)
+            .HasForeignKey(ar => ar.RoleId);
     }
 }
 
@@ -81,6 +91,9 @@ public class ODataContext : BankSimulationContext
         modelBuilder.Entity<Account>()
             .HasQueryFilter(a => a.Roles.Any());
 
+        modelBuilder.Entity<AccountBankingSystemReference>()
+            .HasQueryFilter(absr => absr.Account != null);
+
         modelBuilder.Entity<AccountRole>()
             .HasQueryFilter(ar => ar.Role != null);
 
@@ -98,5 +111,11 @@ public class ODataContext : BankSimulationContext
 
         modelBuilder.Entity<CategoryKeyword>()
             .HasQueryFilter(ck => ck.Category != null);
+
+        modelBuilder.Entity<Calendar>()
+            .HasQueryFilter(c => c.Role != null);
+
+        modelBuilder.Entity<CalendarEvent>()
+            .HasQueryFilter(ce => ce.Calendar != null);
     }
 }
