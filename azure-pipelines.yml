@@ -57,7 +57,7 @@ steps:
     script: |
       $json = Get-Content appsettings.json | ConvertFrom-Json
       $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
-      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:SSOConnectionString
+      $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:SSO" -Value $env:SSOConnectionString
       Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
 
 - task: UseDotNet@2
