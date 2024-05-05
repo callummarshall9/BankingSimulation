@@ -1,6 +1,7 @@
-import { Accounts } from "./components/Accounts";
-import { Home } from "./components/Home";
-import { ImportData } from "./components/ImportData";
+import Accounts from "./components/Accounts";
+import Home from "./components/Home";
+import ImportData from "./components/ImportData";
+import Roles from "./components/Roles";
 
 const AppRoutes = [
     {
@@ -10,6 +11,10 @@ const AppRoutes = [
     {
         path: '/accounts',
         element: <Accounts />
+    },
+    {
+        path: '/roles',
+        element: <Roles />
     },
     {
         path: "/import",
