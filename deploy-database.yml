@@ -70,10 +70,12 @@ jobs:
         workingDirectory: '$(Build.Repository.LocalPath)/BankingSimulation/BankingSimulation'
         targetType: 'inline'
         script: |
-          echo $env:BankConnectionString
+          Write-Output $env:BankConnectionString
           $json = Get-Content appsettings.json | ConvertFrom-Json
           $json | Add-Member -MemberType NoteProperty -Name "ConnectionStrings:BankSimulationContext" -Value $env:BankConnectionString
           Set-Content -Path appsettings.json -value $($json | ConvertTo-Json)
+      env:
+        BankConnectionString: $(BankConnectionString)
 
     - task: PowerShell@2
       displayName: 'Generate Difference Script'
@@ -132,9 +134,7 @@ jobs:
       inputs:
         azureSubscription: '$(subscriptionId)'
         AuthenticationType: 'connectionString'
-        ConnectionString: '${env:BANKCONNECTIONSTRING}'
+        ConnectionString: '${BankConnectionString}'
         deployType: 'SqlTask'
         SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
-      env:
-        BANKCONNECTIONSTRING: $(BankConnectionString)
