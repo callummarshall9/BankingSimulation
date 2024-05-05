@@ -60,6 +60,7 @@ builder.Services.AddDbContext<BankSimulationContext>(opts => opts.UseSqlServer(b
 builder.Services.AddDbContext<ODataContext>(opts => opts.UseSqlServer(builder.Configuration.GetConnectionString("BankSimulationContext")));
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -104,6 +105,12 @@ AddTransactions(app);
 AddSet<TransactionType>(app);
 
 app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
+
+ app.UseCors(x => x
+    .AllowAnyMethod()
+    .SetIsOriginAllowed(_ => true)
+    .AllowAnyHeader()
+    .AllowCredentials()); // allow credentials
 
 app.Run();
 
