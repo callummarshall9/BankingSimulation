@@ -130,11 +130,10 @@ jobs:
     - task: SqlAzureDacpacDeployment@1
       inputs:
         azureSubscription: '$(subscriptionId)'
-        AuthenticationType: 'aadAuthenticationPassword'
-        ServerName: '$(serverName)'
-        DatabaseName: '$(databaseName)'
-        aadSqlUsername: '$(username)'
-        aadSqlPassword: '$(password)'
+        AuthenticationType: 'connectionString'
+        ConnectionString: '${env:BANKCONNECTIONSTRING}'
         deployType: 'SqlTask'
         SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
+      env:
+        BANKCONNECTIONSTRING: $(BankConnectionString)
