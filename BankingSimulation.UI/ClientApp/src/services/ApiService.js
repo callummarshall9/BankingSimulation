@@ -5,6 +5,7 @@ export default class ApiService {
     baseUrl = "";
     loginAuthority = "";
     authorisationToken = "";
+    userId = "";
 
     constructor() {
         this.baseUrl = ApiConfig.BaseUrl;
@@ -50,6 +51,8 @@ export default class ApiService {
 
             var json = await response.json();
 
+            this.userId = json.Id;
+
             return !(json.Id === "Guest");
         } catch (_) {
             return false;
@@ -83,6 +86,32 @@ export default class ApiService {
         var json = await response.text();
 
         return json;
+    }
+
+    async postJson(url, body) {
+        var response = await fetch(this.baseUrl + url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": "bearer " + this.authorisationToken
+            },
+            body: JSON.stringify(body)
+        });
+
+        var json = await response.json();
+
+        return json;
+    }
+
+    async deleteJson(url, body) {
+        await fetch(this.baseUrl + url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": "bearer " + this.authorisationToken
+            },
+            body: JSON.stringify(body)
+        });
     }
 
     async login(username, password) {
