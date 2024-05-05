@@ -134,7 +134,7 @@ jobs:
       inputs:
         azureSubscription: '$(subscriptionId)'
         AuthenticationType: 'connectionString'
-        ConnectionString: '${env:BankConnectionString}'
+        ConnectionString: ${BankConnectionString}
         deployType: 'SqlTask'
         SqlFile: '$(System.ArtifactsDirectory)/drop/migration-script.sql'
         IpDetectionMethod: 'AutoDetect'
