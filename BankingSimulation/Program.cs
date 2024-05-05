@@ -108,8 +108,8 @@ app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
 
  app.UseCors(x => x
     .AllowAnyMethod()
+    .SetIsOriginAllowed(_ => true)
     .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials()); // allow credentials
 
 app.Run();

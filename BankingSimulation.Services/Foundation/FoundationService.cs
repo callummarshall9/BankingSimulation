@@ -17,12 +17,7 @@ public class FoundationService(IStorageBroker storageBroker,
     }
 
     public IQueryable<T> GetAll<T>() where T : class
-    {
-        if (authorisationBroker.GetUserId() == "Guest")
-            throw new SecurityException("Access Denied!");
-
-        return storageBroker.GetAll<T>();
-    }
+        => storageBroker.GetAll<T>();
 
     public Task<T> UpdateAsync<T>(T item) where T : class
     {
