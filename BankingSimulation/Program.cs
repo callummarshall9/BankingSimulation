@@ -39,6 +39,8 @@ IEdmModel GetModel()
     builder.EntitySet<CalendarEvent>("CalendarEvents");
     builder.EntitySet<Category>("Categories");
     builder.EntitySet<CategoryKeyword>("CategoryKeywords");
+    builder.EntitySet<Role>("Roles");
+    builder.EntitySet<UserRole>("UserRoles").EntityType.HasKey(ur => new { ur.UserId, ur.RoleId });
     builder.EntitySet<Transaction>("Transactions");
     builder.EntitySet<TransactionType>("TransactionTypes");
 
@@ -76,6 +78,8 @@ builder.Services.AddODataOptions<Calendar>(model);
 builder.Services.AddODataOptions<CalendarEvent>(model);
 builder.Services.AddODataOptions<Category>(model);
 builder.Services.AddODataOptions<CategoryKeyword>(model);
+builder.Services.AddODataOptions<Role>(model);
+builder.Services.AddODataOptions<UserRole>(model);
 builder.Services.AddODataOptions<Transaction>(model);
 builder.Services.AddODataOptions<TransactionType>(model);
 
@@ -101,6 +105,7 @@ AddSet<Calendar>(app);
 AddSet<CalendarEvent>(app);
 AddCategories(app);
 AddSet<CategoryKeyword>(app);
+AddRoles(app);
 AddTransactions(app);
 AddSet<TransactionType>(app);
 
@@ -250,6 +255,29 @@ void AddCategories(WebApplication app)
         .RequireAuthorization();
 
     app.MapGet($"/Categories", ([FromServices] ICategoryProcessingService service, [FromServices] ODataQueryOptions<Category> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddRoles(WebApplication app)
+{
+    app.MapPost($"/Roles", ([FromServices] IRoleProcessingService service, [FromBody] Role entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/Roles", ([FromServices] IRoleProcessingService service, [FromBody] Role entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/Roles", ([FromServices] IRoleProcessingService service, [FromBody] Role entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Roles", ([FromServices] IRoleProcessingService service, [FromServices] ODataQueryOptions<Role> options)
         => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();

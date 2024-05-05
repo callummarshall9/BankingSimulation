@@ -8,8 +8,10 @@ public static class IServiceCollectionExtensions
     public static void AddBankingSimulationServices(this IServiceCollection services)
     {
         services.AddScoped<IFoundationService, FoundationService>();
-        services.AddScoped<ITransactionProcessingService, TransactionProcessingService>();
-        services.AddScoped<ICategoryProcessingService, CategoryProcessingService>();
+
         services.AddScoped<IAccountProcessingService, AccountProcessingService>();
+        services.AddScoped<ICategoryProcessingService, CategoryProcessingService>();
+        services.AddScoped<IRoleProcessingService, RoleProcessingService>();
+        services.AddScoped<ITransactionProcessingService, TransactionProcessingService>();
     }
 }
