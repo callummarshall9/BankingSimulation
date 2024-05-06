@@ -1,9 +1,10 @@
 ﻿using BankingSimulation.Data.Models;
+using BankingSimulation.Services.Foundation;
 using System.Security;
 
 namespace BankingSimulation.Services.Processing
 {
-    public class CategoryKeywordsProcessingService(IFoundationService foundationService) : ICategoryKeywordsProcessingService
+    public class CategoryKeywordsProcessingService(ICategoryKeywordFoundationService foundationService) : ICategoryKeywordsProcessingService
     {
         public async Task<CategoryKeyword> AddAsync(CategoryKeyword item)
         {
@@ -13,18 +14,26 @@ namespace BankingSimulation.Services.Processing
             if (!categoryExists)
                 throw new SecurityException("Access Denied!");
 
-            return await foundationService.AddAsync(new CategoryKeyword { CategoryId = item.CategoryId, Keyword = item.Keyword });
+            var result = await foundationService.AddAsync(new CategoryKeyword { CategoryId = item.CategoryId, Keyword = item.Keyword });
+
+            await foundationService.UpdateTransactionsForCategory(item.CategoryId);
+
+            return result;
         }
 
         public async Task DeleteAsync(CategoryKeyword item)
         {
-            bool canSeeCategory = foundationService.GetAll<CategoryKeyword>()
-                .Any(c => c.Id == item.Id && c.Category != null);
+            Guid dbCategoryId = foundationService.GetAll<CategoryKeyword>()
+                .Where(c => c.Id == item.Id && c.Category != null)
+                .Select(c => c.CategoryId)
+                .FirstOrDefault();
 
-            if (!canSeeCategory)
+            if (dbCategoryId == default)
                 throw new SecurityException("Access Denied!");
 
             await foundationService.DeleteAsync(new CategoryKeyword { Id = item.Id });
+
+            await foundationService.UpdateTransactionsForCategory(dbCategoryId);
         }
 
         public IQueryable<CategoryKeyword> GetAll()
@@ -43,12 +52,19 @@ namespace BankingSimulation.Services.Processing
             if (item.CategoryId != dbCategoryId)
                 throw new InvalidOperationException("Cannot reassign keywords to new category");
 
-            return await foundationService.UpdateAsync(new CategoryKeyword
+            var result = await foundationService.UpdateAsync(new CategoryKeyword
             {
                 Id = item.Id,
                 Keyword = item.Keyword,
                 CategoryId = item.CategoryId
             });
+
+            await foundationService.UpdateTransactionsForCategory(item.CategoryId);
+
+            return result;
         }
+
+        public Task UpdateTransactionsForCategoryKeyword(Guid categoryId)
+            => foundationService.UpdateTransactionsForCategory(categoryId);
     }
 }

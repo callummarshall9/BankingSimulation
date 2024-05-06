@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using BankingSimulation.Data.Models;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BankingSimulation.Data;
@@ -9,4 +11,5 @@ public interface IStorageBroker
     Task<T> UpdateAsync<T>(T item) where T : class;
     Task DeleteAsync<T>(T item) where T : class;
     IQueryable<T> GetAll<T>(bool ignoreFilters = false) where T : class;
+    Task UpdateTransactionsForCategory(Guid categoryId);
 }

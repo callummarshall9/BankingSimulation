@@ -1,13 +1,13 @@
 ﻿using BankingSimulation.Data.Models;
 
-namespace BankingSimulation.Services.Processing
+namespace BankingSimulation.Services.Foundation
 {
-    public interface ICategoryKeywordsProcessingService
+    public interface ICategoryKeywordFoundationService
     {
         Task<CategoryKeyword> AddAsync(CategoryKeyword item);
         Task DeleteAsync(CategoryKeyword item);
-        IQueryable<CategoryKeyword> GetAll();
+        IQueryable<T> GetAll<T>() where T : class;
         Task<CategoryKeyword> UpdateAsync(CategoryKeyword item);
-        Task UpdateTransactionsForCategoryKeyword(Guid categoryId);
+        Task UpdateTransactionsForCategory(Guid categoryId);
     }
 }
