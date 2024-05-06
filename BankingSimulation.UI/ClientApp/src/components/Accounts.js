@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ApiService from '../services/ApiService';
 
-export class Accounts extends Component {
+export default class Accounts extends Component {
   static displayName = Accounts.name;
 
   constructor(props) {

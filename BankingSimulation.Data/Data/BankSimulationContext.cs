@@ -1,5 +1,8 @@
 ﻿using BankingSimulation.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -84,6 +87,14 @@ public class ODataContext : BankSimulationContext
         userId = principal?.Identity?.Name ?? "Guest";
     }
 
+    private IEnumerable<Guid> roleIds
+    {
+        get => Roles.IgnoreQueryFilters()
+            .Where(r => r.UserRoles.Any(ur => ur.UserId == userId))
+            .Select(r => r.Id)
+            .ToArray();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -98,10 +109,10 @@ public class ODataContext : BankSimulationContext
             .HasQueryFilter(ar => ar.Role != null);
 
         modelBuilder.Entity<Role>()
-            .HasQueryFilter(r => r.UserRoles.Any());
+            .HasQueryFilter(r => roleIds.Contains(r.Id));
 
         modelBuilder.Entity<UserRole>()
-            .HasQueryFilter(ur => ur.UserId == userId);
+            .HasQueryFilter(ur => ur.Role != null);
 
         modelBuilder.Entity<Transaction>()
             .HasQueryFilter(t => t.Account != null);
