@@ -1,10 +1,10 @@
 ﻿using BankingSimulation.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BankingSimulation.Data;
 
@@ -13,7 +13,7 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountBankingSystemReference> AccountSystemReferences { get; set; }
     public DbSet<BankingSystem> Systems { get; set; }
-    public DbSet<Transaction> Transaction { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
     public DbSet<TransactionType> TransactionTypes { get; set; }
     public DbSet<Calendar> Calendars { get; set; }
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
@@ -76,6 +76,26 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
             .HasOne(ar => ar.Role)
             .WithMany(r => r.Accounts)
             .HasForeignKey(ar => ar.RoleId);
+    }
+
+    public async Task UpdateTransactionsForCategory(Guid categoryId)
+    {
+        await Transactions
+            .IgnoreQueryFilters()
+            .Where(c => c.CategoryId == categoryId)
+            .ExecuteUpdateAsync(t => t.SetProperty(t => t.CategoryId, _ => null));
+
+        var dbKeywords = CategoryKeywords
+            .IgnoreQueryFilters()
+            .Where(ck => ck.CategoryId == categoryId)
+            .Select(ck => ck.Keyword)
+            .ToArray();
+
+        foreach(var keyword in dbKeywords)
+            await Transactions
+                .IgnoreQueryFilters()
+                .Where(t => t.Description.Contains(keyword))
+                .ExecuteUpdateAsync(t => t.SetProperty(t => t.CategoryId, categoryId));
     }
 }
 

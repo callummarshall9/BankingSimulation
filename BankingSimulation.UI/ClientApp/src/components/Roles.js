@@ -54,20 +54,20 @@ export default class Roles extends Component {
               </thead>
               <tbody>
                 {roles.map(role =>
-                  <tr key={role.Id}>
-                    <td>{role.Name}</td>
-                    <td>{Roles.getRoleUsers(role.UserRoles)}</td>
+                  <tr key={role.id}>
+                    <td>{role.name}</td>
+                    <td>{Roles.getRoleUsers(role.userRoles)}</td>
                     <td>
                         <Button 
                           variant="secondary" 
-                          onClick={(_) => this.editRoleId(role.Id)}
+                          onClick={(_) => this.editRoleId(role.id)}
                         >Edit</Button>
                         {
                         role.Deleting 
                           ? <p>Deleting</p> 
                           : <Button 
                               variant="danger" 
-                              onClick={(_) => this.deleteRoleId(role.Id)}
+                              onClick={(_) => this.deleteRoleId(role.id)}
                             >Delete</Button>
                           }
                       </td>
@@ -80,7 +80,7 @@ export default class Roles extends Component {
     }
 
     static getRoleUsers(userRoles) {
-        return userRoles.map(ur => (<div key={ur.UserId} className="badge badge-primary">{ur.UserId}</div>));
+        return userRoles.map(ur => (<div key={ur.userId} className="badge badge-primary">{ur.userId}</div>));
     }
 
     async editRoleId(roleId) {
@@ -90,13 +90,13 @@ export default class Roles extends Component {
     async deleteRoleId(roleId) {
         var roles = this.state.roles;
 
-        var roleEntry = roles.filter(r => r.Id === roleId)[0];
+        var roleEntry = roles.filter(r => r.id === roleId)[0];
 
         roleEntry.Deleting = true;
 
         this.setState({ roles: roles });
 
-        await this.apiService.deleteJson("Roles", { Id: roleId });
+        await this.apiService.deleteJson("Roles", { id: roleId });
 
         this.populateRolesData();
     }
@@ -104,7 +104,7 @@ export default class Roles extends Component {
     async populateRolesData() {
         this.setState({ roles: [], loading: true });
 
-        var roleData = await this.apiService.get("Roles?$expand=UserRoles($orderby=UserId)");
+        var roleData = await this.apiService.get("Roles?$expand=UserRoles($orderby=userId)");
 
         this.setState({ roles: roleData, loading: false });
     }

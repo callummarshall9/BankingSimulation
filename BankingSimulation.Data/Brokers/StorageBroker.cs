@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankingSimulation.Data;
 
@@ -48,4 +49,7 @@ public class StorageBroker : IStorageBroker
 
         return baseQueryable;
     }
+
+    public Task UpdateTransactionsForCategory(Guid categoryId)
+        => context.UpdateTransactionsForCategory(categoryId);
 }

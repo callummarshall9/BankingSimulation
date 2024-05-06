@@ -187,27 +187,30 @@ internal partial class RBSOrchestrationService(
         };
     }
 
-    private async Task ImportTransaction(Transaction transaction, 
+    private async Task ImportTransaction(Transaction receivedTransaction, 
         List<(string Number, Guid Id)> existingAccounts, 
         IEnumerable<CategoryKeyword> dbCategoryKeywords, 
         IEnumerable<(string TypeId, Guid Id)> dbTransactionTypes)
     {
-        transaction.CategoryId = dbCategoryKeywords
-                            .FirstOrDefault(ck => transaction.Description.Contains(ck.Keyword))?.CategoryId;
-
         var accountId = existingAccounts
-            .Where(a => a.Number == transaction.Account.Number)
+            .Where(a => a.Number == receivedTransaction.Account.Number)
             .Select(a => a.Id)
             .First();
 
-        await foundationService.AddAsync(new Transaction
+        var transaction = new Transaction
         {
             AccountId = accountId,
-            TransactionTypeId = dbTransactionTypes.First(tt => tt.TypeId == transaction.TransactionType.TypeId).Id,
-            Date = transaction.Date,
-            Description = transaction.Description,
-            Balance = transaction.Balance,
-            Value = transaction.Value
-        });
+            TransactionTypeId = dbTransactionTypes
+                .First(tt => tt.TypeId == receivedTransaction.TransactionType.TypeId).Id,
+            CategoryId = dbCategoryKeywords
+                .FirstOrDefault(ck => receivedTransaction.Description.Contains(ck.Keyword))?.CategoryId,
+            SourceSystemId = "RBS",
+            Date = receivedTransaction.Date,
+            Description = receivedTransaction.Description,
+            Balance = receivedTransaction.Balance,
+            Value = receivedTransaction.Value
+        };
+
+        await foundationService.AddAsync(transaction);
     }
 }
