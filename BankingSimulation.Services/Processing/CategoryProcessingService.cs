@@ -1,4 +1,5 @@
 ﻿using BankingSimulation.Data.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Security;
 
 namespace BankingSimulation.Services.Processing
@@ -7,6 +8,12 @@ namespace BankingSimulation.Services.Processing
     {
         public async Task<Category> AddAsync(Category item)
         {
+            if (string.IsNullOrEmpty(item.Name))
+                throw new ValidationException("Name cannot be empty");
+
+            if (string.IsNullOrEmpty(item.Description))
+                throw new ValidationException("Description cannot be empty");
+
             bool roleExists = foundationService.GetAll<Role>()
                 .Any(r => r.Id == item.RoleId);
 
@@ -37,6 +44,12 @@ namespace BankingSimulation.Services.Processing
 
         public async Task<Category> UpdateAsync(Category item)
         {
+            if (string.IsNullOrEmpty(item.Name))
+                throw new ValidationException("Name cannot be empty");
+
+            if (string.IsNullOrEmpty(item.Description))
+                throw new ValidationException("Description cannot be empty");
+
             bool categoryExists = foundationService.GetAll<Category>()
                 .Any(r => r.Id == item.Id);
 
