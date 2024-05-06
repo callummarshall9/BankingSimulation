@@ -93,7 +93,6 @@ public class BankSimulationContext(DbContextOptions options) : DbContext(options
 
         foreach(var keyword in dbKeywords)
             await Transactions
-                .IgnoreQueryFilters()
                 .Where(t => t.Description.Contains(keyword))
                 .ExecuteUpdateAsync(t => t.SetProperty(t => t.CategoryId, categoryId));
     }
