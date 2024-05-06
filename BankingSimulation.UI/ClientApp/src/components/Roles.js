@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import ApiService from '../services/ApiService';
 
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import AddRoleDialog from './AddRoleDialog';
+import EditRoleDialog from './EditRoleDialog';
 
 export default class Roles extends Component {
     constructor(props) {
         super(props);
 
         this.apiService = new ApiService();
-        this.state = { roles: [], loading: true, addRole: { name: "", showDialog: false } };
+        this.state = { roles: [], loading: true, showAddRoleDialog: false, editRoleDialogId: null };
     }
 
 
@@ -29,7 +29,15 @@ export default class Roles extends Component {
                 <h1 id="tableLabel">Roles</h1>
                 <p><Button variant="primary" onClick={(_) => this.showAddRoleDialog()}>Add Role</Button>Showing your roles</p>
                 {contents}
-                {this.renderAddRoleDialog()}
+                {this.state.showAddRoleDialog ? <AddRoleDialog 
+                    onClose={(_) => this.setState({ showAddRoleDialog: false })} 
+                    onSubmit={(_) => this.populateRolesData()}
+                    /> : null}
+                {this.state.editRoleDialogId ? <EditRoleDialog
+                    roleId={this.state.editRoleDialogId}
+                    onClose={(_) => this.setState({ editRoleDialogId: null })}
+                    onSubmit={(_) => this.populateRolesData()} 
+                    /> : null}
             </div>
         );
     }
@@ -49,7 +57,21 @@ export default class Roles extends Component {
                   <tr key={role.Id}>
                     <td>{role.Name}</td>
                     <td>{Roles.getRoleUsers(role.UserRoles)}</td>
-                    <td>{role.Deleting ? <p>Deleting</p> : <Button variant="danger" onClick={(_) => this.deleteRoleId(role.Id)}>Delete</Button>}</td>
+                    <td>
+                        <Button 
+                          variant="secondary" 
+                          onClick={(_) => this.editRoleId(role.Id)}
+                        >Edit</Button>
+                        {
+                        role.Deleting 
+                          ? <p>Deleting</p> 
+                          : <Button 
+                              variant="danger" 
+                              onClick={(_) => this.deleteRoleId(role.Id)}
+                            >Delete</Button>
+                          }
+                      </td>
+
                   </tr>
                 )}
               </tbody>
@@ -58,7 +80,11 @@ export default class Roles extends Component {
     }
 
     static getRoleUsers(userRoles) {
-        return userRoles.map(ur => (<div className="badge badge-primary">{ur.UserId}</div>));
+        return userRoles.map(ur => (<div key={ur.UserId} className="badge badge-primary">{ur.UserId}</div>));
+    }
+
+    async editRoleId(roleId) {
+        this.setState({ editRoleDialogId: roleId });
     }
 
     async deleteRoleId(roleId) {
@@ -83,65 +109,8 @@ export default class Roles extends Component {
         this.setState({ roles: roleData, loading: false });
     }
 
-    renderAddRoleDialog() {
-        if (!this.state.addRole.showDialog) {
-            return;
-        }
-
-        return (
-              <Modal show={this.state.addRole.showDialog}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Add role</Modal.Title>
-                </Modal.Header>
-                {this.renderAddRoleDialogBody()}
-                {this.renderAddRoleDialogFooter()}
-                
-              </Modal>
-          );
-    }
-
-    renderAddRoleDialogBody() {
-        if (this.state.addRole.adding) {
-            return;
-        }
-
-        return (
-            <Modal.Body>
-                <Form.Group className="mb-3">
-                    <Form.Label>Role Name</Form.Label>
-                    <Form.Control type="text" placeholder="Role name here" value={this.state.addRole.name} onChange={(e) => this.setState({ addRole: { name: e.target.value, showDialog: true } })} />
-                </Form.Group>
-            </Modal.Body>
-        );
-    }
-
-    renderAddRoleDialogFooter() {
-        if (!this.state.addRole.adding) {
-            return (
-                <Modal.Footer>
-                  <Button variant="secondary">Close</Button>
-                  <Button variant="primary" onClick={(_) => this.addRole()}>Add</Button>
-                </Modal.Footer>
-            );
-        } else {
-            return (
-                <Modal.Footer>
-                  <p>Adding</p>
-                </Modal.Footer>
-            )
-        }
-    }
-
     showAddRoleDialog() {
-        this.setState({ addRole: { name: "", showDialog: true, adding: false } });
+        this.setState({ showAddRoleDialog: true });
     }
 
-    async addRole() {
-        this.setState({ addRole: { name: this.state.addRole.name, showDialog: true, adding: true } });
-
-        await this.apiService.postJson("Roles", { Name: this.state.addRole.name });
-        
-        this.setState({ addRole: { name: "", showDialog: false, adding: false } });
-        this.populateRolesData();
-    }
 }

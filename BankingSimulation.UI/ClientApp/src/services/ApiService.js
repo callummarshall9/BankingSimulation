@@ -103,6 +103,21 @@ export default class ApiService {
         return json;
     }
 
+    async putJson(url, body) {
+        var response = await fetch(this.baseUrl + url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": "bearer " + this.authorisationToken
+            },
+            body: JSON.stringify(body)
+        });
+
+        var json = await response.json();
+
+        return json;
+    }
+
     async deleteJson(url, body) {
         await fetch(this.baseUrl + url, {
             method: "DELETE",
