@@ -106,6 +106,7 @@ AddSet<CalendarEvent>(app);
 AddCategories(app);
 AddSet<CategoryKeyword>(app);
 AddRoles(app);
+AddUserRoles(app);
 AddTransactions(app);
 AddSet<TransactionType>(app);
 
@@ -130,7 +131,7 @@ object HandleOData(IEnumerable result)
     {
         var results = new List<IDictionary<string, object>>();
 
-        var entities = result as IEnumerable<ISelectExpandWrapper>;
+        var entities = (result as IEnumerable<ISelectExpandWrapper>).ToList();
 
         foreach(var entity in entities)
         {
@@ -278,6 +279,25 @@ void AddRoles(WebApplication app)
         .RequireAuthorization();
 
     app.MapGet($"/Roles", ([FromServices] IRoleProcessingService service, [FromServices] ODataQueryOptions<Role> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+
+void AddUserRoles(WebApplication app)
+{
+    app.MapPost($"/UserRoles", ([FromServices] IUserRoleProcessingService service, [FromBody] UserRole entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/UserRoles", ([FromServices] IUserRoleProcessingService service, [FromBody] UserRole entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/UserRoles", ([FromServices] IUserRoleProcessingService service, [FromServices] ODataQueryOptions<UserRole> options)
         => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();

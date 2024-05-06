@@ -12,6 +12,7 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IAccountProcessingService, AccountProcessingService>();
         services.AddScoped<ICategoryProcessingService, CategoryProcessingService>();
         services.AddScoped<IRoleProcessingService, RoleProcessingService>();
+        services.AddScoped<IUserRoleProcessingService, UserRoleProcessingService>();
         services.AddScoped<ITransactionProcessingService, TransactionProcessingService>();
     }
 }
