@@ -104,7 +104,7 @@ AddSet<BankingSystem>(app);
 AddSet<Calendar>(app);
 AddSet<CalendarEvent>(app);
 AddCategories(app);
-AddSet<CategoryKeyword>(app);
+AddCategoryKeywords(app);
 AddRoles(app);
 AddUserRoles(app);
 AddTransactions(app);
@@ -135,18 +135,24 @@ object HandleOData(IEnumerable result)
 
         foreach(var entity in entities)
         {
+            var newDictionary = new Dictionary<string, object>();
+
             var dictionaryResult = entity.ToDictionary();
 
             foreach(var (key, value) in dictionaryResult)
             {
+                string actualKey = System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(key);
+
+                newDictionary[actualKey] = value;
+
                 if (value is IEnumerable<ISelectExpandWrapper> castedValue)
-                    dictionaryResult[key] = HandleOData(castedValue);
+                    newDictionary[actualKey] = HandleOData(castedValue);
 
                 if (value is ISelectExpandWrapper)
-                    dictionaryResult[key] = HandleOData(new[] { value }.AsQueryable());
+                    newDictionary[actualKey] = HandleOData(new[] { value }.AsQueryable());
             }
 
-            results.Add(dictionaryResult);
+            results.Add(newDictionary);
         }
 
         return results;
@@ -256,6 +262,29 @@ void AddCategories(WebApplication app)
         .RequireAuthorization();
 
     app.MapGet($"/Categories", ([FromServices] ICategoryProcessingService service, [FromServices] ODataQueryOptions<Category> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddCategoryKeywords(WebApplication app)
+{
+    app.MapPost($"/CategoryKeywords", ([FromServices] ICategoryKeywordsProcessingService service, [FromBody] CategoryKeyword entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/CategoryKeywords", ([FromServices] ICategoryKeywordsProcessingService service, [FromBody] CategoryKeyword entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/CategoryKeywords", ([FromServices] ICategoryKeywordsProcessingService service, [FromBody] CategoryKeyword entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/CategoryKeywords", ([FromServices] ICategoryKeywordsProcessingService service, [FromServices] ODataQueryOptions<CategoryKeyword> options)
         => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();

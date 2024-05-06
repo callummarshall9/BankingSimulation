@@ -58,6 +58,7 @@ namespace BankingSimulation.Services.Processing
 
             return await foundationService.UpdateAsync(new Category 
             { 
+                Id = item.Id,
                 Name = item.Name,
                 Description = item.Description,
                 RoleId = item.RoleId,
