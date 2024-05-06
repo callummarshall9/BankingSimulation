@@ -5,7 +5,7 @@ namespace BankingSimulation.Services.Processing
 {
     public class CategoryProcessingService(IFoundationService foundationService) : ICategoryProcessingService
     {
-        public Task<Category> AddAsync(Category item)
+        public async Task<Category> AddAsync(Category item)
         {
             bool roleExists = foundationService.GetAll<Role>()
                 .Any(r => r.Id == item.RoleId);
@@ -13,10 +13,15 @@ namespace BankingSimulation.Services.Processing
             if (!roleExists)
                 throw new SecurityException("Access Denied!");
 
-            return foundationService.AddAsync(item);
+            return await foundationService.AddAsync(
+                new Category { 
+                    Name = item.Name,
+                    Description = item.Description,
+                    RoleId = item.RoleId 
+                });
         }
 
-        public Task DeleteAsync(Category item)
+        public async Task DeleteAsync(Category item)
         {
             bool categoryExists = foundationService.GetAll<Category>()
                 .Any(r => r.Id == item.Id);
@@ -24,13 +29,13 @@ namespace BankingSimulation.Services.Processing
             if (!categoryExists)
                 throw new SecurityException("Access Denied!");
 
-            return foundationService.DeleteAsync(item);
+            await foundationService.DeleteAsync(new Category { Id = item.Id });
         }
 
         public IQueryable<Category> GetAll()
             => foundationService.GetAll<Category>();
 
-        public Task<Category> UpdateAsync(Category item)
+        public async Task<Category> UpdateAsync(Category item)
         {
             bool categoryExists = foundationService.GetAll<Category>()
                 .Any(r => r.Id == item.Id);
@@ -38,7 +43,12 @@ namespace BankingSimulation.Services.Processing
             if (!categoryExists)
                 throw new SecurityException("Access Denied!");
 
-            return foundationService.UpdateAsync(item);
+            return await foundationService.UpdateAsync(new Category 
+            { 
+                Name = item.Name,
+                Description = item.Description,
+                RoleId = item.RoleId,
+            });
         }
     }
 }
