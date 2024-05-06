@@ -68,7 +68,7 @@ export default class AddRoleDialog extends Component {
     async addRole() {
         this.setState({ adding: true });
 
-        await this.apiService.postJson("Roles", { Name: this.state.name });
+        await this.apiService.postJson("Roles", { name: this.state.name });
         
         this.setState({ name: "", adding: false });
         this.props.onSubmit();

@@ -17,17 +17,17 @@ export default class Accounts extends Component {
   }
 
   static getAccountName(account) {
-    var name = account.Name;
+    var name = account.name;
 
-      if (account.FriendlyName && account.FriendlyName !== "") {
-          name = account.FriendlyName + " (" + account.Name + ")";
+      if (account.friendlyName && account.friendlyName !== "") {
+          name = account.friendlyName + " (" + account.name + ")";
     }
 
     return name;
   }
 
   static getAccountSystems(accountSystems) {
-    return accountSystems.map(acs => (<span key={acs.BankingSystemId} className="badge badge-primary">{acs.BankingSystemId}</span>));
+    return accountSystems.map(acs => (<span key={acs.bankingSystemId} className="badge badge-primary">{acs.bankingSystemId}</span>));
   }
 
   static renderAccountsTable(accounts) {
@@ -45,7 +45,7 @@ export default class Accounts extends Component {
             <tr key={account.Id}>
               <td>{Accounts.getAccountName(account)}</td>
               <td>{account.Number}</td>
-              <td>{Accounts.getAccountSystems(account.AccountSystemReferences)}</td>
+              <td>{Accounts.getAccountSystems(account.accountSystemReferences)}</td>
             </tr>
           )}
         </tbody>

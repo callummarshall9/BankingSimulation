@@ -11,7 +11,7 @@ export default class EditRoleDialog extends Component {
         super(props);
         this.apiService = new ApiService();
         this.state = {
-            role: null,
+            role: { name: "", userRoles: [] },
             editing: false
         };
     }
@@ -22,7 +22,7 @@ export default class EditRoleDialog extends Component {
     }
 
     async getRoleData() {
-        this.setState({ role: null });
+        this.setState({ role: { name: "", userRoles: [] } });
 
         var roleId = this.props.roleId;
 
@@ -34,14 +34,14 @@ export default class EditRoleDialog extends Component {
     }
 
     render() {
-        if (this.state.role === null) {
+        if (this.props.roleId === null) {
             return;
         }
 
         return (
               <Modal show={true}>
                 <Modal.Header>
-                  <Modal.Title>{this.state.role.Name}</Modal.Title>
+                  <Modal.Title>{this.state.role.name}</Modal.Title>
                 </Modal.Header>
                 {this.renderEditRoleDialogBody()}
                 {this.renderEditRoleDialogFooter()}
@@ -53,7 +53,7 @@ export default class EditRoleDialog extends Component {
     changeRole(name) {
         let roleCopy = JSON.parse(JSON.stringify(this.state.role));
 
-        roleCopy.Name = name;
+        roleCopy.name = name;
 
         this.setState({ role: roleCopy });
     }
@@ -69,7 +69,7 @@ export default class EditRoleDialog extends Component {
                     <Form.Control 
                         type="text" 
                         placeholder="Role name here" 
-                        value={this.state.role.Name} 
+                        value={this.state.role.name} 
                         onChange={(e) => this.changeRole(e.target.value)} 
                         />
                     <Button variant="primary" onClick={(_) => this.updateName()} className="float-end">Update Name</Button>
@@ -85,7 +85,7 @@ export default class EditRoleDialog extends Component {
                     <Button variant="secondary" onClick={(_) => this.addUser()} className="float-end">Add User</Button>
                 </InputGroup>
 
-                {this.renderEditRoleDialogUsers(this.state.role.UserRoles)}
+                {this.renderEditRoleDialogUsers(this.state.role.userRoles)}
             </Modal.Body>
         );
     }
@@ -101,9 +101,9 @@ export default class EditRoleDialog extends Component {
               </thead>
               <tbody>
                 {users.map(user =>
-                  <tr key={user.UserId}>
-                    <td>{user.UserId}</td>
-                    <td style={{ textAlign: "right" }}>{user.Deleting ? <p>Deleting</p> : <Button variant="danger" onClick={(_) => this.deleteUserRole(user.UserId)}>Delete</Button>}</td>
+                  <tr key={user.userId}>
+                    <td>{user.userId}</td>
+                    <td style={{ textAlign: "right" }}>{user.Deleting ? <p>Deleting</p> : <Button variant="danger" onClick={(_) => this.deleteUserRole(user.userId)}>Delete</Button>}</td>
                   </tr>
                 )}
               </tbody>
@@ -114,7 +114,7 @@ export default class EditRoleDialog extends Component {
     async deleteUserRole(userId) {
         this.setState({ editing: true });
 
-        await this.apiService.deleteJson("UserRoles", { UserId: userId, RoleId: this.state.role.Id });
+        await this.apiService.deleteJson("UserRoles", { userId: userId, roleId: this.state.role.id });
         
         await this.getRoleData();
         
@@ -150,7 +150,7 @@ export default class EditRoleDialog extends Component {
     async addUser() {
         this.setState({ editing: true });
 
-        await this.apiService.postJson("UserRoles", { UserId: this.state.userId, RoleId: this.state.role.Id });
+        await this.apiService.postJson("UserRoles", { userId: this.state.userId, roleId: this.state.role.id });
         await this.getRoleData();
 
         this.setState({ editing: false, userId: "" });
