@@ -1,4 +1,4 @@
 export default class ApiConfig {
-    static BaseUrl = "__ApiBaseUrl__";
-    static LoginAuthority = "__LoginAuthority__";
+    static BaseUrl = "https://localhost:7050/";
+    static LoginAuthority = "https://dev.corporatelinx.com/Api/";
 }

@@ -12,6 +12,8 @@ public static class IServiceCollectionExtensions
         services.AddScoped<ICategoryKeywordFoundationService, CategoryKeywordFoundationService>();
 
         services.AddScoped<IAccountProcessingService, AccountProcessingService>();
+        services.AddScoped<ICalendarProcessingService, CalendarProcessingService>();
+        services.AddScoped<ICalendarEventProcessingService, CalendarEventProcessingService>();
         services.AddScoped<ICategoryProcessingService, CategoryProcessingService>();
         services.AddScoped<ICategoryKeywordsProcessingService, CategoryKeywordsProcessingService>();
         services.AddScoped<IRoleProcessingService, RoleProcessingService>();

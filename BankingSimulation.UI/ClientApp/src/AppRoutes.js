@@ -1,4 +1,6 @@
 import Accounts from "./components/Accounts";
+import CalendarEvents from "./components/CalendarEvents";
+import Calendars from "./components/Calendars";
 import Categories from "./components/Categories";
 import Home from "./components/Home";
 import ImportData from "./components/ImportData";
@@ -16,6 +18,14 @@ const AppRoutes = [
     {
         path: '/roles',
         element: <Roles />
+    },
+    {
+        path: '/calendars',
+        element: <Calendars />
+    },
+    {
+        path: '/calendar',
+        element: <CalendarEvents />
     },
     {
         path: '/categories',
