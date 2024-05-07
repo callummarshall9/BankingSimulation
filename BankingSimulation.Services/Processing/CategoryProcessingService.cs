@@ -79,9 +79,9 @@ namespace BankingSimulation.Services.Processing
                         Keywords = c.Keywords,
                         RoleId = c.RoleId,
                         Name = c.Name,
-                        Sum = foundationService.GetAll<Transaction>()
+                        Sum = Math.Round(foundationService.GetAll<Transaction>()
                             .Where(t => t.CategoryId == c.Id && t.Date >= fromPeriod && t.Date <= toPeriod)
-                            .Sum(t => t.Value)
+                            .Sum(t => t.Value), 2)
                     }).ToList()
             };
     }

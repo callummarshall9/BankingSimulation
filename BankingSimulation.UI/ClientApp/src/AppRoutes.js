@@ -5,6 +5,7 @@ import Categories from "./components/Categories";
 import Home from "./components/Home";
 import ImportData from "./components/ImportData";
 import Roles from "./components/Roles";
+import Transactions from "./components/Transactions";
 
 const AppRoutes = [
     {
@@ -30,6 +31,10 @@ const AppRoutes = [
     {
         path: '/categories',
         element: <Categories />
+    },
+    {
+        path: '/transactions',
+        element: <Transactions />
     },
     {
         path: "/import",
