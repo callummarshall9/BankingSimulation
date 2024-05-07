@@ -44,7 +44,7 @@ export default class Accounts extends Component {
           {accounts.map(account =>
             <tr key={account.Id}>
               <td>{Accounts.getAccountName(account)}</td>
-              <td>{account.Number}</td>
+              <td>{account.number}</td>
               <td>{Accounts.getAccountSystems(account.accountSystemReferences)}</td>
             </tr>
           )}
