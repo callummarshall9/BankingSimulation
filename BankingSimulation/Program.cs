@@ -472,7 +472,7 @@ void AddTransactions(WebApplication app)
         .RequireAuthorization();
 
     app.MapGet($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromServices] ODataQueryOptions<Transaction> options)
-        => HandleOData(options.ApplyTo(service.GetAll()).Cast<Transaction>()))
+        => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();
 

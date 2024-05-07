@@ -56,8 +56,8 @@ export default class CalendarEvents extends Component {
                 {calendarEvents.map(calendarEvent =>
                   <tr key={calendarEvent.id}>
                     <td>{calendarEvent.name}</td>
-                    <td>{calendarEvent.start}</td>
-                    <td>{calendarEvent.end}</td>
+                    <td>{new Date(calendarEvent.start).toLocaleDateString("en-GB")}</td>
+                    <td>{new Date(calendarEvent.end).toLocaleDateString("en-GB")}</td>
                     <td style={{ textAlign: "right" }}>
                         {
                         calendarEvent.Deleting 
