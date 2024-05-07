@@ -8,6 +8,7 @@ using BankingSimulation.Services.Processing;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Query;
@@ -101,14 +102,14 @@ app.UseHttpsRedirection();
 AddAccounts(app);
 AddSet<AccountBankingSystemReference>(app);
 AddSet<BankingSystem>(app);
-AddSet<Calendar>(app);
-AddSet<CalendarEvent>(app);
+AddCalendars(app);
+AddCalendarEvents(app);
 AddCategories(app);
 AddCategoryKeywords(app);
 AddRoles(app);
 AddUserRoles(app);
 AddTransactions(app);
-AddSet<TransactionType>(app);
+AddTransactionTypes(app);
 
 app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
 
@@ -124,7 +125,25 @@ object HandleOData(IEnumerable result)
 {
     if (result is ISelectExpandWrapper castedWrapper)
     {
-        return castedWrapper.ToDictionary();
+        var newDictionary = new Dictionary<string, object>();
+
+        var dictionaryResult = castedWrapper.ToDictionary();
+
+        foreach (var (key, value) in dictionaryResult)
+        {
+            string actualKey = System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(key);
+
+            newDictionary[actualKey] = value;
+
+            if (value is IEnumerable<ISelectExpandWrapper> castedValue)
+                newDictionary[actualKey] = HandleOData(castedValue);
+
+            if (value is ISelectExpandWrapper selectExpandWrapper)
+                newDictionary[actualKey] = HandleOData(new[] { selectExpandWrapper }.ToList().AsQueryable());
+        }
+
+
+        return newDictionary;
     }
 
     if (result is IEnumerable<ISelectExpandWrapper>)
@@ -148,8 +167,8 @@ object HandleOData(IEnumerable result)
                 if (value is IEnumerable<ISelectExpandWrapper> castedValue)
                     newDictionary[actualKey] = HandleOData(castedValue);
 
-                if (value is ISelectExpandWrapper)
-                    newDictionary[actualKey] = HandleOData(new[] { value }.AsQueryable());
+                if (value is ISelectExpandWrapper expandWrapper)
+                    newDictionary[actualKey] = HandleODataDictionary(expandWrapper);
             }
 
             results.Add(newDictionary);
@@ -159,6 +178,29 @@ object HandleOData(IEnumerable result)
     }
 
     return result;
+}
+
+object HandleODataDictionary(ISelectExpandWrapper castedWrapper)
+{
+    var newDictionary = new Dictionary<string, object>();
+
+    var dictionaryResult = castedWrapper.ToDictionary();
+
+    foreach (var (key, value) in dictionaryResult)
+    {
+        string actualKey = System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(key);
+
+        newDictionary[actualKey] = value;
+
+        if (value is IEnumerable<ISelectExpandWrapper> castedValue)
+            newDictionary[actualKey] = HandleOData(castedValue);
+
+        if (value is ISelectExpandWrapper expandWrapper)
+            newDictionary[actualKey] = HandleODataDictionary(expandWrapper);
+    }
+
+
+    return newDictionary;
 }
 
 void AddSet<T>(WebApplication app) where T : class
@@ -265,6 +307,11 @@ void AddCategories(WebApplication app)
         => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();
+
+    app.MapGet($"/Categories/ForPeriod", ([FromServices] ICategoryProcessingService service, DateOnly fromPeriod, DateOnly toPeriod)
+        => service.ForPeriod(fromPeriod, toPeriod))
+        .WithOpenApi()
+        .RequireAuthorization();
 }
 
 void AddCategoryKeywords(WebApplication app)
@@ -313,6 +360,51 @@ void AddRoles(WebApplication app)
         .RequireAuthorization();
 }
 
+void AddCalendars(WebApplication app)
+{
+    app.MapPost($"/Calendars", ([FromServices] ICalendarProcessingService service, [FromBody] Calendar entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/Calendars", ([FromServices] ICalendarProcessingService service, [FromBody] Calendar entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/Calendars", ([FromServices] ICalendarProcessingService service, [FromBody] Calendar entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Calendars", ([FromServices] ICalendarProcessingService service, [FromServices] ODataQueryOptions<Calendar> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddCalendarEvents(WebApplication app)
+{
+    app.MapPost($"/CalendarEvents", ([FromServices] ICalendarEventProcessingService service, [FromBody] CalendarEvent entity)
+        => service.AddAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPut($"/CalendarEvents", ([FromServices] ICalendarEventProcessingService service, [FromBody] CalendarEvent entity)
+        => service.UpdateAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapDelete($"/CalendarEvents", ([FromServices] ICalendarEventProcessingService service, [FromBody] CalendarEvent entity)
+        => service.DeleteAsync(entity))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/CalendarEvents", ([FromServices] ICalendarEventProcessingService service, [FromServices] ODataQueryOptions<CalendarEvent> options)
+        => HandleOData(options.ApplyTo(service.GetAll())))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
 
 void AddUserRoles(WebApplication app)
 {
@@ -389,6 +481,14 @@ void AddTransactions(WebApplication app)
         DateOnly fromPeriod,
         DateOnly toPeriod)
         => service.GetMonthlyAccountSummariesSincePeriod(fromPeriod, toPeriod))
+        .WithOpenApi()
+        .RequireAuthorization();
+}
+
+void AddTransactionTypes(WebApplication app)
+{
+    app.MapGet($"/TransactionTypes", ([FromServices] IFoundationService service, [FromServices] ODataQueryOptions<TransactionType> options)
+        => HandleOData(options.ApplyTo(service.GetAll<TransactionType>())))
         .WithOpenApi()
         .RequireAuthorization();
 }

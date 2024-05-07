@@ -8,5 +8,6 @@ namespace BankingSimulation.Services.Processing
         Task DeleteAsync(Category item);
         IQueryable<Category> GetAll();
         Task<Category> UpdateAsync(Category item);
+        ForPeriodResultsDTO ForPeriod(DateOnly fromPeriod, DateOnly toPeriod);
     }
 }

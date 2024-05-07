@@ -5,18 +5,46 @@ import Button from 'react-bootstrap/Button';
 import AddCategoryDialog from './AddCategoryDialog';
 import EditCategoryDialog from './EditCategoryDialog';
 
+import Select from 'react-select'
+
 export default class Categories extends Component {
     constructor(props) {
         super(props);
 
         this.apiService = new ApiService();
-        this.state = { categories: [], loading: true, showAddCategoryDialog: false, editCategoryDialogId: null };
+        this.state = { 
+            categories: [], 
+            loading: true, 
+            showAddCategoryDialog: false, 
+            editCategoryDialogId: null, 
+            calendarEvents: [], 
+            selectOptions: [],
+            activeCalendarEvent: null 
+        };
     }
 
 
     componentDidMount() {
         this.apiService.getAuthorisationToken();
         this.populateCategoriesData();
+        this.populateCalendarEventsData();
+    }
+
+    async populateCategoriesData() {
+        this.setState({ categories: [], loading: true });
+
+        var categoryData = await this.apiService.get("Categories?$expand=Keywords($orderby=Keyword)");
+
+        this.setState({ categories: categoryData, loading: false });
+    }
+
+    async populateCalendarEventsData() {
+        this.setState({ calendarEvents: [], activeCalendarEvent: null });
+
+        var calendarEvents = await this.apiService.get("CalendarEvents?$orderby=Start&$expand=Calendar");
+        var selectOptions = calendarEvents.map(ce => ({ label: ce.calendar.name + " - " + ce.name + " (" + ce.start + " - " + ce.end + ")", value: ce }));
+        
+        this.setState({ calendarEvents: calendarEvents, activeCalendarEvent: null, selectOptions: selectOptions });
     }
 
     render() {
@@ -27,7 +55,14 @@ export default class Categories extends Component {
         return (
             <div>
                 <h1 id="tableLabel">Categories</h1>
-                <p><Button variant="primary" onClick={(_) => this.showAddCategoryDialog()}>Add Category</Button>Showing your categories</p>
+                <p>
+                    <Button variant="primary" onClick={(_) => this.showAddCategoryDialog()}>Add Category</Button>
+                    Showing your categories for period
+                    <div style={{ width: "400px", marginTop: "5px" }}>
+                        <Select options={this.state.selectOptions} onChange={(newValue) => this.changeCalendarEvent(newValue.value)}  />
+                    </div>
+                </p>
+
                 {contents}
                 {this.state.showAddCategoryDialog ? <AddCategoryDialog 
                     onClose={(_) => this.setState({ showAddCategoryDialog: false })} 
@@ -42,6 +77,19 @@ export default class Categories extends Component {
         );
     }
 
+    changeCalendarEvent(newValue) {
+        this.setState({ activeCalendarEvent: newValue });
+        this.loadForPeriod(newValue);
+    }
+
+    async loadForPeriod(calendarEvent) {
+        this.setState({ categories: [], loading: true });
+
+        var forPeriodResults = await this.apiService.get("Categories/ForPeriod?fromPeriod=" + calendarEvent.start + "&toPeriod=" + calendarEvent.end);
+
+        this.setState({ categories: forPeriodResults.results, loading: false });
+    }
+
     renderCategoriesTable(categories) {
         return (
             <table className="table table-striped" aria-labelledby="tableLabel">
@@ -50,6 +98,7 @@ export default class Categories extends Component {
                   <th>Name</th>
                   <th>Description</th>
                   <th>Keywords</th>
+                  {this.state.activeCalendarEvent != null ? <th>Sum of category between {this.state.activeCalendarEvent.start} and {this.state.activeCalendarEvent.end}</th> : null }
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -59,6 +108,7 @@ export default class Categories extends Component {
                     <td>{category.name}</td>
                     <td>{category.description}</td>
                     <td>{Categories.getCategoryKeywords(category.keywords)}</td>
+                    {this.state.activeCalendarEvent != null ? <td>{category.sum}</td> : null }
                     <td>
                         <Button 
                           variant="secondary" 
@@ -82,7 +132,7 @@ export default class Categories extends Component {
     }
 
     static getCategoryKeywords(keywords) {
-        return keywords.map(k => (<div key={k.id} className="badge badge-primary">{k.Keyword}</div>));
+        return keywords.map(k => (<div key={k.id} className="badge badge-primary">{k.keyword}</div>));
     }
 
     async editCategoryId(categoryId) {
@@ -101,14 +151,6 @@ export default class Categories extends Component {
         await this.apiService.deleteJson("Categories", { id: categoryId });
 
         this.populateCategoriesData();
-    }
-
-    async populateCategoriesData() {
-        this.setState({ categories: [], loading: true });
-
-        var categoryData = await this.apiService.get("Categories?$expand=Keywords($orderby=Keyword)");
-
-        this.setState({ categories: categoryData, loading: false });
     }
 
     showAddCategoryDialog() {
