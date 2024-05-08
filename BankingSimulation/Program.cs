@@ -381,6 +381,16 @@ void AddCalendars(WebApplication app)
         => HandleOData(options.ApplyTo(service.GetAll())))
         .WithOpenApi()
         .RequireAuthorization();
+
+    app.MapGet($"/Calendars/ComputeCalendarStats", ([FromServices] ICalendarProcessingService service, Guid calendarId)
+        => service.ComputeCalendarCategoryStats(calendarId))
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapGet($"/Calendars/ComputeNetCalendarStats", ([FromServices] ICalendarProcessingService service, Guid calendarId)
+        => service.ComputeNetCalendarStats(calendarId))
+        .WithOpenApi()
+        .RequireAuthorization();
 }
 
 void AddCalendarEvents(WebApplication app)
