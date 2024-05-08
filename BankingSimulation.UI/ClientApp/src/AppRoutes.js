@@ -1,5 +1,5 @@
 import Accounts from "./components/Accounts";
-import CalendarEvents from "./components/CalendarEvents";
+import EditCalendar from "./components/EditCalendar";
 import Calendars from "./components/Calendars";
 import Categories from "./components/Categories";
 import Home from "./components/Home";
@@ -26,7 +26,7 @@ const AppRoutes = [
     },
     {
         path: '/calendar',
-        element: <CalendarEvents />
+        element: <EditCalendar />
     },
     {
         path: '/categories',
