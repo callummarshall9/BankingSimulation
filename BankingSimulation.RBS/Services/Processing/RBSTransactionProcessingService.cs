@@ -21,9 +21,10 @@ internal class RBSTransactionProcessingService : IRBSTransactionProcessingServic
         return rows.Select(r => new Transaction
         {
             Account = new Account { Name = r.AccountName, Number = r.AccountNumber },
-            Balance = r.Balance,
+            Balance = 0.0,
             Value = r.Value,
             Date = DateOnly.Parse(r.Date),
+            SourceSystemId = "RBS",
             Description = r.Description,
             TransactionType = new TransactionType { TypeId = r.Type }
         }).ToArray();

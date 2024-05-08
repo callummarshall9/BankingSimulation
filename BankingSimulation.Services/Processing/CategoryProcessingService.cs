@@ -41,7 +41,8 @@ namespace BankingSimulation.Services.Processing
         }
 
         public IQueryable<Category> GetAll()
-            => foundationService.GetAll<Category>();
+            => foundationService.GetAll<Category>()
+                .OrderBy(c => c.Name);
 
         public async Task<Category> UpdateAsync(Category item)
         {
@@ -82,7 +83,10 @@ namespace BankingSimulation.Services.Processing
                         Sum = Math.Round(foundationService.GetAll<Transaction>()
                             .Where(t => t.CategoryId == c.Id && t.Date >= fromPeriod && t.Date <= toPeriod)
                             .Sum(t => t.Value), 2)
-                    }).ToList()
+                    })
+                    .OrderByDescending(b => b.Sum)
+                        .ThenBy(b => b.Name)
+                .ToList()
             };
     }
 }

@@ -31,7 +31,7 @@ export default class Categories extends Component {
     }
 
     async populateCategoriesData() {
-        this.setState({ categories: [], loading: true });
+        this.setState({ categories: [], loading: true, showAddCategoryDialog: false, editCategoryDialogId: null });
 
         var categoryData = await this.apiService.get("Categories?$expand=Keywords($orderby=Keyword)");
 
@@ -41,7 +41,7 @@ export default class Categories extends Component {
     async populateCalendarEventsData() {
         this.setState({ calendarEvents: [], activeCalendarEvent: null });
 
-        var calendarEvents = await this.apiService.get("CalendarEvents?$orderby=Start&$expand=Calendar");
+        var calendarEvents = await this.apiService.get("CalendarEvents?$orderby=Calendar/Name,Start&$expand=Calendar");
         var selectOptions = calendarEvents.map(ce => ({ label: ce.calendar.name + " - " + ce.name + " (" + ce.start + " - " + ce.end + ")", value: ce }));
         
         this.setState({ calendarEvents: calendarEvents, activeCalendarEvent: null, selectOptions: selectOptions });
@@ -65,12 +65,12 @@ export default class Categories extends Component {
 
                 {contents}
                 {this.state.showAddCategoryDialog ? <AddCategoryDialog 
-                    onClose={(_) => this.setState({ showAddCategoryDialog: false })} 
+                    onClose={(_) => this.populateCategoriesData()} 
                     onSubmit={(_) => this.populateCategoriesData()}
                     /> : null}
                 {this.state.editCategoryDialogId ? <EditCategoryDialog
                     categoryId={this.state.editCategoryDialogId}
-                    onClose={(_) => this.setState({ editCategoryDialogId: null })}
+                    onClose={(_) => this.populateCategoriesData()}
                     onSubmit={(_) => this.populateCategoriesData()} 
                     /> : null}
             </div>
@@ -126,6 +126,13 @@ export default class Categories extends Component {
 
                   </tr>
                 )}
+                {this.state.activeCalendarEvent != null ? <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{Math.round(categories.map(c => c.sum).reduce((a,b) => a + b) * 100.0) / 100.0}</td>
+                    <td></td>
+                </tr> : null}
               </tbody>
             </table>
           );
