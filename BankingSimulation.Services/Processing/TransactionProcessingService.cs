@@ -52,31 +52,41 @@ namespace BankingSimulation.Services.Processing
         public IQueryable<Transaction> GetAll()
             => foundationService.GetAll<Transaction>();
 
-        public IEnumerable<MonthlyAccountSummary> GetMonthlyAccountSummariesSincePeriod(DateOnly fromDate, DateOnly toDate)
-        {
-            var accounts = foundationService.GetAll<Account>();
-
-            List<MonthlyAccountSummary> accountSummaries = new List<MonthlyAccountSummary>();
-
-            foreach (var account in accounts)
-            {
-                var transactions = foundationService.GetAll<Transaction>()
-                    .Where(t => t.Date >= fromDate && t.Date <= toDate)
-                    .GroupBy(t => new { t.Date.Month, t.Date.Year, t.AccountId })
-                    .Select(g => new MonthlyAccountSummary
-                    {
-                        Date = g.First().Date,
-                        AccountId = g.First().AccountId,
-                        Incomings = g.Where(g => g.Value >= 0.0).Sum(g => g.Value),
-                        Outgoings = g.Where(g => g.Value < 0.0).Sum(g => g.Value),
-                    })
-                    .ToArray();
-
-                accountSummaries.AddRange(transactions);
-            }
-
-            return accountSummaries;
-        }
+        public IEnumerable<PeriodAccountSummary> GetCalendarEventAccountSummaries(Guid calendarId)
+                => foundationService.GetAll<Account>()
+                    .SelectMany(a => 
+                        foundationService.GetAll<CalendarEvent>()
+                        .Where(ce => ce.CalendarId == calendarId)
+                        .Select(ce => new { ce.Start, ce.End, ce.Name })
+                        .OrderBy(ce => ce.Start)
+                        .Select(ce => new PeriodAccountSummary
+                        {
+                            AccountId = a.Id,
+                            AccountName = a.Name,
+                            AccountNumber = a.Number,
+                            ComputedAccountInfo = a.Name + " (" + a.Number + ")",
+                            CalendarEventName = ce.Name,
+                            CalendarEventStart = ce.Start,
+                            CalendarEventEnd = ce.End,
+                            Incomings = Math.Round(foundationService.GetAll<Transaction>()
+                                .Where(t => 
+                                    t.Date >= ce.Start 
+                                    && t.Date <= ce.End 
+                                    && t.Value >= 0.0 
+                                    && t.AccountId == a.Id
+                                )
+                                .Sum(l => l.Value), 2),
+                            Outgoings = Math.Round(foundationService.GetAll<Transaction>()
+                                .Where(t => 
+                                    t.Date >= ce.Start 
+                                    && t.Date <= ce.End 
+                                    && t.Value <= 0.0 
+                                    && t.AccountId == a.Id)
+                                .Sum(l => l.Value), 2)
+                        }))
+                .OrderBy(pas => pas.CalendarEventStart)
+                    .ThenBy(pas => pas.AccountName)
+                .ToArray();
 
     }
 }
