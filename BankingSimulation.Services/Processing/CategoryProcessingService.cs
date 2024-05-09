@@ -83,6 +83,19 @@ namespace BankingSimulation.Services.Processing
                         Sum = Math.Round(foundationService.GetAll<Transaction>()
                             .Where(t => t.CategoryId == c.Id && t.Date >= fromPeriod && t.Date <= toPeriod)
                             .Sum(t => t.Value), 2)
+                    }).ToList()
+                    .Union(
+                        new[]
+                    {
+                        new ForPeriodResults()
+                        {
+                            Id = null,
+                            Description = "Uncategorised",
+                            Name = "Uncategorised",
+                            Sum = Math.Round(foundationService.GetAll<Transaction>()
+                                .Where(t => t.CategoryId == null && t.Date >= fromPeriod && t.Date <= toPeriod)
+                                .Sum(t => t.Value), 2) 
+                        }
                     })
                     .OrderByDescending(b => b.Sum)
                         .ThenBy(b => b.Name)

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ApiService from '../services/ApiService';
+import AccountSummaryChart from './AccountSummaryChart';
+
+import Select from 'react-select';
 
 export default class Accounts extends Component {
   static displayName = Accounts.name;
@@ -8,12 +11,17 @@ export default class Accounts extends Component {
     super(props);
     this.apiService = new ApiService();
 
-    this.state = { accounts: [], loading: true };
+    this.state = { 
+      accounts: [], 
+      chartData: [],
+      loading: true 
+    };
   }
 
   componentDidMount() {
     this.apiService.getAuthorisationToken();
     this.populateAccountData();
+    this.populateCalendarData();
   }
 
   static getAccountName(account) {
@@ -53,6 +61,12 @@ export default class Accounts extends Component {
     );
   }
 
+  async changeCalendar(calendarId) {
+    var chartData = await this.apiService.get("Transactions/GetCalendarEventAccountSummaries?calendarId=" + calendarId);
+
+    this.setState({ chartData: chartData });
+  }
+
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
@@ -61,15 +75,28 @@ export default class Accounts extends Component {
     return (
       <div>
         <h1 id="tableLabel">Accounts</h1>
+        <div style={{ width: "400px", marginTop: "5px" }}>
+            <Select options={this.state.calendars} onChange={(newValue) => this.changeCalendar(newValue.value.id)}  />
+        </div>
+        {this.state.chartData.length > 0 ? <AccountSummaryChart chartData={this.state.chartData} /> : null }
+
         <p>Showing your accounts</p>
         {contents}
       </div>
     );
   }
 
-    async populateAccountData() {
-        var accountData = await this.apiService.get("Accounts?$expand=AccountSystemReferences");
+  async populateAccountData() {
+    var accountData = await this.apiService.get("Accounts?$expand=AccountSystemReferences");
 
-      this.setState({ accounts: accountData, loading: false });
+    this.setState({ accounts: accountData, loading: false });
+  }
+
+  async populateCalendarData() {
+    var calendarData = await this.apiService.get("Calendars?$orderby=Name");
+
+    var selectOptions = calendarData.map(c => ({ label: c.name, value: c }));
+
+    this.setState({ calendars: selectOptions });
   }
 }

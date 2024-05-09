@@ -90,6 +90,29 @@ export default class Categories extends Component {
         this.setState({ categories: forPeriodResults.results, loading: false });
     }
 
+    getButtons(category) {
+        if (category.id === null) {
+            return <td></td>;
+        }
+
+        return (
+        <td>
+            <Button 
+              variant="secondary" 
+              onClick={(_) => this.editCategoryId(category.id)}
+            >Edit</Button>
+            {
+            category.Deleting 
+              ? <p>Deleting</p> 
+              : <Button 
+                  variant="danger" 
+                  onClick={(_) => this.deleteCategoryId(category.id)}
+                >Delete</Button>
+              }
+          </td>
+        );
+    }
+
     renderCategoriesTable(categories) {
         return (
             <table className="table table-striped" aria-labelledby="tableLabel">
@@ -109,21 +132,7 @@ export default class Categories extends Component {
                     <td>{category.description}</td>
                     <td>{Categories.getCategoryKeywords(category.keywords)}</td>
                     {this.state.activeCalendarEvent != null ? <td>{category.sum}</td> : null }
-                    <td>
-                        <Button 
-                          variant="secondary" 
-                          onClick={(_) => this.editCategoryId(category.id)}
-                        >Edit</Button>
-                        {
-                        category.Deleting 
-                          ? <p>Deleting</p> 
-                          : <Button 
-                              variant="danger" 
-                              onClick={(_) => this.deleteCategoryId(category.id)}
-                            >Delete</Button>
-                          }
-                      </td>
-
+                    {this.getButtons(category)}
                   </tr>
                 )}
                 {this.state.activeCalendarEvent != null ? <tr>
@@ -139,6 +148,9 @@ export default class Categories extends Component {
     }
 
     static getCategoryKeywords(keywords) {
+        if (keywords === null)
+            return;
+
         return keywords.map(k => (<div key={k.id} className="badge badge-primary">{k.keyword}</div>));
     }
 

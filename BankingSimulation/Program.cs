@@ -387,6 +387,13 @@ void AddCalendars(WebApplication app)
         .WithOpenApi()
         .RequireAuthorization();
 
+    app.MapGet($"/Calendars/ComputeCalendarAccountStats", ([FromServices] ICalendarProcessingService service, 
+        Guid calendarId,
+        string accountIds)
+        => service.ComputeCalendarCategoryStatsForAccounts(calendarId, accountIds))
+        .WithOpenApi()
+        .RequireAuthorization();
+
     app.MapGet($"/Calendars/ComputeNetCalendarStats", ([FromServices] ICalendarProcessingService service, Guid calendarId)
         => service.ComputeNetCalendarStats(calendarId))
         .WithOpenApi()
@@ -486,11 +493,10 @@ void AddTransactions(WebApplication app)
         .WithOpenApi()
         .RequireAuthorization();
 
-    app.MapGet($"/Transactions/GetMonthlyAccountSummariesSincePeriod", (
+    app.MapGet($"/Transactions/GetCalendarEventAccountSummaries", (
         [FromServices] ITransactionProcessingService service,
-        DateOnly fromPeriod,
-        DateOnly toPeriod)
-        => service.GetMonthlyAccountSummariesSincePeriod(fromPeriod, toPeriod))
+        Guid calendarId)
+        => service.GetCalendarEventAccountSummaries(calendarId))
         .WithOpenApi()
         .RequireAuthorization();
 }

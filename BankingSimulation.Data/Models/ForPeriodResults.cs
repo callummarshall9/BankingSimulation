@@ -12,10 +12,10 @@ namespace BankingSimulation.Data.Models
 
     public class ForPeriodResults
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Guid RoleId { get; set; }
+        public Guid? RoleId { get; set; }
         public double Sum { get; set; }
         public IEnumerable<CategoryKeyword> Keywords { get; set; }
     }

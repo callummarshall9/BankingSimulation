@@ -9,6 +9,7 @@ namespace BankingSimulation.Services.Processing
         IQueryable<Calendar> GetAll();
         Task<Calendar> UpdateAsync(Calendar item);
         IEnumerable<ComputeCalendarCategoryStatsResult> ComputeCalendarCategoryStats(Guid calendarId);
+        IEnumerable<ComputeCalendarCategoryStatsResult> ComputeCalendarCategoryStatsForAccounts(Guid calendarId, string accountIds);
         IEnumerable<ComputeCalendarStatsResult> ComputeNetCalendarStats(Guid calendarId);
     }
 }
