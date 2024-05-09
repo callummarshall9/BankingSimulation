@@ -6,6 +6,7 @@ using BankingSimulation.Data;
 using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingSimulation.RBS;
 
@@ -140,7 +141,8 @@ internal partial class RBSOrchestrationService(
 
             var existingTransactionsForDate = foundationService
                 .GetAll<Transaction>()
-                .Where(t => t.Date == group.Key && receivedAccountNumbers.Contains(t.Account.Number))
+                .Where(t => t.Date == group.Key && receivedAccountNumbers.Contains(t.Account.Number) && t.SourceSystemId == "RBS")
+                .Include(t => t.Account)
                 .OrderBy(t => t.Description)
                     .ThenBy(t => t.Value)
                 .ToArray();
@@ -178,7 +180,9 @@ internal partial class RBSOrchestrationService(
             var receivedItem = receivedStack.Pop();
 
             if (databaseItem.Description != receivedItem.Description
-                && databaseItem.Value != receivedItem.Value)
+                && databaseItem.Value != receivedItem.Value 
+                && databaseItem.Account.Number != receivedItem.Account.Number
+                && databaseItem.SourceSystemId != receivedItem.SourceSystemId)
             {
                 await action(receivedItem);
             }

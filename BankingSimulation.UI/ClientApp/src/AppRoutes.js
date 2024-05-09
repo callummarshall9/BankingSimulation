@@ -1,8 +1,7 @@
 import Accounts from "./components/Accounts";
-import CalendarEvents from "./components/CalendarEvents";
+import EditCalendar from "./components/EditCalendar";
 import Calendars from "./components/Calendars";
 import Categories from "./components/Categories";
-import Home from "./components/Home";
 import ImportData from "./components/ImportData";
 import Roles from "./components/Roles";
 import Transactions from "./components/Transactions";
@@ -10,7 +9,7 @@ import Transactions from "./components/Transactions";
 const AppRoutes = [
     {
         index: true,
-        element: <Home />
+        element: <Accounts />
     },
     {
         path: '/accounts',
@@ -26,7 +25,7 @@ const AppRoutes = [
     },
     {
         path: '/calendar',
-        element: <CalendarEvents />
+        element: <EditCalendar />
     },
     {
         path: '/categories',

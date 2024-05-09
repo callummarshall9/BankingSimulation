@@ -1,4 +1,5 @@
-﻿using BankingSimulation.Data.Models;
+﻿using BankingSimulation.Data;
+using BankingSimulation.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 
@@ -52,5 +53,117 @@ namespace BankingSimulation.Services.Processing
 
             return await foundationService.UpdateAsync(new Calendar { Id = item.Id, Name = item.Name, RoleId = item.RoleId });
         }
+
+        public IEnumerable<ComputeCalendarCategoryStatsResult> ComputeCalendarCategoryStatsForAccounts(Guid calendarId,
+                string accountIds)
+        {
+            Guid[] accountIdsGuids = accountIds.Split(",").Select(a => Guid.Parse(a)).ToArray();
+
+            return foundationService.GetAll<CalendarEvent>()
+                        .Where(ce => ce.CalendarId == calendarId)
+                        .SelectMany(ce => foundationService
+                                .GetAll<Category>()
+                                .Select(c => new ComputeCalendarCategoryStatsResult
+                                {
+                                    CategoryId = c.Id,
+                                    CategoryName = c.Name,
+                                    CalendarEventId = ce.Id,
+                                    CalendarEventName = ce.Name,
+                                    CalendarEventStart = ce.Start,
+                                    FriendlyName = ce.Name + " (" + c.Name + ")",
+                                    Value = Math.Round(foundationService
+                                        .GetAll<Transaction>()
+                                        .Where(t => 
+                                            t.Date >= ce.Start 
+                                            && t.Date <= ce.End 
+                                            && t.CategoryId == c.Id
+                                            && accountIdsGuids.Contains(t.AccountId))
+                                        .Sum(t => t.Value), 2)
+                                }))
+                        .ToList()
+                        .Union(
+                            foundationService.GetAll<CalendarEvent>()
+                            .Where(ce => ce.CalendarId == calendarId)
+                            .Select(ce => new ComputeCalendarCategoryStatsResult
+                            {
+                                CategoryId = null,
+                                CategoryName = "Uncategorised",
+                                CalendarEventId = ce.Id,
+                                CalendarEventName = ce.Name,
+                                CalendarEventStart = ce.Start,
+                                FriendlyName = ce.Name + " (Uncategorised)",
+                                Value = Math.Round(foundationService
+                                            .GetAll<Transaction>()
+                                            .Where(t => 
+                                                t.Date >= ce.Start 
+                                                && t.Date <= ce.End 
+                                                && t.CategoryId == null
+                                                && accountIdsGuids.Contains(t.AccountId))
+                                            .Sum(t => t.Value), 2)
+                            })
+                        )
+                        .Where(c => Math.Round(c.Value, 2) != 0.0)
+                        .OrderBy(ccsr => ccsr.CalendarEventStart)
+                            .ThenBy(ccsr => ccsr.CategoryName)
+                        .ToList();
+        }
+
+        public IEnumerable<ComputeCalendarCategoryStatsResult> ComputeCalendarCategoryStats(Guid calendarId)
+            => foundationService.GetAll<CalendarEvent>()
+                .Where(ce => ce.CalendarId == calendarId)
+                .SelectMany(ce => foundationService
+                        .GetAll<Category>()
+                        .Select(c => new ComputeCalendarCategoryStatsResult
+                        {
+                            CategoryId = c.Id,
+                            CategoryName = c.Name,
+                            CalendarEventId = ce.Id,
+                            CalendarEventName = ce.Name,
+                            CalendarEventStart = ce.Start,
+                            FriendlyName = ce.Name + " (" + c.Name + ")",
+                            Value = Math.Round(foundationService
+                                .GetAll<Transaction>()
+                                .Where(t => t.Date >= ce.Start && t.Date <= ce.End && t.CategoryId == c.Id)
+                                .Sum(t => t.Value), 2)
+                        }))
+                .ToList()
+                .Union(
+                    foundationService.GetAll<CalendarEvent>()
+                    .Where(ce => ce.CalendarId == calendarId)
+                    .Select(ce => new ComputeCalendarCategoryStatsResult
+                    {
+                        CategoryId = null,
+                        CategoryName = "Uncategorised",
+                        CalendarEventId = ce.Id,
+                        CalendarEventName = ce.Name,
+                        CalendarEventStart = ce.Start,
+                        FriendlyName = ce.Name + " (Uncategorised)",
+                        Value = Math.Round(foundationService
+                                    .GetAll<Transaction>()
+                                    .Where(t => t.Date >= ce.Start && t.Date <= ce.End && t.CategoryId == null)
+                                    .Sum(t => t.Value), 2)
+                    })
+                )
+                .Where(c => Math.Round(c.Value, 2) != 0.0)
+                .OrderBy(ccsr => ccsr.CalendarEventStart)
+                    .ThenBy(ccsr => ccsr.CategoryName)
+                .ToList();
+
+        public IEnumerable<ComputeCalendarStatsResult> ComputeNetCalendarStats(Guid calendarId)
+            => foundationService.GetAll<CalendarEvent>()
+                .Where(ce => ce.CalendarId == calendarId)
+                .Select(ce => new ComputeCalendarStatsResult
+                        {
+                            CalendarEventId = ce.Id,
+                            CalendarEventName = ce.Name,
+                            CalendarEventStart = ce.Start,
+                            FriendlyName = ce.Name,
+                            Value = Math.Round(foundationService
+                                .GetAll<Transaction>()
+                                .Where(t => t.Date >= ce.Start && t.Date <= ce.End)
+                                .Sum(t => t.Value), 2)
+                        })
+                .OrderBy(ccsr => ccsr.CalendarEventStart)
+                .ToList();
     }
 }

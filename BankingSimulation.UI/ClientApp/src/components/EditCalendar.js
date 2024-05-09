@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import ApiService from '../services/ApiService';
 
-import Button from 'react-bootstrap/Button';
+import { Button, InputGroup, Form } from 'react-bootstrap';
 import AddCalendarEventDialog from './AddCalendarEventDialog';
+import TransactionsNetChart from './TransactionsNetChart';
 
-export default class CalendarEvents extends Component {
+export default class EditCalendar extends Component {
     constructor(props) {
         super(props);
 
@@ -13,13 +14,40 @@ export default class CalendarEvents extends Component {
         var params = new URLSearchParams(window.location.search);
         var calendarId = params.get("calendarId");
 
-        this.state = { calendarEvents: [], loading: true, showAddCalendarEventDialog: false, editCalendarEventDialogId: null, calendarId: calendarId };
+        this.state = { 
+          calendarEvents: [], 
+          loading: true, 
+          showAddCalendarEventDialog: false, 
+          editCalendarEventDialogId: null, 
+          calendarId: calendarId, 
+          calendar: null,
+          chartData: []
+        };
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
         this.apiService.getAuthorisationToken();
-        this.populateCalendarEventsData();
+        await this.populateCalendarData();
+        await this.populateChartData();
+    }
+
+    async populateChartData() {
+      var data = await this.apiService.get("Calendars/ComputeNetCalendarStats?calendarId=" + this.state.calendarId);
+
+      this.setState({ chartData: data });
+    }
+
+    async changeCalendarName(name) {
+      let copy = JSON.parse(JSON.stringify(this.state.calendar));
+
+      copy.name = name;
+
+      this.setState({ calendar: copy });
+    }
+
+    async updateCalendarName() {
+      await this.apiService.putJson("Calendars", this.state.calendar);
     }
 
     render() {
@@ -29,13 +57,25 @@ export default class CalendarEvents extends Component {
 
         return (
             <div>
+                {this.state.chartData.length > 0 ? <TransactionsNetChart chartData={this.state.chartData} /> : null }
+
+                {this.state.calendar != null ? <InputGroup>
+                    <Form.Control 
+                        type="text" 
+                        placeholder="Name" 
+                        value={this.state.calendar.name} 
+                        onChange={(e) => this.changeCalendarName(e.target.value)} 
+                        />
+                    <Button variant="primary" onClick={(_) => this.updateCalendarName()} className="float-end">Update Name</Button>
+                </InputGroup> : null}
+
                 <h1 id="tableLabel">Calendar Events</h1>
                 <p><Button variant="primary" onClick={(_) => this.showAddCalendarEventDialog()}>Add Calendar Event</Button>Showing your calendar events</p>
                 {contents}
                 {this.state.showAddCalendarEventDialog ? <AddCalendarEventDialog 
                     calendarId={this.state.calendarId}
                     onClose={(_) => this.setState({ showAddCalendarEventDialog: false })} 
-                    onSubmit={(_) => this.populateCalendarEventsData()}
+                    onSubmit={(_) => this.populateCalendarData()}
                     /> : null}
             </div>
         );
@@ -91,15 +131,15 @@ export default class CalendarEvents extends Component {
 
         await this.apiService.deleteJson("CalendarEvents", { id: calendarEventId });
 
-        this.populateCalendarEventsData();
+        await this.populateCalendarData();
     }
 
-    async populateCalendarEventsData() {
-        this.setState({ calendarEvents: [], loading: true });
+    async populateCalendarData() {
+      this.setState({ calendarEvents: [], loading: true });
 
-        var calendarEventData = await this.apiService.get("CalendarEvents?$filter=CalendarId eq " + this.state.calendarId + "&$expand=Calendar");
+      var calendarData = await this.apiService.get("Calendars?$filter=Id eq " + this.state.calendarId + "&$expand=CalendarEvents");
 
-        this.setState({ calendarEvents: calendarEventData, loading: false });
+      this.setState({ calendarEvents: calendarData[0].calendarEvents, calendar: calendarData[0], loading: false });
     }
 
     showAddCalendarEventDialog() {
