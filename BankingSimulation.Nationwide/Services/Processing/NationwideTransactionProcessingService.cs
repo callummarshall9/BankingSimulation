@@ -18,7 +18,7 @@ namespace BankingSimulation.Nationwide.Services.Processing
                 {
                     Account = new Account { Name = accountName, Number = accountName },
                     Balance = 0.0,
-                    Value = double.Parse(string.IsNullOrEmpty(r.Amount1) ? r.Amount2 : r.Amount1),
+                    Value = double.Parse(string.IsNullOrEmpty(r.Amount1) ? r.Amount2 : "-" + r.Amount1),
                     Date = DateOnly.Parse(r.Date),
                     SourceSystemId = "Nationwide",
                     Description = r.Description,
