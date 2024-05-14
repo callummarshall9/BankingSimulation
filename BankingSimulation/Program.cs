@@ -1,14 +1,18 @@
 using BankingSimulation.Authentication;
+using BankingSimulation.Barclays;
+using BankingSimulation.BarclaysCard;
+using BankingSimulation.BarclaysCard.Services.Orchestration;
 using BankingSimulation.Data;
 using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
+using BankingSimulation.MBNA;
+using BankingSimulation.MBNA.Services.Orchestration;
 using BankingSimulation.RBS;
 using BankingSimulation.Services;
 using BankingSimulation.Services.Processing;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Query;
@@ -86,6 +90,9 @@ builder.Services.AddODataOptions<TransactionType>(model);
 
 builder.Services.AddBankingSimulationServices();
 builder.Services.AddBankingSimulationRBSServices();
+builder.Services.AddBankingSimulationBarclaysServices();
+builder.Services.AddBankingSimulationBarclaysCardServices();
+builder.Services.AddBankingSimulationMBNAServices();
 builder.Services.AddBankingSimulationData();
 
 var app = builder.Build();
@@ -260,6 +267,94 @@ void AddAccounts(WebApplication app)
                                 Type = "text/csv",
                                 Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
 19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
+                            }
+                        }
+                    }
+                },
+                Summary = "Import Accounts",
+                Description = "Import Accounts from CSV for RBS Transaction Statements"
+            })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Accounts/ImportBarclays",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IBarclaysOrchestrationService orchestrationService)
+            => {
+                var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+                await orchestrationService.ImportAccountsFromRawDataAsync(requestBody);
+                return "";
+            }).WithOpenApi((operation) => new(operation)
+            {
+                RequestBody = new()
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>()
+                    {
+                        ["text/csv"] = new()
+                        {
+                            Schema = new OpenApiSchema()
+                            {
+                                Type = "text/csv",
+                                Example = new OpenApiString(@"Number,Date,Account,Amount,Subcategory,Memo
+0,07/05/2024,DUMMY ACCOUNT,-1.00,TEST CARD PURCHASE,EXAMPLE MEMO")
+                            }
+                        }
+                    }
+                },
+                Summary = "Import Accounts",
+                Description = "Import Accounts from CSV for RBS Transaction Statements"
+            })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Accounts/ImportBarclaysCard",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IBarclaysCardOrchestrationService orchestrationService)
+            => {
+                var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+                await orchestrationService.ImportAccountsFromRawDataAsync(requestBody);
+                return "";
+            }).WithOpenApi((operation) => new(operation)
+            {
+                RequestBody = new()
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>()
+                    {
+                        ["text/csv"] = new()
+                        {
+                            Schema = new OpenApiSchema()
+                            {
+                                Type = "text/csv",
+                                Example = new OpenApiString(@"1 May 24,"" Foo "",n/a,TEST CARD HOLDER,,-1.00,")
+                            }
+                        }
+                    }
+                },
+                Summary = "Import Accounts",
+                Description = "Import Accounts from CSV for RBS Transaction Statements"
+            })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Accounts/ImportMBNA",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IMBNAOrchestrationService orchestrationService)
+            => {
+                await orchestrationService.ImportAccountsAsync();
+                return "";
+            }).WithOpenApi((operation) => new(operation)
+            {
+                RequestBody = new()
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>()
+                    {
+                        ["text/csv"] = new()
+                        {
+                            Schema = new OpenApiSchema()
+                            {
+                                Type = "text/csv",
+                                Example = new OpenApiString(@"Date,Date entered,Reference,Description,Amount,
+21/04/2024,21/04/2024,1,INTEREST,1.00,")
                             }
                         }
                     }
@@ -468,6 +563,95 @@ void AddTransactions(WebApplication app)
                                Type = "text/csv",
                                Example = new OpenApiString(@"Date,Type,Description,Value,Balance,Account Name,Account Number
 19 Dec 2022,DPC,""Test Account"",2.01,432.38,AccountReference1,AccountNumber1")
+                           }
+                       }
+                   }
+               },
+               Summary = "Import Transactions",
+               Description = "Import Transactions from CSV for RBS Transaction Statements"
+           })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Transactions/ImportBarclays",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IBarclaysOrchestrationService orchestrationService)
+           => {
+               var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+               await orchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
+               return "";
+           }).WithOpenApi((operation) => new(operation)
+           {
+               RequestBody = new()
+               {
+                   Required = true,
+                   Content = new Dictionary<string, OpenApiMediaType>()
+                   {
+                       ["text/csv"] = new()
+                       {
+                           Schema = new OpenApiSchema()
+                           {
+                               Type = "text/csv",
+                               Example = new OpenApiString(@"Number,Date,Account,Amount,Subcategory,Memo
+0,07/05/2024,DUMMY ACCOUNT,-1.00,TEST CARD PURCHASE,EXAMPLE MEMO")
+                           }
+                       }
+                   }
+               },
+               Summary = "Import Transactions",
+               Description = "Import Transactions from CSV for RBS Transaction Statements"
+           })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Transactions/ImportBarclaysCard",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IBarclaysCardOrchestrationService orchestrationService)
+           => {
+               var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+               await orchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
+               return "";
+           }).WithOpenApi((operation) => new(operation)
+           {
+               RequestBody = new()
+               {
+                   Required = true,
+                   Content = new Dictionary<string, OpenApiMediaType>()
+                   {
+                       ["text/csv"] = new()
+                       {
+                           Schema = new OpenApiSchema()
+                           {
+                               Type = "text/csv",
+                               Example = new OpenApiString(@"1 May 24,"" Foo "",n/a,TEST CARD HOLDER,,-1.00,")
+                           }
+                       }
+                   }
+               },
+               Summary = "Import Transactions",
+               Description = "Import Transactions from CSV for RBS Transaction Statements"
+           })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Transactions/ImportMBNA",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] IMBNAOrchestrationService orchestrationService)
+           => {
+               var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+               await orchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
+               return "";
+           }).WithOpenApi((operation) => new(operation)
+           {
+               RequestBody = new()
+               {
+                   Required = true,
+                   Content = new Dictionary<string, OpenApiMediaType>()
+                   {
+                       ["text/csv"] = new()
+                       {
+                           Schema = new OpenApiSchema()
+                           {
+                               Type = "text/csv",
+                               Example = new OpenApiString(@"Date,Date entered,Reference,Description,Amount,
+21/04/2024,21/04/2024,1,INTEREST,1.00,")
                            }
                        }
                    }
