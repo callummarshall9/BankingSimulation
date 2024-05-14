@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.BarclaysC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.MBNA", "BankingSimulation.MBNA\BankingSimulation.MBNA.csproj", "{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.Nationwide", "BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj", "{F299D78E-D6B5-4948-ADD5-84B558861D27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F299D78E-D6B5-4948-ADD5-84B558861D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F299D78E-D6B5-4948-ADD5-84B558861D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F299D78E-D6B5-4948-ADD5-84B558861D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F299D78E-D6B5-4948-ADD5-84B558861D27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

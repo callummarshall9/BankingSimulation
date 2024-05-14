@@ -17,14 +17,16 @@ export default class ImportData extends Component {
             "rbs": "Transactions/ImportRBS",
             "barclays": "Transactions/ImportBarclays",
             "barclaysCard": "Transactions/ImportBarclaysCard",
-            "mbna": "Transactions/ImportMBNA"
+            "mbna": "Transactions/ImportMBNA",
+            "nationwide": "Transactions/ImportNationwide"
         };
 
         this.accountEndpoint = {
             "rbs": "Accounts/ImportRBS",
             "barclays": "Accounts/ImportBarclays",
             "barclaysCard": "Accounts/ImportBarclaysCard",
-            "mbna": "Accounts/ImportMBNA"
+            "mbna": "Accounts/ImportMBNA",
+            "nationwide": "Accounts/ImportNationwide"
         };
     }
 
@@ -108,6 +110,7 @@ export default class ImportData extends Component {
                         <option value="barclays">Barclays</option>
                         <option value="barclaysCard">Barclays Card</option>
                         <option value="mbna">MBNA</option>
+                        <option value="nationwide">Nationwide</option>
                     </select>                    
                 </div>
     

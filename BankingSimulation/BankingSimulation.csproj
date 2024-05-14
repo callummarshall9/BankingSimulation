@@ -18,6 +18,7 @@
     <ProjectReference Include="..\BankingSimulation.Barclays\BankingSimulation.Barclays.csproj" />
     <ProjectReference Include="..\BankingSimulation.Data\BankingSimulation.Data.csproj" />
     <ProjectReference Include="..\BankingSimulation.MBNA\BankingSimulation.MBNA.csproj" />
+    <ProjectReference Include="..\BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj" />
     <ProjectReference Include="..\BankingSimulation.Services\BankingSimulation.Services.csproj" />
     <ProjectReference Include="..\BankingSimulation.RBS\BankingSimulation.RBS.csproj" />
   </ItemGroup>

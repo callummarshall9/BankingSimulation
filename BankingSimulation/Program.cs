@@ -7,6 +7,8 @@ using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.MBNA;
 using BankingSimulation.MBNA.Services.Orchestration;
+using BankingSimulation.Nationwide;
+using BankingSimulation.Nationwide.Services.Orchestration;
 using BankingSimulation.RBS;
 using BankingSimulation.Services;
 using BankingSimulation.Services.Processing;
@@ -93,6 +95,7 @@ builder.Services.AddBankingSimulationRBSServices();
 builder.Services.AddBankingSimulationBarclaysServices();
 builder.Services.AddBankingSimulationBarclaysCardServices();
 builder.Services.AddBankingSimulationMBNAServices();
+builder.Services.AddBankingSimulationNationwideServices();
 builder.Services.AddBankingSimulationData();
 
 var app = builder.Build();
@@ -355,6 +358,40 @@ void AddAccounts(WebApplication app)
                                 Type = "text/csv",
                                 Example = new OpenApiString(@"Date,Date entered,Reference,Description,Amount,
 21/04/2024,21/04/2024,1,INTEREST,1.00,")
+                            }
+                        }
+                    }
+                },
+                Summary = "Import Accounts",
+                Description = "Import Accounts from CSV for RBS Transaction Statements"
+            })
+        .WithOpenApi()
+        .RequireAuthorization();
+
+    app.MapPost("/Accounts/ImportNationwide",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] INationwideOrchestrationService orchestrationService)
+            => {
+                var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+                await orchestrationService.ImportAccountsFromRawDataAsync(requestBody);
+                return "";
+            }).WithOpenApi((operation) => new(operation)
+            {
+                RequestBody = new()
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>()
+                    {
+                        ["text/csv"] = new()
+                        {
+                            Schema = new OpenApiSchema()
+                            {
+                                Type = "text/csv",
+                                Example = new OpenApiString(@"""Account Name:"",""FlexOne ****12345""
+""Account Balance:"",""£1.00""
+""Available Balance: "",""£1.00""
+
+""Date"",""Transaction type"",""Description"",""Paid out"",""Paid in"",""Balance""
+""10 Apr 2024"",""Direct Debit"",""Foo"",""£1.00"","""",""£1.56""")
                             }
                         }
                     }
@@ -661,6 +698,41 @@ void AddTransactions(WebApplication app)
            })
         .WithOpenApi()
         .RequireAuthorization();
+
+    app.MapPost("/Transactions/ImportNationwide",
+        async ([FromServices] IHttpContextAccessor context, [FromServices] INationwideOrchestrationService orchestrationService)
+           => {
+               var requestBody = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+               await orchestrationService.ImportTransactionsFromRawDataAsync(requestBody);
+               return "";
+           }).WithOpenApi((operation) => new(operation)
+           {
+               RequestBody = new()
+               {
+                   Required = true,
+                   Content = new Dictionary<string, OpenApiMediaType>()
+                   {
+                       ["text/csv"] = new()
+                       {
+                           Schema = new OpenApiSchema()
+                           {
+                               Type = "text/csv",
+                               Example = new OpenApiString(@"""Account Name:"",""FlexOne ****12345""
+""Account Balance:"",""£1.00""
+""Available Balance: "",""£1.00""
+
+""Date"",""Transaction type"",""Description"",""Paid out"",""Paid in"",""Balance""
+""10 Apr 2024"",""Direct Debit"",""Foo"",""£1.00"","""",""£1.56""")
+                           }
+                       }
+                   }
+               },
+               Summary = "Import Transactions",
+               Description = "Import Transactions from CSV for RBS Transaction Statements"
+           })
+        .WithOpenApi()
+        .RequireAuthorization();
+
 
     app.MapPut($"/Transactions", ([FromServices] ITransactionProcessingService service, [FromBody] Transaction entity)
         => service.UpdateAsync(entity))

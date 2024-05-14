@@ -5,6 +5,6 @@ namespace BankingSimulation.BarclaysCard.Brokers
 {
     internal interface ICSVBroker
     {
-        IEnumerable<BarclaysCardTransactionEntry> GetBarclaysTransactionEntries(string rawData);
+        IEnumerable<BarclaysCardTransactionEntry> GetBarclaysCardTransactionEntries(string rawData);
     }
 }

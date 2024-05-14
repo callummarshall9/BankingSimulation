@@ -11,7 +11,7 @@ namespace BankingSimulation.BarclaysCard.Brokers
 {
     internal class CSVBroker : ICSVBroker
     {
-        public IEnumerable<BarclaysCardTransactionEntry> GetBarclaysTransactionEntries(string rawData)
+        public IEnumerable<BarclaysCardTransactionEntry> GetBarclaysCardTransactionEntries(string rawData)
         {
             using var streamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(rawData)));
 

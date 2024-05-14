@@ -9,7 +9,7 @@ namespace BankingSimulation.BarclaysCard.Services.Processing
     {
         public IEnumerable<Account> ParseAccounts(string rawData)
         {
-            var rows = csvBroker.GetBarclaysTransactionEntries(rawData);
+            var rows = csvBroker.GetBarclaysCardTransactionEntries(rawData);
 
             return rows
                 .Where(r => !string.IsNullOrEmpty(r.Cardholder))
