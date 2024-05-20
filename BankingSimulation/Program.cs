@@ -444,6 +444,11 @@ void AddCategories(WebApplication app)
         => service.ForPeriod(fromPeriod, toPeriod))
         .WithOpenApi()
         .RequireAuthorization();
+
+    app.MapGet($"/Categories/AccountsForPeriod", ([FromServices] ICategoryProcessingService service, DateOnly fromPeriod, DateOnly toPeriod, string accountIds)
+        => service.AccountsForPeriod(fromPeriod, toPeriod, accountIds))
+        .WithOpenApi()
+        .RequireAuthorization();
 }
 
 void AddCategoryKeywords(WebApplication app)

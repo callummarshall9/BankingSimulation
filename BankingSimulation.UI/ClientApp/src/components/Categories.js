@@ -14,6 +14,8 @@ export default class Categories extends Component {
         this.apiService = new ApiService();
         this.state = { 
             categories: [], 
+            accounts: [],
+            activeAccounts: [],
             loading: true, 
             showAddCategoryDialog: false, 
             editCategoryDialogId: null, 
@@ -28,6 +30,7 @@ export default class Categories extends Component {
         this.apiService.getAuthorisationToken();
         this.populateCategoriesData();
         this.populateCalendarEventsData();
+        this.populateAccountData();
     }
 
     async populateCategoriesData() {
@@ -47,6 +50,17 @@ export default class Categories extends Component {
         this.setState({ calendarEvents: calendarEvents, activeCalendarEvent: null, selectOptions: selectOptions });
     }
 
+    async populateAccountData() {
+        this.setState({ accounts: [] });
+
+        var accounts = await this.apiService.get("Accounts?$select=Name,Number,Id&$orderby=Name");
+        var accountSelectOptions = accounts.map(a => ({ label: a.name + " (" + a.number + ")", value: a.id }));
+
+        accountSelectOptions.splice(0, 0, { label: "All", value: null });
+
+        this.setState({ accounts: accountSelectOptions });
+    }
+
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
@@ -57,11 +71,23 @@ export default class Categories extends Component {
                 <h1 id="tableLabel">Categories</h1>
                 <p>
                     <Button variant="primary" onClick={(_) => this.showAddCategoryDialog()}>Add Category</Button>
-                    Showing your categories for period
-                    <div style={{ width: "400px", marginTop: "5px" }}>
-                        <Select options={this.state.selectOptions} onChange={(newValue) => this.changeCalendarEvent(newValue.value)}  />
-                    </div>
                 </p>
+
+                <div className="row">
+                    <div className="col-sm-4">
+                        Calendar Events: 
+                        <div style={{ width: "400px", marginTop: "5px" }}>
+                            <Select options={this.state.selectOptions} onChange={(newValue) => this.changeCalendarEvent(newValue.value)}  />
+                        </div>
+                    </div>
+                    <div className="col-sm-4">
+                        Accounts:
+                        <div style={{ width: "400px", marginTop: "5px" }}>
+                            <Select isMulti options={this.state.accounts} onChange={(newValue) => this.changeAccount(newValue)}  />
+                        </div>
+                    </div>
+                </div>
+
 
                 {contents}
                 {this.state.showAddCategoryDialog ? <AddCategoryDialog 
@@ -82,10 +108,24 @@ export default class Categories extends Component {
         this.loadForPeriod(newValue);
     }
 
+    changeAccount(activeAccountOptions) {
+        this.setState({ activeAccounts: activeAccountOptions.map(a => a.value) });
+
+        if (this.state.activeCalendarEvent !== null) {
+            this.loadForPeriod(this.state.activeCalendarEvent);
+        }
+    }
+
     async loadForPeriod(calendarEvent) {
         this.setState({ categories: [], loading: true });
 
-        var forPeriodResults = await this.apiService.get("Categories/ForPeriod?fromPeriod=" + calendarEvent.start + "&toPeriod=" + calendarEvent.end);
+        let forPeriodResults = null;
+
+        if (this.state.activeAccounts.length === 0) {
+            forPeriodResults = await this.apiService.get("Categories/ForPeriod?fromPeriod=" + calendarEvent.start + "&toPeriod=" + calendarEvent.end);
+        } else {
+            forPeriodResults = await this.apiService.get("Categories/AccountsForPeriod?fromPeriod=" + calendarEvent.start + "&toPeriod=" + calendarEvent.end + "&accountIds=" + this.state.activeAccounts.join());
+        }
 
         this.setState({ categories: forPeriodResults.results, loading: false });
     }
@@ -114,6 +154,10 @@ export default class Categories extends Component {
     }
 
     renderCategoriesTable(categories) {
+        if (this.state.activeAccounts.length > 0 && this.state.activeCalendarEvent === null) {
+            return <p><em>Please select a calendar event or remove the account selection to view category analysis for.</em></p>
+        }
+
         return (
             <table className="table table-striped" aria-labelledby="tableLabel">
               <thead>

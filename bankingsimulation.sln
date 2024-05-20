@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.UI", "Ban
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.OData", "AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj", "{D93FC0E0-9F25-460F-80AC-4F15DA919CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.Barclays", "BankingSimulation.Barclays\BankingSimulation.Barclays.csproj", "{AFBDB76E-1453-441B-86C9-890846FFE064}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Barclays", "BankingSimulation.Barclays\BankingSimulation.Barclays.csproj", "{AFBDB76E-1453-441B-86C9-890846FFE064}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.BarclaysCard", "BankingSimulation.BarclaysCard\BankingSimulation.BarclaysCard.csproj", "{E31FCCDE-3908-4C13-967B-0D2D9799191C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.BarclaysCard", "BankingSimulation.BarclaysCard\BankingSimulation.BarclaysCard.csproj", "{E31FCCDE-3908-4C13-967B-0D2D9799191C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.MBNA", "BankingSimulation.MBNA\BankingSimulation.MBNA.csproj", "{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.MBNA", "BankingSimulation.MBNA\BankingSimulation.MBNA.csproj", "{B6FCCBA7-7251-4BCB-8D9A-8E991F2EBDAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSimulation.Nationwide", "BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj", "{F299D78E-D6B5-4948-ADD5-84B558861D27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Nationwide", "BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj", "{F299D78E-D6B5-4948-ADD5-84B558861D27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

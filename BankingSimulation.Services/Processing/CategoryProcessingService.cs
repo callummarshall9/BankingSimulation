@@ -2,6 +2,7 @@
 using BankingSimulation.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Security;
+using System.Linq;
 
 namespace BankingSimulation.Services.Processing
 {
@@ -101,5 +102,44 @@ namespace BankingSimulation.Services.Processing
                         .ThenBy(b => b.Name)
                 .ToList()
             };
+
+        public AccountsForPeriodResultsDTO AccountsForPeriod(DateOnly fromPeriod, DateOnly toPeriod, string accountIds)
+        {
+            Guid[] accountIdsGuids = accountIds.Split(",").Select(Guid.Parse).ToArray();
+
+            return new AccountsForPeriodResultsDTO
+            {
+                From = fromPeriod,
+                To = toPeriod,
+                Results = foundationService.GetAll<Category>()
+                    .Select(c => new AccountsForPeriodResults
+                    {
+                        Id = c.Id,
+                        Description = c.Description,
+                        Keywords = c.Keywords,
+                        RoleId = c.RoleId,
+                        Name = c.Name,
+                        Sum = Math.Round(foundationService.GetAll<Transaction>()
+                            .Where(t => t.CategoryId == c.Id && t.Date >= fromPeriod && t.Date <= toPeriod && accountIdsGuids.Contains(t.AccountId))
+                            .Sum(t => t.Value), 2)
+                    }).ToList()
+                    .Union(
+                        new[]
+                    {
+                        new AccountsForPeriodResults()
+                        {
+                            Id = null,
+                            Description = "Uncategorised",
+                            Name = "Uncategorised",
+                            Sum = Math.Round(foundationService.GetAll<Transaction>()
+                                .Where(t => t.CategoryId == null && t.Date >= fromPeriod && t.Date <= toPeriod && accountIdsGuids.Contains(t.AccountId))
+                                .Sum(t => t.Value), 2)
+                        }
+                    })
+                    .OrderByDescending(b => b.Sum)
+                        .ThenBy(b => b.Name)
+                .ToList()
+            };
+        }
     }
 }
