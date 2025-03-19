@@ -10,47 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d75fec4c-fbe4-489d-a914-69610cccc779" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.Data/Data/ODataContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.UI/AuthInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.UI/AuthenticationHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulationDependencyInstaller.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.UI/ODataDependencyInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.bankingsimulation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.bankingsimulation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AspNetCoreOData" beforeDir="false" afterPath="$PROJECT_DIR$/AspNetCoreOData" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/BankingSimulation.Data.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.Data/BankingSimulation.Data.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Data/BankSimulationContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.Data/Data/BankSimulationContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240121230629_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240121230629_Initial.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240429150011_AddSecurityAndCalendars.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240429150011_AddSecurityAndCalendars.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240429164325_SecureCategories.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240429164325_SecureCategories.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240504201338_FixAccountRoles.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240504201338_FixAccountRoles.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240506214608_UpdateTransactionsTable.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240506214608_UpdateTransactionsTable.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240509005451_AddSourceSystemId.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/20240509005451_AddSourceSystemId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Migrations/BankSimulationContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.RBS/Models/RBSTransactionEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.RBS/Models/RBSTransactionEntry.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.UI.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/.env.development" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/src/config/ApiConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/ClientApp/src/config/ApiConfig.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/Authentication/CoreAuthInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/Authentication/CoreUser.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/Authentication/SSOAuthenticationHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/BankingSimulation.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/Properties/launchSettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/appsettings.Development.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bankingsimulation.sln" beforeDir="false" afterPath="$PROJECT_DIR$/bankingsimulation.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.Services/Processing/TransactionProcessingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.Services/Processing/TransactionProcessingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.db-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.UI/BankingSimulation.db-wal" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +27,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f2ec3a5613ca4976b35b938f12f2d3a4dc00/eb/8ed27698/AuthorizationAppBuilderExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/413341ec7da6e42cb630e52ba9208edacb2e7267da1d9296f51628fcd35e81d9/SingleQueryingEnumerable.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/601d8ae16eb19a2a9517a3a1f6693e320ac1d2c8fba891cb6229a58f1df4/SqliteQueryTranslationPostprocessor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7b710f6a0201548f1aee385dbfe20b7cdd629fb378894c7978f7ca5936a28/ConfigurationExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ce37be1a06b16c6faa02038d2cc477dd3bca5b217ceeb41c5f2ad45c1bf9/ServiceProvider.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -151,6 +116,7 @@
       <workItem from="1742396933923" duration="4366000" />
       <workItem from="1742401476073" duration="640000" />
       <workItem from="1742402134677" duration="1177000" />
+      <workItem from="1742403725694" duration="643000" />
     </task>
     <servers />
   </component>
@@ -166,19 +132,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BankingSimulation.UI/Program.cs</url>
-          <line>88</line>
-          <properties documentPath="$PROJECT_DIR$/BankingSimulation.UI/Program.cs" containingFunctionPresentation="">
-            <startOffsets>
-              <option value="3141" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3224" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/BankingSimulation.RBS/Services/Orchestration/RBSOrchestrationService.cs</url>
           <line>26</line>
           <properties documentPath="$PROJECT_DIR$/BankingSimulation.RBS/Services/Orchestration/RBSOrchestrationService.cs" containingFunctionPresentation="Method 'ImportAccountsFromRawDataAsync'">
@@ -190,19 +143,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BankingSimulation.RBS/Services/Processing/RBSAccountProcessingService.cs</url>
-          <line>20</line>
-          <properties documentPath="$PROJECT_DIR$/BankingSimulation.RBS/Services/Processing/RBSAccountProcessingService.cs" containingFunctionPresentation="Method 'ParseAccounts'">
-            <startOffsets>
-              <option value="504" />
-            </startOffsets>
-            <endOffsets>
-              <option value="964" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
