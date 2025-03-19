@@ -1,4 +1,4 @@
 export default class ApiConfig {
-    static BaseUrl = "__ApiBaseUrl__";
+    static BaseUrl = "https://localhost:7270/";
     static LoginAuthority = "__LoginAuthority__";
 }

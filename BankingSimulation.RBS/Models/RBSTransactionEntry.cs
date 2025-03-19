@@ -12,6 +12,7 @@ internal class RBSTransactionEntry
 
     [Name("Description")]
     public string Description { get; set; }
+    
     [Name("Value")]
     public double Value { get; set; }
 

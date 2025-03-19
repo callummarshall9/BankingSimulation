@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +28,17 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\config\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj" />
+    <ProjectReference Include="..\BankingSimulation.BarclaysCard\BankingSimulation.BarclaysCard.csproj" />
+    <ProjectReference Include="..\BankingSimulation.Barclays\BankingSimulation.Barclays.csproj" />
+    <ProjectReference Include="..\BankingSimulation.Data\BankingSimulation.Data.csproj" />
+    <ProjectReference Include="..\BankingSimulation.MBNA\BankingSimulation.MBNA.csproj" />
+    <ProjectReference Include="..\BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj" />
+    <ProjectReference Include="..\BankingSimulation.RBS\BankingSimulation.RBS.csproj" />
+    <ProjectReference Include="..\BankingSimulation.Services\BankingSimulation.Services.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -40,7 +53,7 @@
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)"  Command="npm install" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
 
     <!-- Include the newly-built files in the publish output -->

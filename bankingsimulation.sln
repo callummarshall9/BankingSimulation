@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation", "BankingSimulation\BankingSimulation.csproj", "{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.RBS", "BankingSimulation.RBS\BankingSimulation.RBS.csproj", "{83AF25F2-DF02-491B-A6B0-B3482D327EE9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSimulation.Data", "BankingSimulation.Data\BankingSimulation.Data.csproj", "{4DA3AFB5-D598-4CB8-854C-241DAAFE7C05}"
@@ -29,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{240DE012-EC7F-4CA6-AC3D-EA48B810EB8B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83AF25F2-DF02-491B-A6B0-B3482D327EE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83AF25F2-DF02-491B-A6B0-B3482D327EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83AF25F2-DF02-491B-A6B0-B3482D327EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
