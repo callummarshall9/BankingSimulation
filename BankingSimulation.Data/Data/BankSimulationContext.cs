@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankingSimulation.Data;
 
-public class BankSimulationContext(DbContextOptions options) : DbContext(options)
+public class BankSimulationContext(DbContextOptions<BankSimulationContext> options) : DbContext(options)
 {
     public DbSet<Account> Accounts { get; set; }
     public DbSet<AccountBankingSystemReference> AccountSystemReferences { get; set; }

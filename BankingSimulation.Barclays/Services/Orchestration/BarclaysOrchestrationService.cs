@@ -7,6 +7,7 @@ using BankingSimulation.Data;
 using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.Services;
+using BankingSimulation.Services.Orchestration;
 using Microsoft.EntityFrameworkCore;
 using static BankingSimulation.Barclays.Services.Orchestration.BarclaysOrchestrationService;
 
@@ -16,7 +17,9 @@ internal partial class BarclaysOrchestrationService(
     IBarclaysAccountProcessingService accountProcessingService,
     IBarclaysTransactionProcessingService transactionProcessingService,
     IFoundationService foundationService,
-    IAuthorisationBroker authorisationBroker) : IBarclaysOrchestrationService
+    IAuthorisationBroker authorisationBroker) : IBarclaysOrchestrationService, 
+        IAccountImportOrchestrationService,
+        ITransactionImportOrchestrationService
 {
     public async Task CreateBarclaysSystem()
     {

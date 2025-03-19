@@ -6,6 +6,7 @@ using BankingSimulation.Data;
 using BankingSimulation.Data.Brokers;
 using BankingSimulation.Data.Models;
 using BankingSimulation.Services;
+using BankingSimulation.Services.Orchestration;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankingSimulation.RBS;
@@ -14,7 +15,9 @@ internal partial class RBSOrchestrationService(
     IRBSAccountProcessingService accountProcessingService,
     IRBSTransactionProcessingService transactionProcessingService,
     IFoundationService foundationService,
-    IAuthorisationBroker authorisationBroker) : IRBSOrchestrationService
+    IAuthorisationBroker authorisationBroker) : IRBSOrchestrationService, 
+        IAccountImportOrchestrationService,
+        ITransactionImportOrchestrationService
 {
     public async Task CreateRBSSystem()
     {
@@ -153,7 +156,7 @@ internal partial class RBSOrchestrationService(
             await HandleDifferences(
                 receivedStack, 
                 databaseStack, 
-                (Transaction transaction) => ImportTransaction
+                (transaction) => ImportTransaction
                 (
                     transaction, 
                     existingAccounts, 

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BankingSimulation.Services.Orchestration;
 
 namespace BankingSimulation.MBNA.Services.Orchestration
 {
@@ -15,13 +16,17 @@ namespace BankingSimulation.MBNA.Services.Orchestration
         IMBNAAccountProcessingService accountProcessingService,
         IMBNATransactionsProcessingService transactionProcessingService,
         IFoundationService foundationService,
-        IAuthorisationBroker authorisationBroker) : IMBNAOrchestrationService
+        IAuthorisationBroker authorisationBroker) : IMBNAOrchestrationService, 
+            IAccountImportOrchestrationService,
+            ITransactionImportOrchestrationService
     {
         public async Task CreateMBNASystem()
         {
             if (!foundationService.GetAll<BankingSystem>().Any(bs => bs.Id == "MBNA"))
                 await foundationService.AddAsync(new BankingSystem { Id = "MBNA" });
         }
+        
+        
 
         public async Task ImportAccountsAsync()
         {
@@ -218,5 +223,8 @@ namespace BankingSimulation.MBNA.Services.Orchestration
 
             await foundationService.AddAsync(transaction);
         }
+
+        public Task ImportAccountsFromRawDataAsync(string _)
+            => ImportAccountsAsync();
     }
 }

@@ -10,7 +10,7 @@ namespace BankingSimulation.Data;
 public class ODataContext : BankSimulationContext
 {
     private string userId;
-    public ODataContext(DbContextOptions options, ClaimsPrincipal principal) : base(options)
+    public ODataContext(DbContextOptions<BankSimulationContext> options, ClaimsPrincipal principal) : base(options)
     {
         userId = principal?.Identity?.Name ?? "Guest";
     }

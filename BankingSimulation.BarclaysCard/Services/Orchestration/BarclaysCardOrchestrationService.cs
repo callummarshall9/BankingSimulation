@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BankingSimulation.Services.Orchestration;
 
 namespace BankingSimulation.BarclaysCard.Services.Orchestration;
 
@@ -15,7 +16,9 @@ internal partial class BarclaysCardOrchestrationService(
     IBarclaysCardAccountProcessingService accountProcessingService,
     IBarclaysCardTransactionProcessingService transactionProcessingService,
     IFoundationService foundationService,
-    IAuthorisationBroker authorisationBroker) : IBarclaysCardOrchestrationService
+    IAuthorisationBroker authorisationBroker) : IBarclaysCardOrchestrationService, 
+        IAccountImportOrchestrationService,
+        ITransactionImportOrchestrationService
 {
     public async Task CreateBarclaysCardSystem()
     {

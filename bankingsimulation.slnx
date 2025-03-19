@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Project Path="AspNetCoreOData\src\Microsoft.AspNetCore.OData\Microsoft.AspNetCore.OData.csproj" />
+  <Project Path="BankingSimulation.BarclaysCard\BankingSimulation.BarclaysCard.csproj" />
+  <Project Path="BankingSimulation.Barclays\BankingSimulation.Barclays.csproj" />
+  <Project Path="BankingSimulation.BlazorServer\BankingSimulation.BlazorServer.csproj" Type="Classic C#" />
+  <Project Path="BankingSimulation.Data\BankingSimulation.Data.csproj" />
+  <Project Path="BankingSimulation.MBNA\BankingSimulation.MBNA.csproj" />
+  <Project Path="BankingSimulation.Nationwide\BankingSimulation.Nationwide.csproj" />
+  <Project Path="BankingSimulation.RBS\BankingSimulation.RBS.csproj" />
+  <Project Path="BankingSimulation.Services\BankingSimulation.Services.csproj" />
+  <Project Path="BankingSimulation.UI\BankingSimulation.UI.csproj" />
+</Solution>

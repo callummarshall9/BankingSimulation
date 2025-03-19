@@ -1,0 +1,27 @@
+@using BankingSimulation.Data.Models
+@rendermode InteractiveAuto
+
+<ApexChart TItem="PeriodAccountSummary"
+           Title="Order Net Value">
+
+    <ApexPointTooltip>
+        <label>
+            @context.DataPoint.Items.Sum(e=> e.Incomings).ToString("n0")
+            - @context.DataPoint.Items.Sum(e=> e.Outgoings).ToString("n0")
+            = @context.DataPoint.Items.Sum(e=> e.Net).ToString("n0")
+            (@context.DataPoint.Items.First().ComputedAccountInfo)
+        </label>
+    </ApexPointTooltip>
+    
+    <ChildContent>
+        <ApexPointSeries TItem="PeriodAccountSummary"
+             Items="@Summaries"
+             Name="Calendar Events"
+             ShowDataLabels="true"
+             XValue="@(e => e.CalendarEventName)"
+             YValue="@(e => Convert.ToDecimal(e.Net))"
+             OrderBy="e=> e.Items.First().CalendarEventStart"
+             SeriesType="SeriesType.Bar"/>
+    </ChildContent>
+
+</ApexChart>

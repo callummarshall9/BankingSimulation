@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BankingSimulation.Services.Orchestration;
 
 namespace BankingSimulation.Nationwide.Services.Orchestration;
 
@@ -15,7 +16,9 @@ internal partial class NationwideOrchestrationService(
     INationwideAccountProcessingService accountProcessingService,
     INationwideTransactionProcessingService transactionProcessingService,
     IFoundationService foundationService,
-    IAuthorisationBroker authorisationBroker) : INationwideOrchestrationService
+    IAuthorisationBroker authorisationBroker) : INationwideOrchestrationService, 
+        IAccountImportOrchestrationService,
+        ITransactionImportOrchestrationService
 {
     public async Task CreateNationwideSystem()
     {

@@ -1,0 +1,37 @@
+@page "/importdata"
+
+<h1>Import Data</h1>
+
+@if (Model is { Loading: false, Success: true })
+{
+    <div class="alert alert-success">Data Imported</div>
+}
+else if (Model.Loading)
+{
+    <div class="alert alert-info">Importing Data</div>
+}
+else if (Model is { Loading: false, Exception: not null })
+{
+    <div class="alert alert-danger">@Model.Exception.Message</div>
+}
+
+<div class="mb-3">
+    <label class="form-label">Bank</label>
+    <select class="form-select" @onchange="HandleSelect">
+        <option value="" selected>Select Bank</option>
+        <option value="rbs">RBS</option>
+        <option value="barclays">Barclays</option>
+        <option value="barclaysCard">Barclays Card</option>
+        <option value="mbna">MBNA</option>
+        <option value="nationwide">Nationwide</option>
+    </select>
+</div>
+
+<InputTextArea rows="40" cols="100" class="form-control" @bind-Value="@Model.CSVData"></InputTextArea>
+
+@if (!Model.Loading)
+{
+    <button class="btn btn-primary" @onclick="async () => await ImportDataAsync()">
+        Submit
+    </button>
+}

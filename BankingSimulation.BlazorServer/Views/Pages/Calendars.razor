@@ -1,0 +1,32 @@
+@page "/calendars"
+@rendermode InteractiveAuto
+
+<h1 id="tableLabel">Calendars</h1>
+<p><button class="btn btn-primary">Add Calendar</button>Showing your calendars</p>
+<table className="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th style="text-align: right">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var calendar in Model.Calendars)
+    {
+        <tr>
+            <td>@calendar.Name</td>
+            <td style="text-align: right">
+                @if (!calendar.Deleting)
+                {
+                    <button class="btn btn-secondary">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
+                }
+                else
+                {
+                    <p>Deleting</p>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

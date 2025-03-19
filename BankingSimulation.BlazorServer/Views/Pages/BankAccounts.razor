@@ -1,0 +1,49 @@
+@page "/accounts"
+@page "/"
+
+<h3>Bank Accounts</h3>
+
+<div>
+    <h1 id="tableLabel">Accounts</h1>
+    <div style="width: 400px; margin-top: 5px">
+        <select class="form-control" @onchange="args => HandleSelect(args)">
+            @foreach (var entry in Model.Calendars)
+            {
+                <option value="@entry.Id">@entry.Name</option>
+            }
+        </select>
+    </div>
+    
+    @if (SelectedCalendarId != null)
+    {
+        <AccountSummaryChart @CalendarId="@SelectedCalendarId.Value" />
+    }
+
+    <p>Showing your accounts</p>
+    
+    <table class="table table-striped" aria-labelledby="tableLabel">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Systems</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Model.Accounts)
+            {
+                <tr>
+                    <td>@account.Name @(!string.IsNullOrEmpty(account.FriendlyName) ? "(" + account.FriendlyName + ")": "")</td>
+                    <td>@account.Number</td>
+                    <td>
+                        @foreach (var acs in account.SystemReferences)
+                        {
+                            <span className="badge badge-primary">@acs</span>
+                        }
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
