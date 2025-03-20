@@ -1,0 +1,33 @@
+<Modal @ref="modal" title="Add New Calendar">
+    <BodyTemplate>
+        @if (!Model.Loading)
+        {
+            if (Model.Exception != null)
+            {
+                <div class="alert alert-warning">
+                    @Model.Exception.Message
+                </div>
+            }
+        
+            <div class="form-group row mb-3">
+                <label class="col-md-2 col-form-label">Name:</label>
+                <div class="col-md-10">
+                    <TextInput @bind-Value="@Model.Name" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>Adding</p>
+        }
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="async() => await HideAsync()">Close</Button>
+        
+        @if (!Model.Loading)
+        {
+            <Button Color="ButtonColor.Primary" @onclick="async() => await SubmitAsync()">Create</Button>
+        }
+    </FooterTemplate>
+</Modal>
+

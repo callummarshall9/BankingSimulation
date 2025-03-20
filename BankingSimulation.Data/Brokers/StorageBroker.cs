@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BankingSimulation.Data;
 
@@ -20,6 +21,8 @@ public class StorageBroker : IStorageBroker
 
         await context.SaveChangesAsync();
 
+        context.ChangeTracker.Clear();
+
         return entity.Entity;
     }
 
@@ -28,6 +31,8 @@ public class StorageBroker : IStorageBroker
         var entity = context.Update(item);
 
         await context.SaveChangesAsync();
+        
+        context.ChangeTracker.Clear();;
 
         return entity.Entity;
     }
@@ -35,8 +40,10 @@ public class StorageBroker : IStorageBroker
     public async Task DeleteAsync<T>(T item) where T : class
     {
         context.Set<T>().Remove(item);
-
+        
         await context.SaveChangesAsync();
+        
+        context.ChangeTracker.Clear();
     }
 
     public IQueryable<T> GetAll<T>(bool ignoreFilters = false) where T : class

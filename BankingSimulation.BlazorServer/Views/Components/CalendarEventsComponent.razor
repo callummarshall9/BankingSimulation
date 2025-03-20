@@ -1,0 +1,40 @@
+<h1 id="tableLabel">Calendar Events</h1>
+<p>
+    <Button class="btn btn-primary" @onclick="async() => await AddAsync()">Add Calendar Event</Button>Showing your calendar events
+</p>
+
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Start</th>
+        <th>End</th>
+        <th style="text-align:right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var calendarEvent in Model.Events)
+    {
+        <tr>
+            <td>@calendarEvent.Name</td>
+            <td>@calendarEvent.Start.ToString("dd/MM/yyyy")</td>
+            <td>@calendarEvent.End.ToString("dd/MM/yyyy")</td>
+            <td style="text-align:right">
+                @if (calendarEvent.Deleting)
+                {
+                    <p>Deleting</p>
+                }
+                else
+                {
+                    <Button class="btn btn-danger" @onclick="async() => await DeleteAsync(calendarEvent)">Delete</Button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<AddNewCalendarEventDialog
+    @ref="addNewCalendarEventDialog"
+    OnAdded="async() => await OnSuccessfulAddAsync()"
+    CalendarId="CalendarId"></AddNewCalendarEventDialog>

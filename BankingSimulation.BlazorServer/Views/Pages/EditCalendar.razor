@@ -1,0 +1,11 @@
+@page "/calendar/{CalendarId:guid}"
+
+
+<div class="input-group mb-3">
+    <TextInput @bind-Value="Model.Name" />
+    <div class="input-group-append">
+        <Button class="btn btn-primary" @onclick="async() => await UpdateAsync()">Set Name</Button>
+    </div>
+</div>
+
+<BankingSimulation.BlazorServer.Views.Components.CalendarEventsComponent CalendarId="CalendarId" />

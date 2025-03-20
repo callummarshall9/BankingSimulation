@@ -2,13 +2,13 @@
 @rendermode InteractiveAuto
 
 <h1 id="tableLabel">Calendars</h1>
-<p><button class="btn btn-primary">Add Calendar</button>Showing your calendars</p>
-<table className="table table-striped" aria-labelledby="tableLabel">
+<p><button class="btn btn-primary" @onclick="async() => await AddAsync()">Add Calendar</button>Showing your calendars</p>
+<table class="table table-striped" aria-labelledby="tableLabel">
     <thead>
-        <tr>
-            <th>Name</th>
-            <th style="text-align: right">Actions</th>
-        </tr>
+    <tr>
+        <th>Name</th>
+        <th style="text-align: right">Actions</th>
+    </tr>
     </thead>
     <tbody>
     @foreach (var calendar in Model.Calendars)
@@ -18,8 +18,14 @@
             <td style="text-align: right">
                 @if (!calendar.Deleting)
                 {
-                    <button class="btn btn-secondary">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+                    if (calendar.Exception != null)
+                    {
+                        <div class="alert alert-warning">@calendar.Exception.Message</div>
+                    }
+                    
+                    <button class="btn btn-secondary"
+                            @onclick=@(() => NavigationManager.NavigateTo("/calendar/" + calendar.Id, forceLoad:true))>Edit</button>
+                    <button class="btn btn-danger" @onclick="async() => await DeleteAsync(calendar)">Delete</button>
                 }
                 else
                 {
@@ -30,3 +36,7 @@
     }
     </tbody>
 </table>
+
+<BankingSimulation.BlazorServer.Views.Components.AddNewCalendarDialog 
+    @ref="@addNewCalendarDialog" 
+    OnAdded="async() => await OnSuccessfulAddAsync()" />

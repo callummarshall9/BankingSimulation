@@ -141,7 +141,7 @@ public class BankingSimulationDependencyInstaller
 
     public static void AddCalendars(WebApplication app)
     {
-        app.MapPost($"/Calendars", ([FromServices] ICalendarProcessingService service, [FromBody] Calendar entity)
+        app.MapPost($"/api/Calendars", ([FromServices] ICalendarProcessingService service, [FromBody] Calendar entity)
             => service.AddAsync(entity))
             .WithOpenApi()
             .RequireAuthorization();
