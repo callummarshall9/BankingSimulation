@@ -7,9 +7,9 @@ namespace BankingSimulation.BlazorServer.Views.Pages;
 public partial class ImportData : ComponentBase
 {
     [Inject]
-    public IImportDataViewService ImportDataViewService { get; set; }
+    public IImportDataViewService ImportDataViewService { get; set; } = null!;
 
-    public ImportDataViewModel Model { get; set; }
+    public ImportDataViewModel Model { get; set; } = new();
 
     protected override void OnInitialized()
     {
@@ -27,6 +27,6 @@ public partial class ImportData : ComponentBase
 
     public void HandleSelect(ChangeEventArgs e)
     {
-        Model.SelectedProvider = e.Value.ToString();
+        Model.SelectedProvider = e.Value?.ToString();
     }
 }

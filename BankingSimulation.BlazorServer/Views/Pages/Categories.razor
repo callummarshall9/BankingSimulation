@@ -1,7 +1,52 @@
 @page "/categories"
+@rendermode InteractiveAuto
 
 <h3>Categories</h3>
 
-@code {
-    
-}
+<p>
+    <Button class="btn btn-primary" @onclick="async() => await AddAsync()">Add Category</Button>
+</p>
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Keywords</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var entry in Model.Categories)
+    {
+        <tr>
+            <td>@entry.Name</td>
+            <td>@entry.Description</td>
+            <td>
+                @foreach (var keyword in entry.Keywords)
+                {
+                    <div class="badge badge-primary">
+                        @keyword
+                    </div>
+                }
+            </td>
+            <td>
+                @if (!entry.Deleting)
+                {
+                    <Button class="btn btn-secondary"
+                            @onclick=@(() => NavigationManager.NavigateTo("/category/" + entry.Id, forceLoad:true))>Edit</Button>
+                    <button class="btn btn-danger" @onclick="async() => await DeleteAsync(entry)">Delete</button>
+                }
+                else
+                {
+                    <p>Deleting</p>
+                }
+            </td>
+        </tr>
+    }
+
+    </tbody>
+</table>
+
+<BankingSimulation.BlazorServer.Views.Components.AddNewCategoryDialog 
+    @ref="@addNewCategoryDialog" 
+    OnAdded="async() => await OnSuccessfulAddAsync()" />

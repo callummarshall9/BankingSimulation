@@ -1,0 +1,17 @@
+@page "/category/{CategoryId:guid}"
+
+<div class="input-group mb-3">
+    <TextInput @bind-Value="Model.Name" />
+    <div class="input-group-append">
+        <Button class="btn btn-primary" @onclick="async() => await UpdateAsync()">Set Name</Button>
+    </div>
+</div>
+
+<div class="input-group mb-3">
+    <TextInput @bind-Value="Model.Description" />
+    <div class="input-group-append">
+        <Button class="btn btn-primary" @onclick="async() => await UpdateAsync()">Set Description</Button>
+    </div>
+</div>
+
+<BankingSimulation.BlazorServer.Views.Components.CategoryKeywordsComponent CategoryId="@CategoryId" />

@@ -76,7 +76,7 @@ public static class ODataDependencyInstaller
         {
             var results = new List<IDictionary<string, object>>();
 
-            var entities = (result as IEnumerable<ISelectExpandWrapper>).ToList();
+            var entities = (result as IEnumerable<ISelectExpandWrapper> ?? Array.Empty<ISelectExpandWrapper>()).ToList();
 
             foreach(var entity in entities)
             {

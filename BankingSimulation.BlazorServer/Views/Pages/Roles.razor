@@ -1,7 +1,39 @@
 @page "/roles"
+@rendermode InteractiveAuto
 
-<h3>Roles</h3>
+<h1 id="tableLabel">Roles</h1>
+<p><button class="btn btn-primary" @onclick="async() => await AddAsync()">Add Role</button>Showing your roles</p>
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th style="text-align: right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var entry in Model.Roles)
+    {
+        <tr>
+            <td>@entry.Name</td>
+            <td style="text-align: right">
+                @if (!entry.Deleting)
+                {
+                    if (entry.Exception != null)
+                    {
+                        <div class="alert alert-warning">@entry.Exception.Message</div>
+                    }
 
-@code {
-    
-}
+                    <button class="btn btn-secondary"
+                            @onclick=@(() => NavigationManager.NavigateTo("/role/" + entry.Id, forceLoad:true))>Edit</button>
+                    <button class="btn btn-danger" @onclick="async() => await DeleteAsync(entry)">Delete</button>
+                }
+                else
+                {
+                    <p>Deleting</p>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+

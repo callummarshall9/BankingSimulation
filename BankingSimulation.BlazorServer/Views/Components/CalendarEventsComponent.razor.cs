@@ -11,7 +11,7 @@ public partial class CalendarEventsComponent : ComponentBase
     public CalendarEventAggregateViewModel Model { get; set; } = new();
     
     [Inject]
-    public ICalendarEventsViewService CalendarEventsViewService { get; set; }
+    public ICalendarEventsViewService CalendarEventsViewService { get; set; } = null!;
 
     [Parameter]
     public Guid CalendarId { get; set; }

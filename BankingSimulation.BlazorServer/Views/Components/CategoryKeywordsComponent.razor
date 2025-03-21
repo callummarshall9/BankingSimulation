@@ -1,0 +1,36 @@
+<h1 id="tableLabel">Category Keywords</h1>
+<p>
+    <Button class="btn btn-primary" @onclick="async() => await AddAsync()">Add Keyword</Button>Showing your category keywords
+</p>
+
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th style="text-align:right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var categoryKeyword in Model.Keywords)
+    {
+        <tr>
+            <td>@categoryKeyword.Keyword</td>
+            <td style="text-align:right">
+                @if (categoryKeyword.Deleting)
+                {
+                    <p>Deleting</p>
+                }
+                else
+                {
+                    <Button class="btn btn-danger" @onclick="async() => await DeleteAsync(categoryKeyword)">Delete</Button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<AddNewCategoryKeywordDialog
+    @ref="addNewCategoryKeywordDialog"
+    OnAdded="async() => await OnSuccessfulAddAsync()"
+    CategoryId="CategoryId"></AddNewCategoryKeywordDialog>

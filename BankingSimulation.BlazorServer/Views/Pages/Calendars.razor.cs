@@ -11,11 +11,11 @@ public partial class Calendars : ComponentBase
     
     public CalendarsViewModel Model { get; set; } = new();
 
-    [Inject]
-    public ICalendarViewService CalendarViewService { get; set; }
+    [Inject] 
+    public ICalendarViewService CalendarViewService { get; set; } = null!;
     
     [Inject]
-    public NavigationManager NavigationManager { get; set; }
+    public NavigationManager NavigationManager { get; set; } = null!;
 
     protected override void OnInitialized()
     {

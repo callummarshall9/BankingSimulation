@@ -7,7 +7,7 @@ namespace BankingSimulation.BlazorServer.Views.Pages;
 public partial class BankAccounts : ComponentBase
 {
     [Inject]
-    public IBankAccountsViewService BankAccountsViewService { get; set; }
+    public IBankAccountsViewService BankAccountsViewService { get; set; } = null!;
     
     public Guid? SelectedCalendarId { get; set; }
     public BankAccountsIndexViewModel Model { get; set; } = new();
@@ -20,7 +20,7 @@ public partial class BankAccounts : ComponentBase
 
     void HandleSelect(ChangeEventArgs e)
     {
-        if (Guid.TryParse(e.Value.ToString(), out var calendarId))
+        if (Guid.TryParse(e.Value?.ToString(), out var calendarId))
         {
             SelectedCalendarId = calendarId;
         }

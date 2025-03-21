@@ -10,11 +10,8 @@ public partial class EditCalendar : ComponentBase
 {
     [Parameter]
     public Guid CalendarId { get; set; }
-    
-    [Inject]
-    public IEditCalendarViewService EditCalendarViewService { get; set; }
-    
-    private AddNewCalendarEventDialog addNewCalendarEventDialog;
+
+    [Inject] public IEditCalendarViewService EditCalendarViewService { get; set; } = null!;
     
     public EditCalendarViewModel Model { get; set; } = new();
 

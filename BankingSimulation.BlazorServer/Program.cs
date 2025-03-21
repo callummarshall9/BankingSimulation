@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using ApexCharts;
 using BankingSimulation.BlazorServer.Views;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped((provider) => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+builder.Services.AddScoped<ClaimsPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User ?? new ClaimsPrincipal());
 builder.Services.AddScoped<IAuthorisationBroker, AuthorisationBroker>();
 
 builder.Services.AddAuthentication("bearer")
@@ -80,18 +81,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-BankingSimulationDependencyInstaller.AddAccounts(app);
-BankingSimulationDependencyInstaller.AddSet<AccountBankingSystemReference>(app);
-BankingSimulationDependencyInstaller.AddSet<BankingSystem>(app);
-BankingSimulationDependencyInstaller.AddCalendars(app);
-BankingSimulationDependencyInstaller.AddCalendarEvents(app);
-BankingSimulationDependencyInstaller.AddCategories(app);
-BankingSimulationDependencyInstaller.AddCategoryKeywords(app);
-BankingSimulationDependencyInstaller.AddRoles(app);
-BankingSimulationDependencyInstaller.AddUserRoles(app);
-BankingSimulationDependencyInstaller.AddTransactions(app);
-BankingSimulationDependencyInstaller.AddTransactionTypes(app);
-
 app.MapGet("/health/check", () => DateTimeOffset.UtcNow);
 
 app.UseAuthentication();
@@ -105,7 +94,7 @@ app.UseAuthorization();
 
  using var scope = app.Services.CreateScope();
 
- scope.ServiceProvider.GetService<BankSimulationContext>().Database.EnsureCreated();
+ scope.ServiceProvider.GetService<BankSimulationContext>()?.Database.EnsureCreated();
 
 app.Run();
 

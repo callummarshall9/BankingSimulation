@@ -8,11 +8,11 @@ public partial class AccountSummaryChart : ComponentBase
 {
     [Parameter]
     public Guid CalendarId { get; set; }
-    
-    public IEnumerable<PeriodAccountSummary> Summaries { get; set; }
+
+    public IEnumerable<PeriodAccountSummary> Summaries { get; set; } = [];
     
     [Inject]
-    public IAccountSummaryChartViewService AccountSummaryChartViewService { get; set; }
+    public IAccountSummaryChartViewService AccountSummaryChartViewService { get; set; } = null!;
 
     protected override void OnInitialized()
     {

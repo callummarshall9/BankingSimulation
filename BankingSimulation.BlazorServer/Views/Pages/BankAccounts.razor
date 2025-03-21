@@ -7,6 +7,7 @@
     <h1 id="tableLabel">Accounts</h1>
     <div style="width: 400px; margin-top: 5px">
         <select class="form-control" @onchange="args => HandleSelect(args)">
+            <option value="" selected>Select a calendar</option>
             @foreach (var entry in Model.Calendars)
             {
                 <option value="@entry.Id">@entry.Name</option>
@@ -16,7 +17,7 @@
     
     @if (SelectedCalendarId != null)
     {
-        <AccountSummaryChart @CalendarId="@SelectedCalendarId.Value" />
+        <BankingSimulation.BlazorServer.Views.Components.AccountSummaryChart CalendarId="@SelectedCalendarId.Value" />
     }
 
     <p>Showing your accounts</p>

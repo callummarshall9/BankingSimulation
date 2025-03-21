@@ -18,13 +18,13 @@ public partial class AddNewCalendarEventDialog : ComponentBase
     public EventCallback OnAdded { get; set; }
     
     [Inject]
-    public IAddCalendarEventViewService AddCalendarEventViewService { get; set; }
+    public IAddCalendarEventViewService AddCalendarEventViewService { get; set; } = null!;
     
     public Task ShowAsync()
-        => this.modal.ShowAsync();
+        => modal.ShowAsync();
 
     public Task HideAsync()
-        => this.modal.HideAsync();
+        => modal.HideAsync();
 
     protected override void OnInitialized()
     {

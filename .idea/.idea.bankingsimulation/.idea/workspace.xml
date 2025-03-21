@@ -14,38 +14,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d75fec4c-fbe4-489d-a914-69610cccc779" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CalendarEvents/AddNewCalendarEventViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CalendarEvents/CalendarEventAggregateViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CalendarEvents/CalendarEventViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/AddCalendarViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/EditCalendarViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CalendarEvents/AddCalendarEventViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CalendarEvents/CalendarEventsViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CalendarEvents/IAddCalendarEventViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CalendarEvents/ICalendarEventsViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/AddCalendarViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/EditCalendarViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/IAddCalendarViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/IEditCalendarViewService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarDialog.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarDialog.razor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarEventDialog.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarEventDialog.razor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CalendarEventsComponent.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CalendarEventsComponent.razor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCalendar.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCalendar.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Categories/AddNewCategoryViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Categories/CategoriesViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Categories/CategoryViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Categories/EditCategoryViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CategoryKeywords/AddNewCategoryKeywordViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CategoryKeywords/CategoryKeywordAggregateViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CategoryKeywords/CategoryKeywordViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Roles/AddNewRolesViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Roles/RoleViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Roles/RolesViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/AddCategoryViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/CategoriesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/EditCategoryViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/IAddCategoryViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/ICategoriesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Categories/IEditCategoryViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CategoryKeywords/AddCategoryKeywordsViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CategoryKeywords/CategoryKeywordsViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CategoryKeywords/IAddCategoryKeywordsViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/CategoryKeywords/ICategoryKeywordsViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Roles/AddRolesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Roles/IAddRolesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Roles/IRolesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Roles/RolesViewService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCategoryDialog.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCategoryDialog.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCategoryKeywordDialog.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCategoryKeywordDialog.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewRoleDialog.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewRoleDialog.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CategoryKeywordsComponent.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CategoryKeywordsComponent.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCategory.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCategory.razor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditRole.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditRole.razor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.bankingsimulation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.bankingsimulation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AspNetCoreOData" beforeDir="false" afterPath="$PROJECT_DIR$/AspNetCoreOData" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Authentication/AuthInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Authentication/AuthInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/BankingSimulation.db-wal" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/BankingSimulationDependencyInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/BankingSimulationDependencyInstaller.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/BankingSimulationUIDependencyInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/BankingSimulationUIDependencyInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/ODataDependencyInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/DependencyInjection/ODataDependencyInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/BankAccounts/AccountViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/BankAccounts/AccountViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/BankAccounts/CalendarViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/BankAccounts/CalendarViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CalendarEvents/CalendarEventViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/CalendarEvents/CalendarEventViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/AddCalendarViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/AddCalendarViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/CalendarViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/CalendarViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/CalendarViewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/CalendarViewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/ICalendarViewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/ICalendarViewService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Calendars.razor" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Calendars.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/CalendarsViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/Calendars/CalendarsViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/ImportData/ProviderViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewModels/ImportData/ProviderViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AccountSummaryChart.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AccountSummaryChart.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarDialog.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarDialog.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarEventDialog.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/AddNewCalendarEventDialog.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CalendarEventsComponent.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Components/CalendarEventsComponent.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/BankAccounts.razor" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/BankAccounts.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/BankAccounts.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/BankAccounts.razor.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Calendars.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Calendars.razor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankingSimulation.Data/Brokers/StorageBroker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.Data/Brokers/StorageBroker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Categories.razor" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Categories.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Categories.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Categories.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCalendar.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/EditCalendar.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/ImportData.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/ImportData.razor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Roles.razor" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Roles.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Roles.razor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/Views/Pages/Roles.razor.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,27 +116,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.BankingSImulation.BlazorServer: http.executor&quot;: &quot;Debug&quot;,
-    &quot;.NET Launch Settings Profile.BankingSimulation.BlazorServer: http.executor&quot;: &quot;Debug&quot;,
-    &quot;.NET Launch Settings Profile.BankingSimulation.UI.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;blazor__rewrite&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/callum/source/repos/BankingSimulation&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;/home/callum/.config/JetBrains/Rider2024.3/node/versions/22.14.0/bin/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/callum/source/repos/BankingSimulation/BankingSimulation.UI/ClientApp/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.BankingSImulation.BlazorServer: http.executor": "Debug",
+    ".NET Launch Settings Profile.BankingSimulation.BlazorServer: http.executor": "Debug",
+    ".NET Launch Settings Profile.BankingSimulation.UI.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.42060417",
+    "git-widget-placeholder": "blazor__rewrite",
+    "last_opened_file_path": "/home/callum/source/repos/BankingSimulation",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "/home/callum/.config/JetBrains/Rider2024.3/node/versions/22.14.0/bin/node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "/home/callum/source/repos/BankingSimulation/BankingSimulation.UI/ClientApp/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.BankingSimulation.BlazorServer: http">
+}]]></component>
+  <component name="RunManager" selected=".NET Launch Settings Profile.BankingSimulation.UI">
     <configuration name="BankingSImulation.BlazorServer: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/BankingSImulation.BlazorServer/BankingSImulation.BlazorServer.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -224,7 +259,9 @@
       <workItem from="1742403725694" duration="14054000" />
       <workItem from="1742488742087" duration="231000" />
       <workItem from="1742489020710" duration="6164000" />
-      <workItem from="1742501978970" duration="5291000" />
+      <workItem from="1742501978970" duration="6421000" />
+      <workItem from="1742566072982" duration="633000" />
+      <workItem from="1742566735994" duration="13062000" />
     </task>
     <servers />
   </component>
@@ -237,23 +274,6 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/EditCalendarViewService.cs</url>
-          <line>25</line>
-          <properties documentPath="$PROJECT_DIR$/BankingSimulation.BlazorServer/ViewServices/Calendars/EditCalendarViewService.cs" containingFunctionPresentation="Method 'UpdateCalendarAsync'">
-            <startOffsets>
-              <option value="761" />
-            </startOffsets>
-            <endOffsets>
-              <option value="885" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="LaunchSettings">
         <watch expression="Accounts" language="C#" />

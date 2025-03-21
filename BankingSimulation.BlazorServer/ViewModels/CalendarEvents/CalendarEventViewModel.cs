@@ -3,7 +3,7 @@ namespace BankingSimulation.UI.ViewModels.CalendarEvents;
 public class CalendarEventViewModel
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public DateOnly Start { get; set; }
     public DateOnly End { get; set; }
     

@@ -8,7 +8,7 @@ namespace BankingSimulation.BlazorServer.Views.Components;
 public partial class AddNewCalendarDialog : ComponentBase
 {
     [Inject]
-    public IAddCalendarViewService AddCalendarViewService { get; set; }
+    public IAddCalendarViewService AddCalendarViewService { get; set; } = null!;
     
     public AddCalendarViewModel Model { get; set; } = new ();
     
