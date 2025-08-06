@@ -1,0 +1,17 @@
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.BarclaysCard.deps.json
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.BarclaysCard.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.BarclaysCard.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.Data.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.Services.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.Data.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\bin\Debug\net8.0\BankingSimulation.Services.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.csproj.AssemblyReference.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.AssemblyInfoInputs.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.AssemblyInfo.cs
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.csproj.CoreCompileInputs.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingS.673AAB52.Up2Date
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\refint\BankingSimulation.BarclaysCard.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\BankingSimulation.BarclaysCard.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.BarclaysCard\obj\Debug\net8.0\ref\BankingSimulation.BarclaysCard.dll

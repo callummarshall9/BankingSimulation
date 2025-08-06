@@ -1,0 +1,66 @@
+﻿@using BankingSimulation.Blazor.Models.Calendars
+@using BankingSimulation.Blazor.ViewServices.Calendars
+
+<h1 id="tableLabel">Calendars</h1>
+
+<AddCalendarComponent OnCalendarAdded="OnCalendarAdded" />
+
+<p>Showing your calendars</p>
+
+@if(!Loading)
+{
+    <table class="table table-striped" aria-labelledby="tableLabel">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th style="text-align:right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in CalendarList)
+            {
+                <tr>
+                    <td>@entry.Name</td>
+                    <td style="text-align: right">
+                        <NavLink href="@entry.EventUrl">
+                            <button class="btn btn-secondary">Edit</button>
+                        </NavLink>
+                        <DeleteCalendarComponent CalendarId="@entry.Id" OnCalendarDelete="OnCalendarUpdated" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Loading Calendars...</p>
+}
+
+@code
+{
+    public bool Loading { get; set; } = true;
+
+    public IEnumerable<CalendarViewModel> CalendarList { get; set; } = [];
+
+    [Inject]
+    public ICalendarViewService CalendarViewService { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        CalendarList = CalendarViewService.GetCalendars();
+        Loading = false;
+    }
+
+    private void OnCalendarAdded()
+    {
+        CalendarList = CalendarViewService.GetCalendars();
+        StateHasChanged();
+    }
+
+    private void OnCalendarUpdated(Guid calendarId)
+    {
+        CalendarList = CalendarViewService.GetCalendars();
+        StateHasChanged();
+    }
+}

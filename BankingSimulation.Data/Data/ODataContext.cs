@@ -1,18 +1,19 @@
+using BankingSimulation.Data.Brokers;
+using BankingSimulation.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using BankingSimulation.Data.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankingSimulation.Data;
 
 public class ODataContext : BankSimulationContext
 {
     private string userId;
-    public ODataContext(DbContextOptions options, ClaimsPrincipal principal) : base(options)
+
+    public ODataContext(DbContextOptions options, IAuthorisationBroker authorisationBroker) : base(options)
     {
-        userId = principal?.Identity?.Name ?? "Guest";
+        userId = authorisationBroker.GetUserId() ?? "Guest";
     }
 
     private IEnumerable<Guid> roleIds

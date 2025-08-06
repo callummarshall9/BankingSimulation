@@ -1,0 +1,55 @@
+﻿@using BankingSimulation.Blazor.Models.Roles
+@using BankingSimulation.Blazor.ViewServices.Roles
+
+<h1 id="tableLabel">Roles</h1>
+
+<AddRoleComponent OnRoleAdded="OnRoleUpdated" />
+
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Users</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry.Name</td>
+                <td>
+                    @foreach(var userId in entry.UserIds)
+                    {
+                        <div class="badge bg-primary">@userId</div>
+                    }
+                </td>
+                <td>
+                    <NavLink href="@entry.EditUrl">
+                        <button class="btn btn-secondary">Edit</button>
+                    </NavLink>
+                    <DeleteRoleComponent RoleId="@entry.Id" OnRoleDelete="OnRoleUpdated" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    public IEnumerable<RoleViewModel> Model { get; set; } = [];
+
+    [Inject]
+    public IRoleViewService RoleViewService { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        Model = RoleViewService.GetRoles();
+    }
+
+    void OnRoleUpdated()
+    {
+        Model = RoleViewService.GetRoles();
+        StateHasChanged();
+    }
+}

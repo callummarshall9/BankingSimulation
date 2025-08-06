@@ -1,0 +1,73 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.ViewServices.Roles
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addroleModel">
+    Add Role
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addroleModel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Role</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if (Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="roleNameInput" class="form-label">Role Name</label>
+                    <input type="email" class="form-control" id="roleNameInput" @bind="RoleName">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddRoleAsync">Add Role</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    public IAddRoleViewService AddRoleViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public string? RoleName { get; set; } = string.Empty;
+
+    public Exception? Exception { get; set; }
+
+    async Task AddRoleAsync()
+    {
+        try
+        {
+            Exception = null;
+            await AddRoleViewService.AddRoleAsync(RoleName);
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addroleModel");
+            await OnRoleAdded.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+
+    [Parameter]
+    public EventCallback OnRoleAdded { get; set; }
+}
+

@@ -1,0 +1,41 @@
+﻿@using BankingSimulation.Blazor.Models.Calendars
+
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th style="text-align:right;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry</td>
+                <td style="text-align:right;">
+                    <button class="btn btn-danger"
+                            @onclick="() => OnDeleteAsync(entry)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    [Parameter]
+    public IList<string> Model { get; set; } = [];
+
+    [Parameter]
+    public EventCallback<IList<string>> ModelChanged { get; set; }
+
+    private async Task OnDeleteAsync(string? userId)
+    {
+        var newList = Model.First(m => m == userId);
+        Model.Remove(newList);
+        StateHasChanged();
+        await ModelChanged.InvokeAsync(Model);
+    }
+}

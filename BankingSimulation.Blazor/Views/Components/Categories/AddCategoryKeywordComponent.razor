@@ -1,0 +1,74 @@
+﻿@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKeywordModal">
+    Add Keyword
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addKeywordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Keyword</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if (Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="keywordInput" class="form-label">Keyword</label>
+                    <input type="text" class="form-control" id="keywordInput" @bind="Keyword">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddKeywordAsync">Add Keyword</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public string? Keyword { get; set; }
+
+    [Parameter]
+    public IList<string> Model { get; set; } = [];
+
+    [Parameter]
+    public EventCallback<IList<string>> ModelChanged { get; set; }
+
+    public Exception? Exception { get; set; }
+
+    async Task AddKeywordAsync()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(Keyword))
+                throw new ValidationException("Keyword cannot not be empty");
+
+            Exception = null;
+            Model.Add(Keyword);
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addKeywordModal");
+            await ModelChanged.InvokeAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+}

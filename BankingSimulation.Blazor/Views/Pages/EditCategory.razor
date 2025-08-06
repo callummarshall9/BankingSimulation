@@ -1,0 +1,10 @@
+﻿@page "/categories/{id:guid}"
+@rendermode InteractiveServer
+
+<BankingSimulation.Blazor.Views.Components.Categories.EditCategoryComponent CategoryId="@Id" />
+
+@code
+{
+    [Parameter]
+    public Guid Id { get; set; }
+}

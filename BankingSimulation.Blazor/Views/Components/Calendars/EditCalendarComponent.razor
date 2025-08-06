@@ -1,0 +1,61 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.Models.Calendars
+@using BankingSimulation.Blazor.ViewServices.Calendars
+
+@if(Model.Events.Any())
+{
+    <ComputeNetCalendarStatsComponent CalendarId="@CalendarId" />
+}
+
+@if (Exception != null)
+{
+    <div class="alert alert-warning">@Exception.Message</div>
+}
+
+<div class="mb-3">
+    <label for="calendarNameInput" class="form-label">Name</label>
+    <input type="text" class="form-control" id="calendarNameInput" @bind="Model.Name">
+</div>
+
+<AddCalendarEventComponent CalendarId="@CalendarId" @bind-Model="Model.Events" />
+
+<EditCalendarEventsComponent @bind-Model="@Model.Events" />
+
+<button type="button" class="btn btn-primary" @onclick="UpdateCalendarAsync">Update</button>
+
+@code
+{
+    public Exception? Exception { get; set; }
+
+    public EditCalendarViewModel Model { get; set; } = null!;
+
+    [Inject]
+    public IEditCalendarViewService EditCalendarViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    [Parameter]
+    public Guid CalendarId { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Model = EditCalendarViewService.GetEditCalendarViewModel(CalendarId);
+    }
+
+    public async Task UpdateCalendarAsync()
+    {
+        try
+        {
+            Exception = null;
+            await EditCalendarViewService.UpdateCalendarAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+
+        StateHasChanged();
+    }
+}

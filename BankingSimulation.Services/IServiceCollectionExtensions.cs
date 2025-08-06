@@ -1,4 +1,5 @@
 ﻿using BankingSimulation.Services.Foundation;
+using BankingSimulation.Services.Orchestration;
 using BankingSimulation.Services.Processing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,5 +20,10 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IRoleProcessingService, RoleProcessingService>();
         services.AddScoped<IUserRoleProcessingService, UserRoleProcessingService>();
         services.AddScoped<ITransactionProcessingService, TransactionProcessingService>();
+
+        services.AddScoped<IPeriodAccountSummaryOrchestrationService, PeriodAccountSummaryOrchestrationService>();
+        services.AddScoped<ICalendarRoleOrchestrationService, CalendarRoleOrchestrationService>();
+        services.AddScoped<ICategoryRoleOrchestrationService, CategoryRoleOrchestrationService>();
+        services.AddScoped<IComputeCalendarStatsOrchestrationService, ComputeCalendarStatsOrchestrationService>();
     }
 }

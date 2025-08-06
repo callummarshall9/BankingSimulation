@@ -1,0 +1,32 @@
+﻿@using BankingSimulation.Blazor.ViewServices.Calendars
+@if (Deleting)
+{
+    <p>Deleting</p>
+}
+else
+{
+    <button class="btn btn-danger" @onclick=OnDelete>Delete</button>
+}
+
+@code 
+{
+    [Parameter]
+    public Guid CalendarId { get; set; }
+
+    public bool Deleting { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnCalendarDelete { get; set; }
+
+    [Inject]
+    public ICalendarViewService CalendarViewService { get; set; } = null!;
+
+    async Task OnDelete()
+    {
+        Deleting = true;
+        await CalendarViewService.DeleteCalendar(CalendarId);
+
+        Deleting = false;
+        await OnCalendarDelete.InvokeAsync(CalendarId);
+    }
+}

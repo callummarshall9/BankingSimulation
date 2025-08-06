@@ -1,0 +1,60 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.Models.Categories
+@using BankingSimulation.Blazor.ViewServices.Categorys
+
+@if (Exception != null)
+{
+    <div class="alert alert-warning">@Exception.Message</div>
+}
+<div class="mb-3">
+    <label for="categoryNameInput" class="form-label">Category Name</label>
+    <input type="text" class="form-control" id="categoryNameInput" @bind="Model.Name">
+</div>
+
+<div class="mb-3">
+    <label for="categoryDescriptionInput" class="form-label">Category Description</label>
+    <input type="text" class="form-control" id="categoryDescriptionInput" @bind="Model.Description">
+</div>
+
+<AddCategoryKeywordComponent @bind-Model="@Model.Keywords" />
+<EditKeywordComponent @bind-Model="@Model.Keywords" />
+
+<button type="button" class="btn btn-primary" @onclick="EditCategoryAsync">Update Category</button>
+            
+@code
+{
+    [Inject]
+    public IEditCategoryViewService EditCategoryViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public EditCategoryViewModel Model { get; set; } = null!;
+
+    public Exception? Exception { get; set; }
+
+    [Parameter]
+    public required Guid CategoryId { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Model = EditCategoryViewService.GetCategory(CategoryId);
+    }
+
+    async Task EditCategoryAsync()
+    {
+        try
+        {
+            Exception = null;
+            await EditCategoryViewService.UpdateCategoryAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+
+        StateHasChanged();
+    }
+}
+

@@ -1,0 +1,55 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.Models.Roles
+@using BankingSimulation.Blazor.ViewServices.Roles
+
+@if (Exception != null)
+{
+    <div class="alert alert-warning">@Exception.Message</div>
+}
+<div class="mb-3">
+    <label for="roleNameInput" class="form-label">Role Name</label>
+    <input type="text" class="form-control" id="roleNameInput" @bind="Model.Name">
+</div>
+
+<AddUserRoleComponent @bind-Model="@Model.UserIds" />
+<EditUserListComponent @bind-Model="@Model.UserIds" />
+
+<button type="button" class="btn btn-primary" @onclick="EditRoleAsync">Update Role</button>
+            
+@code
+{
+    [Inject]
+    public IEditRoleViewService EditRoleViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public EditRoleViewModel Model { get; set; } = null!;
+
+    public Exception? Exception { get; set; }
+
+    [Parameter]
+    public required Guid RoleId { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Model = EditRoleViewService.GetRole(RoleId);
+    }
+
+    async Task EditRoleAsync()
+    {
+        try
+        {
+            Exception = null;
+            await EditRoleViewService.UpdateRoleAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+
+        StateHasChanged();
+    }
+}
+

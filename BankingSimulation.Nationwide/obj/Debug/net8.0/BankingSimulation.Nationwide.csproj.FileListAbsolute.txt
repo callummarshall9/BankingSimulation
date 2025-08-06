@@ -1,0 +1,17 @@
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Nationwide.deps.json
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Nationwide.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Nationwide.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Data.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Services.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Data.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\bin\Debug\net8.0\BankingSimulation.Services.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.csproj.AssemblyReference.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.AssemblyInfoInputs.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.AssemblyInfo.cs
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.csproj.CoreCompileInputs.cache
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingS.D4EAD0D1.Up2Date
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\refint\BankingSimulation.Nationwide.dll
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\BankingSimulation.Nationwide.pdb
+C:\Users\callu\source\repos\BankingSimulation.Blazor\BankingSimulation.Nationwide\obj\Debug\net8.0\ref\BankingSimulation.Nationwide.dll
