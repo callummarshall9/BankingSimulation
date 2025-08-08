@@ -8,5 +8,7 @@ namespace BankingSimulation.Services.Processing
         Task DeleteAsync(Role item);
         IQueryable<Role> GetAll();
         Task<Role> UpdateAsync(Role item);
+        Task<Guid> CreateCalendarRoleAsync();
+        Task<Guid> CreateCategoryRoleAsync();
     }
 }

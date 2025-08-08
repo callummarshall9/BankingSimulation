@@ -1,0 +1,58 @@
+﻿@using BankingSimulation.Blazor.Models.Categories
+@using BankingSimulation.Blazor.ViewServices.Categories
+
+<h1 id="tableLabel">Categories</h1>
+
+<AddCategoryComponent OnCategoryAdded="OnCategoryUpdated" />
+
+<table class="table table-striped" aria-labelledby="tableLabel">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Keywords</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var entry in Model)
+        {
+            <tr>
+                <td>@entry.Name</td>
+                <td>@entry.Description</td>
+                <td>
+                    @foreach(var keyword in entry.Keywords)
+                    {
+                        <div class="badge bg-primary">@keyword</div>
+                    }
+                </td>
+                <td>
+                    <NavLink href="@entry.EditUrl">
+                        <button class="btn btn-secondary">Edit</button>
+                    </NavLink>
+                    <DeleteCategoryComponent CategoryId="@entry.Id" OnCategoryDelete="OnCategoryUpdated" />
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@code
+{
+    public IEnumerable<CategoryViewModel> Model { get; set; } = [];
+
+    [Inject]
+    public ICategoryViewService CategoryViewService { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        Model = CategoryViewService.GetCategories();
+    }
+
+    void OnCategoryUpdated()
+    {
+        Model = CategoryViewService.GetCategories();
+        StateHasChanged();
+    }
+}

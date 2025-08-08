@@ -1,0 +1,35 @@
+﻿@using BankingSimulation.Blazor.ViewServices.Accounts
+@using BankingSimulation.Data.Models
+
+@if(CalendarId != null)
+{
+    <ApexChart TItem="PeriodAccountSummary"
+               Title="Account Summary For Calendar">
+
+        <ApexPointSeries TItem="PeriodAccountSummary"
+                         Items="Data"
+                         Name="Net"
+                         SeriesType="SeriesType.Bar"
+                         XValue="e => e.CalendarEventName"
+                         YValue="e=> Convert.ToDecimal(e.Net)" />
+    </ApexChart>
+}
+
+@code
+{
+    public IEnumerable<PeriodAccountSummary> Data { get; set; } = [];
+
+    [Parameter]
+    public Guid? CalendarId { get; set; }
+
+    [Inject]
+    public IPeriodAccountSummaryViewService PeriodAccountSummaryViewService { get; set; } = null!;
+
+    protected override void OnParametersSet()
+    {
+        if (CalendarId.HasValue)
+            Data = PeriodAccountSummaryViewService.GetCalendarEventAccountSummaries(CalendarId.Value);
+        else
+            Data = [];
+    }
+}

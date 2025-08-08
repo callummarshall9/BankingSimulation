@@ -1,0 +1,74 @@
+﻿@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserRoleModal">
+    Add User Role
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addUserRoleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add User Role</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if (Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="userIdInput" class="form-label">User Id</label>
+                    <input type="text" class="form-control" id="userIdInput" @bind="UserId">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddUserIdAsync">Add User Role</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public string? UserId { get; set; }
+
+    [Parameter]
+    public IList<string> Model { get; set; } = [];
+
+    [Parameter]
+    public EventCallback<IList<string>> ModelChanged { get; set; }
+
+    public Exception? Exception { get; set; }
+
+    async Task AddUserIdAsync()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(UserId))
+                throw new ValidationException("User Id cannot not be empty");
+
+            Exception = null;
+            Model.Add(UserId);
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addUserRoleModal");
+            await ModelChanged.InvokeAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+}

@@ -83,24 +83,24 @@ namespace BankingSimulation.Services.Processing
                         .ToList()
                         .Union(
                             foundationService.GetAll<CalendarEvent>()
-                            .Where(ce => ce.CalendarId == calendarId)
-                            .Select(ce => new ComputeCalendarCategoryStatsResult
-                            {
-                                CategoryId = null,
-                                CategoryName = "Uncategorised",
-                                CalendarEventId = ce.Id,
-                                CalendarEventName = ce.Name,
-                                CalendarEventStart = ce.Start,
-                                FriendlyName = ce.Name + " (Uncategorised)",
-                                Value = Math.Round(foundationService
-                                            .GetAll<Transaction>()
-                                            .Where(t => 
-                                                t.Date >= ce.Start 
-                                                && t.Date <= ce.End 
-                                                && t.CategoryId == null
-                                                && accountIdsGuids.Contains(t.AccountId))
-                                            .Sum(t => t.Value), 2)
-                            })
+                                .Where(ce => ce.CalendarId == calendarId)
+                                .Select(ce => new ComputeCalendarCategoryStatsResult
+                                {
+                                    CategoryId = null,
+                                    CategoryName = "Uncategorised",
+                                    CalendarEventId = ce.Id,
+                                    CalendarEventName = ce.Name,
+                                    CalendarEventStart = ce.Start,
+                                    FriendlyName = ce.Name + " (Uncategorised)",
+                                    Value = Math.Round(foundationService
+                                                .GetAll<Transaction>()
+                                                .Where(t => 
+                                                    t.Date >= ce.Start 
+                                                    && t.Date <= ce.End 
+                                                    && t.CategoryId == null
+                                                    && accountIdsGuids.Contains(t.AccountId))
+                                                .Sum(t => t.Value), 2)
+                                })
                         )
                         .Where(c => Math.Round(c.Value, 2) != 0.0)
                         .OrderBy(ccsr => ccsr.CalendarEventStart)
@@ -147,23 +147,6 @@ namespace BankingSimulation.Services.Processing
                 .Where(c => Math.Round(c.Value, 2) != 0.0)
                 .OrderBy(ccsr => ccsr.CalendarEventStart)
                     .ThenBy(ccsr => ccsr.CategoryName)
-                .ToList();
-
-        public IEnumerable<ComputeCalendarStatsResult> ComputeNetCalendarStats(Guid calendarId)
-            => foundationService.GetAll<CalendarEvent>()
-                .Where(ce => ce.CalendarId == calendarId)
-                .Select(ce => new ComputeCalendarStatsResult
-                        {
-                            CalendarEventId = ce.Id,
-                            CalendarEventName = ce.Name,
-                            CalendarEventStart = ce.Start,
-                            FriendlyName = ce.Name,
-                            Value = Math.Round(foundationService
-                                .GetAll<Transaction>()
-                                .Where(t => t.Date >= ce.Start && t.Date <= ce.End)
-                                .Sum(t => t.Value), 2)
-                        })
-                .OrderBy(ccsr => ccsr.CalendarEventStart)
                 .ToList();
     }
 }

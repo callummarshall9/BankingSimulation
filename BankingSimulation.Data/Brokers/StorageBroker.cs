@@ -16,6 +16,8 @@ public class StorageBroker : IStorageBroker
 
     public async Task<T> AddAsync<T>(T item) where T : class
     {
+        context.ChangeTracker.Clear();
+
         var entity = context.Add(item);
 
         await context.SaveChangesAsync();
@@ -25,6 +27,8 @@ public class StorageBroker : IStorageBroker
 
     public async Task<T> UpdateAsync<T>(T item) where T : class
     {
+        context.ChangeTracker.Clear();
+
         var entity = context.Update(item);
 
         await context.SaveChangesAsync();
@@ -34,6 +38,8 @@ public class StorageBroker : IStorageBroker
 
     public async Task DeleteAsync<T>(T item) where T : class
     {
+        context.ChangeTracker.Clear();
+
         context.Set<T>().Remove(item);
 
         await context.SaveChangesAsync();

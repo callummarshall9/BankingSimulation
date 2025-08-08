@@ -1,0 +1,11 @@
+﻿@using BankingSimulation.Blazor.Models.Accounts
+@using BankingSimulation.Blazor.ViewServices.Accounts
+@using BankingSimulation.Services.Processing
+
+<CalendarListComponent @bind-CalendarId="@CalendarId" />
+<AccountSummaryComponent CalendarId="@CalendarId" />
+
+@code
+{
+    public Guid? CalendarId { get; set; }
+}

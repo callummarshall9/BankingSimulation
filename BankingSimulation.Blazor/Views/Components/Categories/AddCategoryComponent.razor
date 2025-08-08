@@ -1,0 +1,79 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.Models.Categories
+@using BankingSimulation.Blazor.ViewServices.Calendars
+@using BankingSimulation.Blazor.ViewServices.Categories
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModel">
+    Add Category
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addCategoryModel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Category</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if (Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="categoryNameInput" class="form-label">Category Name</label>
+                    <input type="email" class="form-control" id="categoryNameInput" @bind="Model.Name">
+                </div>
+                <div class="mb-3">
+                    <label for="categoryDescriptionInput" class="form-label">Category Description</label>
+                    <input type="email" class="form-control" id="categoryDescriptionInput" @bind="Model.Description">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddCategoryAsync">Add Category</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    public IAddCategoryViewService AddCategoryViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public AddCategoryViewModel Model { get; set; } = new();
+
+    public Exception? Exception { get; set; }
+
+    async Task AddCategoryAsync()
+    {
+        try
+        {
+            Exception = null;
+            await AddCategoryViewService.AddCategoryAsync(Model);
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addCategoryModel");
+            await OnCategoryAdded.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+
+    [Parameter]
+    public EventCallback OnCategoryAdded { get; set; }
+}
+

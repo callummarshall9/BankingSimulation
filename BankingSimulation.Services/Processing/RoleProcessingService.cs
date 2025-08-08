@@ -7,6 +7,40 @@ namespace BankingSimulation.Services.Processing
 {
     public class RoleProcessingService(IFoundationService foundationService, IAuthorisationBroker authorisationBroker) : IRoleProcessingService
     {
+        public async Task<Guid> CreateCalendarRoleAsync()
+        {
+            string userId = authorisationBroker.GetUserId();
+
+            var existingRole = foundationService.GetAll<Role>()
+                .Where(r => r.Name == userId + " Calendars")
+                .Select(r => r.Id)
+                .FirstOrDefault();
+
+            if (existingRole != default)
+                return existingRole;
+            else
+            {
+                return (await AddAsync(new Role { Name = userId + " Calendars" })).Id;
+            }
+        }
+
+        public async Task<Guid> CreateCategoryRoleAsync()
+        {
+            string userId = authorisationBroker.GetUserId();
+
+            var existingRole = foundationService.GetAll<Role>()
+                .Where(r => r.Name == userId + " Categories")
+                .Select(r => r.Id)
+                .FirstOrDefault();
+
+            if (existingRole != default)
+                return existingRole;
+            else
+            {
+                return (await AddAsync(new Role { Name = userId + " Categories" })).Id;
+            }
+        }
+
         public async Task<Role> AddAsync(Role item)
         {
             if (string.IsNullOrEmpty(item.Name))

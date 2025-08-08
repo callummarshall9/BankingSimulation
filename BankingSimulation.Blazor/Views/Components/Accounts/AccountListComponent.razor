@@ -1,0 +1,51 @@
+﻿@using BankingSimulation.Blazor.Models.Accounts
+@using BankingSimulation.Blazor.ViewServices.Accounts
+
+@if (!Loading)
+{
+    <p>Showing your accounts</p>
+
+    <table class="table table-striped" aria-labelledby="tableLabel">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th>Systems</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in AccountList)
+            {
+                <tr>
+                    <td>@entry.DisplayName</td>
+                    <td>@entry.Number</td>
+                    <td>
+                        @foreach (var system in entry.AccountSystemReferences)
+                        {
+                            <span class="badge bg-primary">@system</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+@code {
+    public bool Loading { get; set; } = true;
+
+    public IEnumerable<AccountViewModel> AccountList { get; set; } = [];
+
+    [Inject]
+    public required IAccountViewService AccountViewService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AccountList = AccountViewService.GetAccounts();
+        Loading = false;
+    }
+}

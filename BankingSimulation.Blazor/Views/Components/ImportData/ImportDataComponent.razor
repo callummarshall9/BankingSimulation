@@ -1,0 +1,71 @@
+﻿@using BankingSimulation.Blazor.ViewServices.ImportData
+
+<h1>Import Data</h1>
+
+@if(!Importing && Imported && Exception == null)
+{
+    <div class="alert alert-success">Data imported successfully.</div>
+}
+else if (Importing)
+{
+    <div class="alert alert-info">Importing Data</div>
+}
+else if (Imported && Exception != null)
+{
+    <div class="alert alert-danger">@Exception.Message - @Exception.StackTrace</div>
+}
+
+<div class="mb-3">
+    <label class="form-label">Bank</label>
+    <select name="bank" class="form-select" @bind="SelectedMethod">
+        <option value="rbs" selected>RBS</option>
+        <option value="barclays">Barclays</option>
+        <option value="barclaysCard">Barclays Card</option>
+        <option value="mbna">MBNA</option>
+        <option value="nationwide">Nationwide</option>
+    </select>
+</div>
+
+<textarea rows="40" cols="100" @bind="RawData" />
+<br />
+
+@if (!Importing)
+{
+    <button type="submit" class="btn btn-primary" @onclick="OnSubmitAsync">Import Data</button>
+}
+
+@code {
+
+    public Exception? Exception { get; set; }
+
+    public bool Imported { get; set;} = false;
+    public bool Importing { get; set; } = false;
+
+    public string? SelectedMethod { get; set; }
+    public string? RawData { get; set; }
+
+    [Inject]
+    public IImportDataAggregateService ImportDataViewService { get; set; } = null!;
+
+    private async Task OnSubmitAsync()
+    {
+        Exception = null;
+        Importing = true;
+        Imported = false;
+        StateHasChanged();
+
+        try
+        {
+            await ImportDataViewService.ImportAsync(SelectedMethod, RawData);  
+        }
+        catch(Exception ex)
+        {
+            Exception = ex;
+        }
+
+        Importing = false;
+        Imported = true;
+
+        StateHasChanged();
+    }
+}

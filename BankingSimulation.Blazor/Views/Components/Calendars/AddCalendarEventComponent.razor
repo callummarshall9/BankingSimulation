@@ -1,0 +1,89 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.Models.Calendars
+@using BankingSimulation.Blazor.ViewServices.Calendars
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCalendarEventModal">
+    Add Calendar Event
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addCalendarEventModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Calendar</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if (Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="calendarEventNameInput" class="form-label">Name</label>
+                    <input type="email" class="form-control" id="calendarEventNameInput" @bind="AddModel.Name">
+                </div>
+                <div class="mb-3">
+                    <label for="calendarEventStartInput" class="form-label">Start</label>
+                    <input type="date" class="form-control" id="calendarEventStartInput" @bind="AddModel.Start">
+                </div>
+                <div class="mb-3">
+                    <label for="calendarEventEndInput" class="form-label">End</label>
+                    <input type="date" class="form-control" id="calendarEventEndInput" @bind="AddModel.End">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddCalendarEventAsync">Add Calendar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    public IAddCalendarEventViewService AddCalendarViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    [Parameter]
+    public Guid CalendarId { get; set; }
+
+    [Parameter]
+    public IList<EditCalendarEventViewModel> Model { get; set; } = [];
+
+    [Parameter]
+    public EventCallback<IList<EditCalendarEventViewModel>> ModelChanged { get; set; }
+
+    public Exception? Exception { get; set; }
+
+    public AddCalendarEventViewModel AddModel = new AddCalendarEventViewModel();
+
+    async Task AddCalendarEventAsync()
+    {
+        try
+        {
+            Exception = null;
+            AddModel.CalendarId = CalendarId;
+            Model.Add(new EditCalendarEventViewModel { Name = AddModel.Name, Start = AddModel.Start, End = AddModel.End });
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addCalendarEventModal");
+            await ModelChanged.InvokeAsync(Model);
+        }
+        catch (Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+
+}
+

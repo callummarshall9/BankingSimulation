@@ -1,0 +1,10 @@
+﻿@page "/roles/{id:guid}"
+@rendermode InteractiveServer
+
+<BankingSimulation.Blazor.Views.Components.Roles.EditRoleComponent RoleId="@Id" />
+
+@code
+{
+    [Parameter]
+    public Guid Id { get; set; }
+}

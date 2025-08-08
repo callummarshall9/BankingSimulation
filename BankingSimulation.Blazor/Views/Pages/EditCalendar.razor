@@ -1,0 +1,10 @@
+﻿@page "/calendars/{id:guid}"
+@rendermode InteractiveServer
+
+<BankingSimulation.Blazor.Views.Components.Calendars.EditCalendarComponent CalendarId="@Id" />
+
+@code
+{
+    [Parameter]
+    public Guid Id { get; set; }
+}

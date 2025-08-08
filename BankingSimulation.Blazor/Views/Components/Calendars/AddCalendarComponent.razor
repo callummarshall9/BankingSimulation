@@ -1,0 +1,72 @@
+﻿@rendermode InteractiveServer
+
+@using BankingSimulation.Blazor.ViewServices.Calendars
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCalendarModal">
+    Add Calendar
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="addCalendarModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Calendar</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @if(Exception != null)
+                {
+                    <div class="alert alert-warning">@Exception.Message</div>
+                }
+                <div class="mb-3">
+                    <label for="calendarNameInput" class="form-label">Calendar Name</label>
+                    <input type="email" class="form-control" id="calendarNameInput" @bind="CalendarName">
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="AddCalendarAsync">Add Calendar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Inject]
+    public IAddCalendarViewService AddCalendarViewService { get; set; } = null!;
+
+    [Inject]
+    IJSRuntime JS { get; set; } = null!;
+
+    public string? CalendarName { get; set; }
+
+    public Exception? Exception { get; set; }
+
+    async Task AddCalendarAsync()
+    {
+        try
+        {
+            Exception = null;
+            await AddCalendarViewService.AddCalendarAsync(CalendarName);
+            await JS.InvokeVoidAsync("hideBootstrapModal", "addCalendarModal");
+            await OnCalendarAdded.InvokeAsync();
+        }
+        catch(Exception ex)
+        {
+            Exception = ex;
+        }
+        StateHasChanged();
+    }
+
+    [Parameter]
+    public EventCallback OnCalendarAdded { get; set; }
+}
+

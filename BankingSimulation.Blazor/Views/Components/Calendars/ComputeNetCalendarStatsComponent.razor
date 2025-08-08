@@ -1,0 +1,36 @@
+﻿@using BankingSimulation.Blazor.ViewServices.Accounts
+@using BankingSimulation.Blazor.ViewServices.Calendars
+@using BankingSimulation.Data.Models
+
+@if (CalendarId != null)
+{
+    <ApexChart TItem="ComputeCalendarStatsResult"
+               Title="Account Summary For Calendar">
+
+        <ApexPointSeries TItem="ComputeCalendarStatsResult"
+                         Items="Data"
+                         Name="Net"
+                         SeriesType="SeriesType.Bar"
+                         XValue="e => e.CalendarEventName"
+                         YValue="e=> Convert.ToDecimal(e.Value)" />
+    </ApexChart>
+}
+
+@code
+{
+    public IEnumerable<ComputeCalendarStatsResult> Data { get; set; } = [];
+
+    [Parameter]
+    public Guid? CalendarId { get; set; }
+
+    [Inject]
+    public IComputeCalendarStatsViewService ComputeCalendarStatsViewService { get; set; } = null!;
+
+    protected override void OnParametersSet()
+    {
+        if (CalendarId.HasValue)
+            Data = ComputeCalendarStatsViewService.ComputeNetCalendarStats(CalendarId.Value);
+        else
+            Data = [];
+    }
+}

@@ -1,0 +1,39 @@
+﻿@using BankingSimulation.Blazor.Models.Accounts
+@using BankingSimulation.Blazor.ViewServices.Accounts
+
+<select @onchange="OnValueChanged" class="form-select">
+    <option>Please Select</option>
+    @foreach (var entry in Calendars)
+    {
+        <option value="@entry.Id">@entry.Name</option>
+    }
+</select>
+
+@code
+{
+    [Inject]
+    public required ICalendarViewService CalendarViewService { get; set; }
+
+    [Parameter]
+    public Guid? CalendarId { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid?> CalendarIdChanged { get; set; }
+
+    public IEnumerable<CalendarViewModel> Calendars { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Calendars = CalendarViewService.GetCalendarViewModels();
+    }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        if(Guid.TryParse(e.Value?.ToString(), out Guid result))
+            CalendarId = result;
+        else
+            CalendarId = null;
+
+        return CalendarIdChanged.InvokeAsync(CalendarId);
+    }
+}

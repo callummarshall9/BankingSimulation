@@ -8,7 +8,6 @@ namespace BankingSimulation.Services.Processing
         Task<Transaction> AddAsync(Transaction item);
         Task DeleteAsync(Transaction item);
         IQueryable<Transaction> GetAll();
-        IEnumerable<PeriodAccountSummary> GetCalendarEventAccountSummaries(Guid calendarId);
         Task<Transaction> UpdateAsync(Transaction item);
     }
 }
